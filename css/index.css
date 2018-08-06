@@ -1,0 +1,28 @@
+header {
+	background-image: url("/gerencia_legal/images/fondo1.jpg");
+	background-size: cover;
+	height: 80vh;
+	display: flex;
+  	justify-content: center;
+  	align-items: center;
+}
+header h1 {
+	font-weight: bold;
+	text-align: center;
+	margin-left: 2vw;
+	margin-right: 2vw;
+}
+
+header img {
+	margin-right: 2vw;
+}
+
+#gsl-menu, #gsl-menu *{
+	background-color: #ccddff;
+}
+
+#img-icon {
+	margin: 0;
+	padding: 0;
+	position: inline;
+}
