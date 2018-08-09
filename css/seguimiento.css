@@ -1,0 +1,28 @@
+#titulo_seguimiento {
+	margin-top: 5%;
+	margin-right: 5%;
+	margin-left: 5%;
+	margin-bottom: 2%;
+	text-align: center;
+}
+
+#buscador_principal {
+	align-items: center;
+}
+
+#buscar_por_label {
+	text-align: right;
+}
+
+.button.secondary {
+    background-color: #9e9e9e;
+    color: #fefefe;
+}
+
+
+#asignar_btn, #descargar_btn, #remitir_btn, #modificar_btn {
+	width: 84%;
+	margin-left: 8%;
+	margin-right: 8%;
+
+}

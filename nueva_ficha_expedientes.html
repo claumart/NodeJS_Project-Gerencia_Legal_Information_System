@@ -10,7 +10,7 @@
 	    <link rel="stylesheet" href="css/app.css">
 	    <link rel="stylesheet" href="css/header.css">
 	    <link rel="stylesheet" href="css/entrada_fichas.css">
-	    <script src="js/angular.min.js"></script>
+	    <script type="text/javascript" src="js/angular.min.js"></script>
   </head>
 
 	<body>
@@ -38,15 +38,15 @@
 			        		<a href="#0">Crear ficha de entrada</a>
 					        <ul class="submenu menu vertical" data-submenu>
 						        <li><a href="nueva_ficha_expedientes.html#titulo_registro">De expedientes</a></li>
-						        <li><a href="nueva_ficha_opiniones.html#titulo_registro">De Opiniones</a></li>
+						        <li><a href="nueva_ficha_opiniones.html#titulo_registro">De opiniones</a></li>
 						        <li><a href="nueva_ficha_patronatos.html#titulo_registro">De patronatos</a></li>
 					        </ul>
 					    </li>
 					    <li><a href="#0">Dar seguimiento</a>
 					    	<ul class="submenu menu vertical" data-submenu>
-						        <li><a href="actualizar_ficha_expedientes.html#titulo_actualizacion">A expedientes</a></li>
-						        <li><a href="actualizar_ficha_opiniones.html#titulo_actualizacion">A Opiniones</a></li>
-						        <li><a href="actualizar_ficha_patronatos.html#titulo_actualizacion">A patronatos</a></li>
+						        <li><a href="seguimiento_expedientes.html#titulo_seguimiento">A expedientes</a></li>
+						        <li><a href="seguimiento_opiniones.html#titulo_seguimiento">A opiniones</a></li>
+						        <li><a href="seguimiento_patronatos.html#titulo_seguimiento">A patronatos</a></li>
 					        </ul>
 					    </li>
 					    <li><a href="buscar.html">Buscar</a></li>
@@ -76,13 +76,15 @@
             		<div class="medium-6 small-12 cell medium-offset-3">
                 		<label>Interesado(a): <input type="text" placeholder="Nombre del interesado" id="interesado" name="interesado"/></label> 
               		</div>
+              	</div>
+            	<div class="grid-x grid-padding-x">
               		<div class="medium-6 small-12 cell medium-offset-3">
                 		<label>Procedencia:</label>
                 		<select id="procedencia_select" name="procedencia_select">
 		                	<option value="husker">Catastro</option>
 		                	<option value="starbuck">Tierras</option>
 		                	<option value="hotdog">Finanzas</option>
-		                	<option value="apollo">Trnas450</option>
+		                	<option value="apollo">Trans450</option>
                 		</select>
               		</div>
             	</div>
@@ -101,12 +103,12 @@
 	            <div class="grid-x grid-padding-x">
 	            	<div class="medium-6 small-12 cell medium-offset-3">
 	                	<label>Expedientes Acumulados</label>
-	                	<input type="radio" name="acumulados" value="No" id="acumulados_no" checked><label for="acumulados_no">No</label>
-	                	<input type="radio" name="acumulados" value="Si" id="acumulados_si"><label for="acumulados_si">Si</label>
+	                	<input type="radio" name="acumulados" value="No" id="acumulados_no" ng-model="acumulados" checked><label for="acumulados_no">No</label>
+	                	<input type="radio" name="acumulados" value="Si" id="acumulados_si" ng-model="acumulados"><label for="acumulados_si">Si</label>
 	              	</div>
 	            </div>
 
-	            <div id="no_acumulados_box" style="display:block;">
+	            <div id="no_acumulados_box" ng-show="acumulados=='No'">
 		            <div class="grid-x grid-padding-x">  	
 		              	<div class="medium-4 small-12 cell">
 			              	<label>Código de Expediente:</label>
@@ -119,7 +121,7 @@
 			            </div>
 
 			            <div class="medium-4 small-12 cell">
-			              	<label>Tipo de Expediente:</label>
+			              	<label>Asunto:</label>
 			                <select id="tipo_expediente_NA" name="tipo_expediente_NA">
 					           	<option value="husker">Prescripción</option>
 					           	<option value="starbuck">Exoneración</option>
@@ -130,7 +132,7 @@
 		            </div>
 	        	</div>
 
-	            <div id="si_acumulados_box" style="display:block;">
+	            <div id="si_acumulados_box" ng-show="acumulados=='Si'">
 		            <div class="grid-x grid-padding-x" id="si_acumulados_controllers">
 		              	<fieldset class="medium-4 small-12 cell">
 		              		<label>Numero de Expedientes:</label>
@@ -157,7 +159,7 @@
 		              	</div>
 
 		              	<div class="medium-4 small-12 cell">
-		              		<label>Tipo de Expediente:</label>
+		              		<label>Asunto:</label>
 		                		<select id="tipo_expediente1" name="tipo_expediente1">
 				                	<option value="husker">Prescripción</option>
 				                	<option value="starbuck">Exoneración</option>

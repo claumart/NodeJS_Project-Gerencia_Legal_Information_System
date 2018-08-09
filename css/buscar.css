@@ -1,0 +1,33 @@
+#buscador_principal {
+	margin-top: 2vh;
+}
+
+
+
+#search_btn {
+	width: 96%;
+	margin-left: 2%;
+	margin-right: 2%;
+}
+
+#menu_lateral {
+	background: linear-gradient(90deg, #bfbfbf, #e6e6e6);
+}
+
+#titulo_menu_lateral {
+	text-align: center;
+	font-size: 1.5em;
+	padding: 4%;
+}
+
+.search_param {
+	padding-bottom: 4%;
+}
+
+#titulo_menu_fecha {
+
+}
+
+.accordion-content {
+	background: linear-gradient(90deg, #bfbfbf, #e6e6e6);
+}
