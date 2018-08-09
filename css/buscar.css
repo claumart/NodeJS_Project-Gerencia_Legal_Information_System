@@ -11,7 +11,7 @@
 }
 
 #menu_lateral {
-	background: linear-gradient(90deg, #bfbfbf, #e6e6e6);
+	background: linear-gradient(90deg, #e6e6e6, #f2f2f2);
 }
 
 #titulo_menu_lateral {
@@ -29,5 +29,7 @@
 }
 
 .accordion-content {
-	background: linear-gradient(90deg, #bfbfbf, #e6e6e6);
+	background: linear-gradient(90deg, #e6e6e6, #f2f2f2);
 }
+
+/* #bfbfbf, *7
