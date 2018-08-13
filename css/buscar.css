@@ -32,4 +32,17 @@
 	background: linear-gradient(90deg, #e6e6e6, #f2f2f2);
 }
 
+.button.secondary {
+    background-color: #9e9e9e;
+    color: #fefefe;
+}
+
+
+.ver_btn {
+	width: 84%;
+	margin-left: 8%;
+	margin-right: 8%;
+
+}
+
 /* #bfbfbf, *7

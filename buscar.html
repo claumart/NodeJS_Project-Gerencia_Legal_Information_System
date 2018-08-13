@@ -224,7 +224,47 @@
 			      	<div class="medium-9 small-12 cell">
 						<div class="grid-x">
 							<div class="small-12 cell">
-
+								<table  id="tabla_principal">
+							<thead>
+						    	<tr>
+						    		<th>Número de expedientes</th>
+						      		<th>Interesado</th>
+						      		<th>Procedencia</th>
+						      		<th>Fecha de entrada</th>
+						      		<th id="resultado_parametro_busqueda">Abogada(o) asignada(o)</th>
+						      		<th>Acción</th>
+						    	</tr>
+						  	</thead>
+						  	<tbody>
+						    	<tr>
+						    		<td>075-G2-2017</td>
+						    		<td>Ana Maria López</td>
+						    		<td>Catastro</td>
+						    		<td>20/06/2017</td>
+						    		<td>Carolina Arambu</td>
+						    		<td><button type="button" class="button secondary ver_btn" 
+						    			data-open="ficha_detalle">Ver detalles</button></td>
+						    	</tr>
+						    	<tr>
+						      		<td>084-J9-2016, 093-J9-2016, 142-E8-2015</td>
+						    		<td>Eduardo Fabricio Carcamo</td>
+						    		<td>Finanzas</td>
+						    		<td>02/11/2016</td>
+						    		<td>Carolina Arambu</td>
+						    		<td><button type="button" class="button secondary ver_btn" 
+						    			data-open="ficha_detalle">Ver detalles</button></td>
+						    	</tr>
+						    	<tr>
+						      		<td>070-E-2018</td>
+						    		<td>Sandra Victoria Castro</td>
+						    		<td>Dirección de Gestión</td>
+						    		<td>07/05/2018</td>
+						    		<td>Carolina Arambu</td>
+						    		<td><button type="button" class="button secondary ver_btn" 
+						    			data-open="ficha_detalle">Ver detalles</button></td>
+						    	</tr>
+						  	</tbody>
+						</table>
 							</div>
 						</div>
 			      	</div>
@@ -232,6 +272,15 @@
 	      		</div>
 
 			</form>
+
+			<div class="reveal" id="ficha_detalle" data-reveal>
+				<h1>Información de Registro</h1>
+				<p class="lead">Aquí ira toda la información relacionada a los expedientes, opiniones o patronatos recibidos</p>
+				<p></p>
+				<button class="close-button" data-close aria-label="Close reveal" type="button">
+					<span aria-hidden="true">&times;</span>
+			  	</button>
+			</div>
 
 		<footer>
 			

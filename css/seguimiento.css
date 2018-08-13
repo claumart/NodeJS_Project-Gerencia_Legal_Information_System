@@ -15,15 +15,26 @@
 }
 
 .button.secondary {
+	background-color: #9e9e9e;
+    width: 84%;
+	margin-left: 8%;
+	margin-right: 8%;
+}
+
+/*.button.secondary {
     background-color: #9e9e9e;
     color: #fefefe;
-}
+}*/
 
 
 #asignar_btn, #descargar_btn, #remitir_btn, #modificar_btn {
-	width: 84%;
-	margin-left: 8%;
-	margin-right: 8%;
+	font-weight: bold;
+	background-color: #4da6ff;
+    color: #fefefe;
+}
 
+#asignar_btn:hover, #descargar_btn:hover, #remitir_btn:hover, #modificar_btn:hover {
+	background-color: #0059b3;
+    color: #fefefe;
 }
 

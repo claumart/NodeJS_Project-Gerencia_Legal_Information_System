@@ -66,113 +66,60 @@
 			<div class="grid-container grid-padding-x">
       			<div class="grid-x grid-padding-x">
         			<div class="large-12 cell">
-          				<h3 id="titulo_registro">Registar entrada de Expedientes</h3>
+          				<h3 id="titulo_registro">Descargo de Expedientes</h3>
         			</div>
       			</div>
-      		</div>
-
+	      		<div class="grid-x grid-padding-x">
+	        		<div class="large-12 cell">
+	          			<h5>Expedientes a descargar:<h6>651-P2-2018</h6></h5>
+	        		</div>
+	      		</div>
+	      	</div>
       		<form class="grid-container grid-padding-x" ng-app="formApp" ng-controller="formCtrl">
-            	<div class="grid-x grid-padding-x">
-            		<div class="medium-6 small-12 cell medium-offset-3">
-                		<label>Interesado(a): <input type="text" placeholder="Nombre del interesado" id="interesado" name="interesado"/></label> 
-              		</div>
-              	</div>
-            	<div class="grid-x grid-padding-x">
-              		<div class="medium-6 small-12 cell medium-offset-3">
-                		<label>Procedencia:</label>
-                		<select id="procedencia_select" name="procedencia_select">
-		                	<option value="husker">Catastro</option>
-		                	<option value="starbuck">Tierras</option>
-		                	<option value="hotdog">Finanzas</option>
-		                	<option value="apollo">Trans450</option>
-                		</select>
-              		</div>
-            	</div>
-            	<div class="grid-x grid-padding-x">
-              		<div class="medium-6 small-12 cell medium-offset-3">
-              			<label>Recibido Por:</label>
-                		<select id="empleado_receptor" name="empleado_receptor">
-		                	<option value="husker">Miriam</option>
-		                	<option value="starbuck">Marielos</option>
-		                	<option value="hotdog">Elsa</option>
-		                	<option value="apollo">Karen Bonilla</option>
-                		</select>
-              		</div>
-            	</div>
-           
-	            <div class="grid-x grid-padding-x">
-	            	<div class="medium-6 small-12 cell medium-offset-3">
-	                	<label>Expedientes Acumulados</label>
-	                	<input type="radio" name="acumulados" value="No" id="acumulados_no" ng-model="acumulados" checked><label for="acumulados_no">No</label>
-	                	<input type="radio" name="acumulados" value="Si" id="acumulados_si" ng-model="acumulados"><label for="acumulados_si">Si</label>
-	              	</div>
-	            </div>
+            	<div class="grid-x grid-padding-x">	
+					<div class="medium-6 small-12 cell medium-offset-3">
+						<label>Fecha de Descargo:</label>
+						<input type="date" id="fecha_descargo" name="fecha_descargo">
+					</div>
+				</div>
+				<div class="grid-x grid-padding-x">  	
+		            <div class="medium-6 small-12 cell medium-offset-3">
+			           	<label>Numero de Dictamen:</label>
+			           	<input type="text" id="num_dictamen" name="num_dictamen">
+			        </div>
+			    </div>
 
-	            <div id="no_acumulados_box" ng-show="acumulados=='No'">
-		            <div class="grid-x grid-padding-x">  	
-		              	<div class="medium-4 small-12 cell">
-			              	<label>Código de Expediente:</label>
-			              	<input type="text" id="num_exp_NA" name="num_exp_NA">
-			            </div>
-
-			            <div class="medium-4 small-12 cell">
-			              	<label>folios</label>
-			              	<input id="num_folios_NA" name="num_folios_NA" type="number" value="0" min="0">
-			            </div>
-
-			            <div class="medium-4 small-12 cell">
-			              	<label>Asunto:</label>
-			                <select id="tipo_expediente_NA" name="tipo_expediente_NA">
-					           	<option value="husker">Prescripción</option>
-					           	<option value="starbuck">Exoneración</option>
-					           	<option value="hotdog">Nota de Credito</option>
-					           	<option value="apollo">Apelación</option>
-			            	</select>
-			            </div>
-		            </div>
-	        	</div>
-
-	            <div id="si_acumulados_box" ng-show="acumulados=='Si'">
+	            <div id="si_acumulados_box">
 		            <div class="grid-x grid-padding-x" id="si_acumulados_controllers">
 		              	<fieldset class="medium-4 small-12 cell">
-		              		<label>Numero de Expedientes:</label>
+		              		<label>Numero de Páginas:</label>
 		              		<input id="numeroExpedientes" name="numeroExpedientes" type="number" value="1" min="1" max="15">
 		              	</fieldset>
 
 		              	<fieldset class="medium-2 small-12 cell">
-		              		<button type="button" id="add_exp_btn" class="button secondary">Agregar Expediente</button>
+		              		<button type="button" id="add_exp_btn" class="button secondary">Agregar Página</button>
 		              	</fieldset>
 
 		              	<fieldset class="medium-4 small-12 cell">
-		              		<button type="button" id="delete_last_btn" class="button secondary">Eliminar último</button>
+		              		<button type="button" id="delete_last_btn" class="button secondary">Eliminar última Página</button>
 		              	</fieldset>
 		            </div>
 		            <div class="grid-x grid-padding-x" id="expediente1" name="expediente1">
-		              	<div class="medium-4 small-12 cell">
-		              		<label>Código de Expediente:</label>
-		              		<input type="text" name="prueba" id="num_expediente1" name="num_expediente1">
+		              	<div class="medium-3 small-12 cell">
+		              		<label for="imageFile">Página # 1</label>
+		              	</div>
+		              	<div class="medium-9 small-12 cell">
+		              		<input name="imageFile" type="file" accept="image/*" id="imageFile">
+
 		              	</div>
 
-		              	<div class="medium-4 small-12 cell">
-		              		<label>folios</label>
-		              		<input type="number" value="0" min="0" id="num_folios_expediente1" name="num_folios_expediente1">
-		              	</div>
-
-		              	<div class="medium-4 small-12 cell">
-		              		<label>Asunto:</label>
-		                		<select id="tipo_expediente1" name="tipo_expediente1">
-				                	<option value="husker">Prescripción</option>
-				                	<option value="starbuck">Exoneración</option>
-				                	<option value="hotdog">Nota de Credito</option>
-				                	<option value="apollo">Apelación</option>
-		                		</select>
-		              	</div>
+		              	
 		            </div>
 	        	</div>
 
 	        	<div class="grid-x grid-padding-x">
 		        	<fieldset class="medium-4 small-12 cell medium-offset-4">
-	      				<button class="button" type="submit" value="Submit" id="registrar_btn">Registar</button>
+	      				<button class="button" type="submit" value="Submit" id="descargar_btn">Descargar</button>
 	   				</fieldset>
    				</div>
           	</form>

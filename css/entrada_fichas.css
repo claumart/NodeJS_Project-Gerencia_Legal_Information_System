@@ -14,6 +14,7 @@
 	align-items: flex-end;
 }
 
-#registrar_btn {
+#registrar_btn, #asignar_btn, #descargar_btn, #remitir_btn {
 	width: 100%;
 }
+
