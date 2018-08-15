@@ -9,7 +9,7 @@
 	    <link rel="stylesheet" href="css/foundation.css">
 	    <link rel="stylesheet" href="css/app.css">
 	    <link rel="stylesheet" href="css/header.css">
-	    <link rel="stylesheet" href="css/entrada_fichas.css">
+	    <link rel="stylesheet" href="css/formulario_fichas.css">
 	    <script type="text/javascript" src="js/angular.min.js"></script>
   </head>
 
@@ -66,7 +66,7 @@
 			<div class="grid-container grid-padding-x">
       			<div class="grid-x grid-padding-x">
         			<div class="large-12 cell">
-          				<h3 id="titulo_registro">Remisión de Expedientes</h3>
+          				<h3 id="titulo_formulario">Remisión de Expedientes</h3>
         			</div>
       			</div>
       			<div class="grid-x grid-padding-x">
@@ -96,15 +96,18 @@
               		</div>
               	</div>
 
-            	<div class="grid-x grid-padding-x">	
+            	<div class="grid-x grid-padding-x ultimo_parametro">	
 					<div class="medium-6 small-12 cell medium-offset-3">
 						<label>Fecha de Remisión:</label>
 						<input type="date" id="fecha_remisión" name="fecha_remisión">
 					</div>
 				</div>
 
-	        	<div class="grid-x grid-padding-x">
-		        	<fieldset class="medium-4 small-12 cell medium-offset-4">
+   				<div class="grid-x grid-padding-x">
+	        		<fieldset class="medium-2 small-6 cell medium-offset-4">
+	      				<button class="button" type="button" id="atras_btn" onclick="window.history.back();">Atras</button>
+	   				</fieldset>
+		        	<fieldset class="medium-2 small-6 cell">
 	      				<button class="button" type="submit" value="Submit" id="remitir_btn">Remitir</button>
 	   				</fieldset>
    				</div>

@@ -1,0 +1,24 @@
+#titulo_registro, #titulo_formulario {
+	margin: 6%;
+	text-align: center;
+}
+
+#no_acumulados_box, #si_acumulados_box, #fecha_personalizada_box, #paginas_dictamen_box {
+	background-color: #e6e6e6;
+	border-radius: 25px;
+	margin: 1vw;
+	padding: 1vw;
+}
+
+#si_acumulados_controllers {
+	align-items: flex-end;
+}
+
+#registrar_btn, #asignar_btn, #descargar_btn, #remitir_btn, #atras_btn {
+	width: 100%;
+}
+
+.ultimo_parametro {
+	margin-bottom: 2vh;
+}
+

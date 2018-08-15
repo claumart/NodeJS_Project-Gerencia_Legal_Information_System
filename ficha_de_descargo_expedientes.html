@@ -9,7 +9,7 @@
 	    <link rel="stylesheet" href="css/foundation.css">
 	    <link rel="stylesheet" href="css/app.css">
 	    <link rel="stylesheet" href="css/header.css">
-	    <link rel="stylesheet" href="css/entrada_fichas.css">
+	    <link rel="stylesheet" href="css/formulario_fichas.css">
 	    <script type="text/javascript" src="js/angular.min.js"></script>
   </head>
 
@@ -66,7 +66,7 @@
 			<div class="grid-container grid-padding-x">
       			<div class="grid-x grid-padding-x">
         			<div class="large-12 cell">
-          				<h3 id="titulo_registro">Descargo de Expedientes</h3>
+          				<h3 id="titulo_formulario">Descargo de Expedientes</h3>
         			</div>
       			</div>
 	      		<div class="grid-x grid-padding-x">
@@ -89,7 +89,7 @@
 			        </div>
 			    </div>
 
-	            <div id="si_acumulados_box">
+	            <div id="paginas_dictamen_box">
 		            <div class="grid-x grid-padding-x" id="si_acumulados_controllers">
 		              	<fieldset class="medium-4 small-12 cell">
 		              		<label>Numero de Páginas:</label>
@@ -117,8 +117,11 @@
 		            </div>
 	        	</div>
 
-	        	<div class="grid-x grid-padding-x">
-		        	<fieldset class="medium-4 small-12 cell medium-offset-4">
+   				<div class="grid-x grid-padding-x">
+	        		<fieldset class="medium-2 small-6 cell medium-offset-4">
+	      				<button class="button" type="button" id="atras_btn" onclick="window.history.back();">Atras</button>
+	   				</fieldset>
+		        	<fieldset class="medium-2 small-6 cell">
 	      				<button class="button" type="submit" value="Submit" id="descargar_btn">Descargar</button>
 	   				</fieldset>
    				</div>

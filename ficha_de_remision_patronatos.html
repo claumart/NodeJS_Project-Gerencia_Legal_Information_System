@@ -66,41 +66,49 @@
 			<div class="grid-container grid-padding-x">
       			<div class="grid-x grid-padding-x">
         			<div class="large-12 cell">
-          				<h3 id="titulo_formulario">Asignación de Expedientes</h3>
+          				<h3 id="titulo_formulario">Remisión de Patronatos</h3>
         			</div>
       			</div>
       			<div class="grid-x grid-padding-x">
         			<div class="large-12 cell">
-          				<h5>Expedientes a asignar:<h6>075-G2-2017</h6></h5>
+          				<h5>Patronatos a remitir:<h6>890-SA-2014</h6></h5>
         			</div>
       			</div>
       		</div>
 
+
       		<form class="grid-container grid-padding-x" ng-app="formApp" ng-controller="formCtrl">
-      			<div class="grid-x grid-padding-x">
+            	<div class="grid-x grid-padding-x">
               		<div class="medium-6 small-12 cell medium-offset-3">
-              			<label>Abogada(o) Asignada(o):</label>
-                		<select id="empleado_receptor" name="empleado_receptor">
-		                	<option value="husker">Grandos</option>
-		                	<option value="starbuck">Karen Bonilla</option>
-		                	<option value="hotdog">Carolina Arambu</option>
-		                	<option value="apollo">Jorge Godoy</option>
+                		<label>Dependencia a Remitir:</label>
+                		<select id="procedencia_select" name="procedencia_select">
+		                	<option value="husker">Catastro</option>
+		                	<option value="starbuck">Tierras</option>
+		                	<option value="hotdog">Finanzas</option>
+		                	<option value="apollo">Trans450</option>
                 		</select>
               		</div>
             	</div>
+
+            	<div class="grid-x grid-padding-x">
+            		<div class="medium-6 small-12 cell medium-offset-3">
+                		<label>Recibido Por: <input type="text" placeholder="Nombre de la persona que recibió el expediente" id="nombre_recibio" name="nombre_recibio"/></label> 
+              		</div>
+              	</div>
+
             	<div class="grid-x grid-padding-x ultimo_parametro">	
 					<div class="medium-6 small-12 cell medium-offset-3">
-						<label>Fecha de Asignación:</label>
-						<input type="date" id="fecha_asignacion" name="fecha_asignacion">
+						<label>Fecha de Remisión:</label>
+						<input type="date" id="fecha_remisión" name="fecha_remisión">
 					</div>
 				</div>
-            
-   				<div class="grid-x grid-padding-x">
+
+	        	<div class="grid-x grid-padding-x">
 	        		<fieldset class="medium-2 small-6 cell medium-offset-4">
 	      				<button class="button" type="button" id="atras_btn" onclick="window.history.back();">Atras</button>
 	   				</fieldset>
 		        	<fieldset class="medium-2 small-6 cell">
-	      				<button class="button" type="submit" value="Submit" id="asignar_btn">Asignar</button>
+	      				<button class="button" type="submit" value="Submit" id="remitir_btn">Remitir</button>
 	   				</fieldset>
    				</div>
           	</form>

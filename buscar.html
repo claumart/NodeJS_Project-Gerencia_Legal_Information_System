@@ -9,6 +9,7 @@
 	    <link rel="stylesheet" href="css/foundation.css">
 	    <link rel="stylesheet" href="css/app.css">
 	    <link rel="stylesheet" href="css/header.css">
+	    <link rel="stylesheet" href="css/footer.css">
 	    <link rel="stylesheet" href="css/buscar.css">
 	    <script src="js/angular.min.js"></script>
   </head>
@@ -56,7 +57,7 @@
 			  	</div>-->
 			</div>
 
-			<form class="grid-container full" ng-app="searchApp" ng-controller="searchCtrl">
+			<form class="grid-container full" ng-app="searchApp" ng-controller="searchCtrl" ng-init="populateSelects()">
 				<div class="grid-x grid-padding-x" id="buscador_principal">
 					<div class="medium-1 small-10 cell">
 						<label>Buscar por:</label>
@@ -70,10 +71,10 @@
                 		</select>
               		</div>
 					<div class="medium-6 small-10 cell">
-						<fieldset><input type="search" placeholder="Buscar"></fieldset>
+						<fieldset><input type="search" placeholder="Buscar" id="buscar_input" name="buscar_input" ng-model="buscar_input"></fieldset>
 			      	</div>
 			      	<div class="medium-2 small-2 cell">
-			      		<fieldset><button type="button" class="button" id="search_btn">Buscar</button></fieldset>
+			      		<fieldset><button type="button" class="button" id="search_btn" ng-click="buscarRegistro()">Buscar</button></fieldset>
 			      	</div>
 	      		</div>
 
@@ -90,23 +91,25 @@
 	      						<div class="accordion-content" data-tab-content >
 	      							<div class="grid-x grid-padding-x">
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="num_expediente" checked><label for="">Por número de expediente | oficio | Dictamen</label>
+											<input type="radio" name="parametro_busqueda" value="numExpediente" ng-model="parametro_busqueda"><label for="">Por número de expediente | oficio | Dictamen</label>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="interesado"><label for="">Por nombre del interesado</label>
+											<input type="radio" name="parametro_busqueda" value="interesado" ng-model="parametro_busqueda"><label for="">Por nombre del interesado</label>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="procedencia"><label for="">Por procedencia</label>
-											<select id="procedencia_select" name="procedencia_select">
-							                	<option value="husker">Catastro</option>
-							                	<option value="starbuck">Tierras</option>
-							                	<option value="hotdog">Finanzas</option>
-							                	<option value="apollo">Trans450</option>
+											<input type="radio" name="parametro_busqueda" value="procedencia" ng-change="copyProcedenciaValue()" ng-model="parametro_busqueda"><label for="">Por procedencia</label>
+											<select id="procedencia_select" name="procedencia" ng-model="procedencia_select" ng-change="copyProcedenciaValue()" ng-options="x.nombreDependencia for x in procendenciaList">
 			                				</select>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value=""><label for="">Empleado receptor</label>
-											<select id="empleado_receptor" name="empleado_receptor">
+											<input type="radio" name="parametro_busqueda" value="empleadoReceptor" ng-change="copyEmpleadoReceptorValue()" ng-model="parametro_busqueda"><label for="">Empleado receptor</label>
+											<select id="empleado_receptor_select" name="empleado_receptor_select" ng-model="empleado_receptor_select" ng-change="copyEmpleadoReceptorValue()" ng-options="x.nombreEmpleado for x in empleadoReceptorList">
+					                		</select>
+										</div>
+										<div class="small-12 cell search_param">
+											<input type="radio" name="parametro_busqueda" value="abogadoAsignado" ng-change="" ng-model="parametro_busqueda"><label for="">Por abogado asignado</label>
+											<select id="abogado_asignado_select" name="abogado_asignado_select" ng-model="abogado_asignado_select" ng-change="copyAbogadoAsignadoValue()">
+												<option value="none">No seleccionado</option>
 							                	<option value="husker">Miriam</option>
 							                	<option value="starbuck">Marielos</option>
 							                	<option value="hotdog">Elsa</option>
@@ -114,17 +117,9 @@
 					                		</select>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value=""><label for="">Por abogado asignado</label>
-											<select id="abogado_asignado" name="abogado_asignado">
-							                	<option value="husker">Miriam</option>
-							                	<option value="starbuck">Marielos</option>
-							                	<option value="hotdog">Elsa</option>
-							                	<option value="apollo">Karen Bonilla</option>
-					                		</select>
-										</div>
-										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="procedencia"><label for="">Por dependencia de remisión</label>
-											<select id="dependencia_remision_select" name="dependencia_remision_select">
+											<input type="radio" name="parametro_busqueda" value="dependenciaRemision" ng-change="" ng-model="parametro_busqueda"><label for="">Por dependencia de remisión</label>
+											<select id="dependencia_remision_select" name="dependencia_remision_select" ng-model="dependencia_remision_select" ng-change="copyDependicaRemisionValue()">
+												<option value="none">No seleccionado</option>
 							                	<option value="husker">Catastro</option>
 							                	<option value="starbuck">Tierras</option>
 							                	<option value="hotdog">Finanzas</option>
@@ -132,8 +127,9 @@
 			                				</select>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="procedencia"><label for="">Por estado de expediente</label>
-											<select id="estado_expediente_select" name="estado_expediente_select">
+											<input type="radio" name="parametro_busqueda" value="estadoExpediente" ng-change="" ng-model="parametro_busqueda"><label for="">Por estado de expediente</label>
+											<select id="estado_expediente_select" name="estado_expediente_select" ng-model="estado_expediente_select" ng-change="copyEstadoExpedienteValue()">
+												<option value="none">No seleccionado</option>
 							                	<option value="husker">Recibido</option>
 							                	<option value="starbuck">Asignado</option>
 							                	<option value="hotdog">Descargado</option>
@@ -180,16 +176,16 @@
 											<h5 id="titulo_menu_fecha">Por Fecha De:</h5>
 										</div>
 										<div class="small-12 cell">
-											<input type="radio" name="parametro_busqueda" value="num_expediente"><label for="">Entrada</label>
+											<input type="radio" name="parametro_busqueda" value="fechaEntrada" ng-model="parametro_busqueda"><label for="">Entrada</label>
 										</div>
 										<div class="small-12 cell">
-											<input type="radio" name="parametro_busqueda" value="num_expediente"><label for="">Asignación</label>
+											<input type="radio" name="parametro_busqueda" value="fechaAsignacion" ng-model="parametro_busqueda"><label for="">Asignación</label>
 										</div>
 										<div class="small-12 cell">
-											<input type="radio" name="parametro_busqueda" value="num_expediente"><label for="">Descargo</label>
+											<input type="radio" name="parametro_busqueda" value="fechaDescargo" ng-model="parametro_busqueda"><label for="">Descargo</label>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="num_expediente"><label for="">Remisión</label>
+											<input type="radio" name="parametro_busqueda" value="fechaRemision" ng-model="parametro_busqueda"><label for="">Remisión</label>
 										</div>
 									</div>
 									<div class="grid-x grid-padding-x">

@@ -9,7 +9,6 @@
 	    <link rel="stylesheet" href="css/foundation.css">
 	    <link rel="stylesheet" href="css/app.css">
 	    <link rel="stylesheet" href="css/header.css">
-	    <link rel="stylesheet" href="css/footer.css">
 	    <link rel="stylesheet" href="css/seguimiento.css">
 	    <script src="js/angular.min.js"></script>
   </head>
@@ -61,14 +60,14 @@
 			<div class="grid-container grid-padding-x">
       			<div class="grid-x grid-padding-x">
         			<div class="large-12 cell">
-          				<h3 id="titulo_seguimiento">Seguimiento de Expedientes</h3>
+          				<h3 id="titulo_seguimiento">Seguimiento de Opiniones</h3>
         			</div>
       			</div>
       		</div>
       		<form class="grid-container full" ng-app="seguimientoApp" ng-controller="seguimientoCtrl">
 				<div class="grid-x grid-padding-x" id="buscador_principal">
 					<div class="small-6 medium-2 cell" id="buscar_por_label">
-						<label>Buscar por número de expediente:</label>
+						<label>Buscar por número de oficio:</label>
 			      	</div>
 					<div class="small-6 medium-8 cell">
 						<fieldset><input type="search" placeholder="Buscar"></fieldset>
@@ -78,17 +77,14 @@
 			      	</div>
 	      		</div>
 	      		<div class="grid-x grid-padding-x">
-	      			<fieldset class="medium-3 small-12 cell">
+	      			<fieldset class="medium-4 small-12 cell">
 		            	<button type="button" id="asignar_btn" class="button secondary">Asignar</button>
 		            </fieldset>
-		            <fieldset class="medium-3 small-12 cell">
+		            <fieldset class="medium-4 small-12 cell">
 		            	<button type="button" id="descargar_btn" class="button secondary">Descargar</button>
 		            </fieldset>
-		            <fieldset class="medium-3 small-12 cell">
+		            <fieldset class="medium-4 small-12 cell">
 		            	<button type="button" id="remitir_btn" class="button secondary">Remitir</button>
-		            </fieldset>
-		            <fieldset class="medium-3 small-12 cell">
-		            	<button type="button" id="modificar_btn" class="button secondary">Previo</button>
 		            </fieldset>
 	      		</div>
 	      		
@@ -99,7 +95,7 @@
 	      				<table  id="tabla_principal">
 							<thead>
 						    	<tr>
-						    		<th>Número de expedientes</th>
+						    		<th>Número de Oficio</th>
 						      		<th>Interesado</th>
 						      		<th>Procedencia</th>
 						      		<th>Listo Para</th>
@@ -111,28 +107,21 @@
 						    		<td>Ana Maria López</td>
 						    		<td>Catastro</td>
 						    		<td><button type="button" class="button secondary" 
-						    			onclick="window.location.href = 'ficha_de_asignacion_expedientes.html#titulo_formulario';">Asignar</button></td>
+						    			onclick="window.location.href = 'ficha_de_asignacion_opiniones.html#titulo_formulario';">Asignar</button></td>
 						    	</tr>
 						    	<tr>
 						      		<td>651-P2-2018</td>
 						    		<td>Pedro rodrigo Sánchez</td>
 						    		<td>tierras</td>
 						    		<td><button type="button" class="button secondary"
-						    			onclick="window.location.href = 'ficha_de_descargo_expedientes.html#titulo_formulario';">Descargar</button></td>
+						    			onclick="window.location.href = 'ficha_de_descargo_opiniones.html#titulo_formulario';">Descargar</button></td>
 						    	</tr>
 						    	<tr>
 						      		<td>890-SA-2014</td>
 						    		<td>Jose Manuel Rivera</td>
 						    		<td>Recaudación</td>
 						    		<td><button type="button" class="button secondary"
-						    			onclick="window.location.href = 'ficha_de_remision_expedientes.html#titulo_formulario';">Remitir</button></td>
-						    	</tr>
-						    	<tr>
-						      		<td>032-15-2018</td>
-						    		<td>Carlos Fernado García</td>
-						    		<td>Recaudación</td>
-						    		<td><button type="button" class="button secondary"
-						    			onclick="window.location.href = 'ficha_de_prevision_expedientes.html#titulo_formulario';">Previo</button></td>
+						    			onclick="window.location.href = 'ficha_de_remision_opiniones.html#titulo_formulario';">Remitir</button></td>
 						    	</tr>
 						  	</tbody>
 						</table>
