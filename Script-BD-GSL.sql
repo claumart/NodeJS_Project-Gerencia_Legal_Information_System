@@ -75,7 +75,7 @@ DROP TABLE IF EXISTS `EstadoExpediente` ;
 CREATE TABLE IF NOT EXISTS `EstadoExpediente` (
   `idEstadoExpediente` INT NOT NULL AUTO_INCREMENT,
   `nombreEstadoExpediente` VARCHAR(45) NOT NULL,
-  `descripciónEstadoExpedientecol` VARCHAR(100) NOT NULL,
+  `descripciónEstadoExpediente` VARCHAR(145) NOT NULL,
   PRIMARY KEY (`idEstadoExpediente`))
 ENGINE = InnoDB;
 
@@ -89,11 +89,11 @@ DROP TABLE IF EXISTS `TipoDictamen` ;
 
 CREATE TABLE IF NOT EXISTS `TipoDictamen` (
   `idTipoDictamen` INT NOT NULL AUTO_INCREMENT,
-  `nombreTipoDictamencol` VARCHAR(45) NOT NULL,
+  `nombreTipoDictamen` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idTipoDictamen`))
 ENGINE = InnoDB;
 
-ALTER TABLE `TipoDictamen` ADD UNIQUE `nombreTipoDictamencol_UNIQUE` (`nombreTipoDictamencol` ASC);
+ALTER TABLE `TipoDictamen` ADD UNIQUE `nombreTipoDictamencol_UNIQUE` (`nombreTipoDictamen` ASC);
 
 
 -- -----------------------------------------------------
@@ -127,6 +127,7 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaExpediente` (
   `idFichaEntradaExpediente` INT NOT NULL AUTO_INCREMENT,
   `idProcedencia` INT NOT NULL,
   `interesado` VARCHAR(45) NOT NULL,
+  `idAsunto` INT NOT NULL,
   `idEmpleadoReceptor` INT NOT NULL,
   `fechaEntrada` DATETIME NOT NULL,
   `idAbogadoAsignado` INT NULL,
@@ -167,6 +168,11 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaExpediente` (
     FOREIGN KEY (`idDictamen`)
     REFERENCES `Dictamen` (`idDictamen`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    CONSTRAINT `FEE_idAsunto_FK`
+    FOREIGN KEY (`idAsunto`)
+    REFERENCES `Asunto` (`idAsunto`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = cp1256;
@@ -185,20 +191,21 @@ ALTER TABLE `FichaEntradaExpediente` ADD INDEX `FEE_idDictamen_FK_idx` (`idDicta
 
 ALTER TABLE `FichaEntradaExpediente` ADD UNIQUE `idDictamen_UNIQUE` (`idDictamen` ASC);
 
+ALTER TABLE `FichaEntradaExpediente` ADD INDEX `FEE_idAsunto_FK_idx` (`idAsunto` ASC);
+
 
 -- -----------------------------------------------------
--- Table `TipoExpediente`
+-- Table `Asunto`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `TipoExpediente` ;
+DROP TABLE IF EXISTS `Asunto` ;
 
-CREATE TABLE IF NOT EXISTS `TipoExpediente` (
-  `idTipoExpediente` INT NOT NULL AUTO_INCREMENT,
-  `nombreTipoExpediente` VARCHAR(45) NOT NULL,
-  `Descripción` VARCHAR(150) NULL,
-  PRIMARY KEY (`idTipoExpediente`))
+CREATE TABLE IF NOT EXISTS `Asunto` (
+  `idAsunto` INT NOT NULL AUTO_INCREMENT,
+  `nombreAsunto` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idAsunto`))
 ENGINE = InnoDB;
 
-ALTER TABLE `TipoExpediente` ADD UNIQUE `nombreTipoExpediente_UNIQUE` (`nombreTipoExpediente` ASC);
+ALTER TABLE `Asunto` ADD UNIQUE `nombreTipoExpediente_UNIQUE` (`nombreAsunto` ASC);
 
 
 -- -----------------------------------------------------
@@ -209,19 +216,11 @@ DROP TABLE IF EXISTS `Expediente` ;
 CREATE TABLE IF NOT EXISTS `Expediente` (
   `idExpediente` INT NOT NULL AUTO_INCREMENT,
   `numExpediente` VARCHAR(20) NOT NULL,
-  `idTipoExpediente` INT NULL,
   `folios` INT NOT NULL,
-  PRIMARY KEY (`idExpediente`),
-  CONSTRAINT `Expediente_idTipoExpediente_FK`
-    FOREIGN KEY (`idTipoExpediente`)
-    REFERENCES `TipoExpediente` (`idTipoExpediente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`idExpediente`))
 ENGINE = InnoDB;
 
 ALTER TABLE `Expediente` ADD UNIQUE `numExpediente_UNIQUE` (`numExpediente` ASC);
-
-ALTER TABLE `Expediente` ADD INDEX `Expediente_idTipoExpediente_FK_idx` (`idTipoExpediente` ASC);
 
 
 -- -----------------------------------------------------
@@ -234,7 +233,6 @@ CREATE TABLE IF NOT EXISTS `RevisionExpediente` (
   `idFichaEntradaExpediente` INT NOT NULL,
   `idDependenciaRemison` INT NOT NULL,
   `fechaRemison` INT NOT NULL,
-  `conDictamen` TINYINT NOT NULL,
   `idDependenciaRegreso` INT NULL,
   `fechaRegreso` DATETIME NULL,
   PRIMARY KEY (`idRevisionExpediente`),
@@ -299,19 +297,18 @@ ENGINE = InnoDB;
 
 ALTER TABLE `Archivo` ADD INDEX `Archivo_idFolder_FK_idx` (`idFolder` ASC);
 
-
 -- -----------------------------------------------------
--- Table `TipoPatronato`
+-- Table `TipoLugar`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `TipoPatronato` ;
+DROP TABLE IF EXISTS `TipoLugar` ;
 
-CREATE TABLE IF NOT EXISTS `TipoPatronato` (
-  `idTipoPatronato` INT NOT NULL AUTO_INCREMENT,
-  `nombreTipoPatronato` VARCHAR(25) NOT NULL,
-  PRIMARY KEY (`idTipoPatronato`))
+CREATE TABLE IF NOT EXISTS `TipoLugar` (
+  `idTipoLugar` INT NOT NULL AUTO_INCREMENT,
+  `nombreTipoLugar` VARCHAR(25) NOT NULL,
+  PRIMARY KEY (`idTipoLugar`))
 ENGINE = InnoDB;
 
-ALTER TABLE `TipoPatronato` ADD UNIQUE `nombreTipoPatronato_UNIQUE` (`nombreTipoPatronato` ASC);
+ALTER TABLE `TipoLugar` ADD UNIQUE `nombreTipoLugar_UNIQUE` (`nombreTipoLugar` ASC);
 
 
 -- -----------------------------------------------------
@@ -321,8 +318,8 @@ DROP TABLE IF EXISTS `FichaEntradaPatronato` ;
 
 CREATE TABLE IF NOT EXISTS `FichaEntradaPatronato` (
   `idFichaEntradaPatronato` INT NOT NULL AUTO_INCREMENT,
-  `idTipoPatronato` INT NOT NULL,
-  `nombreColonia` VARCHAR(45) NOT NULL,
+  `idTipoLugar` INT NOT NULL,
+  `nombreLugar` VARCHAR(45) NOT NULL,
   `Asunto` VARCHAR(60) NOT NULL,
   `folios` INT NOT NULL,
   `idEmpleadoReceptor` INT NOT NULL,
@@ -334,9 +331,9 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaPatronato` (
   `recibidoPor` VARCHAR(45) NULL,
   `idDictamen` INT NULL,
   PRIMARY KEY (`idFichaEntradaPatronato`),
-  CONSTRAINT `FEP_idTipoPatronato_FK`
-    FOREIGN KEY (`idTipoPatronato`)
-    REFERENCES `TipoPatronato` (`idTipoPatronato`)
+  CONSTRAINT `FEP_idTipoLugar_FK`
+    FOREIGN KEY (`idTipoLugar`)
+    REFERENCES `TipoLugar` (`idTipoLugar`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `FEP_idEmpleadoReceptor_FK`
@@ -356,7 +353,7 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaPatronato` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idTipoPatronato_FK_idx` (`idTipoPatronato` ASC);
+ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idTipoLugar_FK_idx` (`idTipoLugar` ASC);
 
 ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idEmpleadoReceptor_FK_idx` (`idEmpleadoReceptor` ASC);
 
@@ -375,6 +372,7 @@ DROP TABLE IF EXISTS `FichaEntradaOpinion` ;
 CREATE TABLE IF NOT EXISTS `FichaEntradaOpinion` (
   `idFichaEntradaOpinion` INT NOT NULL AUTO_INCREMENT,
   `idProcedencia` INT NOT NULL,
+  `idAsunto` INT NOT NULL,
   `numOficio` VARCHAR(30) NOT NULL,
   `idEmpleadoReceptor` INT NOT NULL,
   `fechaEntrada` DATETIME NOT NULL,
@@ -410,6 +408,11 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaOpinion` (
     FOREIGN KEY (`idDictamen`)
     REFERENCES `Dictamen` (`idDictamen`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    CONSTRAINT `FEO_idAsunto_FK`
+    FOREIGN KEY (`idAsunto`)
+    REFERENCES `Asunto` (`idAsunto`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -424,6 +427,8 @@ ALTER TABLE `FichaEntradaOpinion` ADD INDEX `FEO_idEstadoOpinion_idx` (`idEstado
 ALTER TABLE `FichaEntradaOpinion` ADD INDEX `FEO_idDictamen_FK_idx` (`idDictamen` ASC);
 
 ALTER TABLE `FichaEntradaOpinion` ADD UNIQUE `idDictamen_UNIQUE` (`idDictamen` ASC);
+
+ALTER TABLE `FichaEntradaOpinion` ADD INDEX `FEO_idAsunto_FK_idx` (`idAsunto` ASC);
 
 
 -- -----------------------------------------------------
@@ -478,7 +483,7 @@ DROP TABLE IF EXISTS `Privilegio` ;
 CREATE TABLE IF NOT EXISTS `Privilegio` (
   `idPrivilegio` INT NOT NULL AUTO_INCREMENT,
   `nombrePrivilegio` VARCHAR(30) NOT NULL,
-  `descripcionPrivilegio` VARCHAR(50) NULL,
+  `descripcionPrivilegio` VARCHAR(100) NULL,
   PRIMARY KEY (`idPrivilegio`))
 ENGINE = InnoDB;
 
@@ -531,3 +536,86 @@ ALTER TABLE `PrivilegioXUsuario` ADD INDEX `PrivilegioXUsuario_idUsuario_FK_idx`
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+INSERT INTO EstadoExpediente(nombreEstadoExpediente, descripciónEstadoExpediente) VALUES('Recibido', 'Estado correspodiente a un expediente recien llegado sin previo');
+INSERT INTO EstadoExpediente(nombreEstadoExpediente, descripciónEstadoExpediente) VALUES('Asignado', 'Estado correspondiente a un expediente que acaba de ser asignado a un abogado o que acaba de llegar con previo');
+INSERT INTO EstadoExpediente(nombreEstadoExpediente, descripciónEstadoExpediente) VALUES('Descargado', 'Estado correspondiente a un expediente que acaba de ser entregado por un abogado al gerente para su revisión');
+INSERT INTO EstadoExpediente(nombreEstadoExpediente, descripciónEstadoExpediente) VALUES('Revisado', 'Estado de un expediente en el cual está siendo revisado por el gerente para realizarse las correcciones necesarias');
+INSERT INTO EstadoExpediente(nombreEstadoExpediente, descripciónEstadoExpediente) VALUES('Remitido', 'Estado correspondiente a un expediente que ha sido revisado y acaba de ser remitido a una dependencia');
+INSERT INTO EstadoExpediente(nombreEstadoExpediente, descripciónEstadoExpediente) VALUES('Providencia', 'Estado de un expediente que necesita más contexto para ser trabajado y ha sido regresado a la dependencia de donde procede para aclarar dudas');
+
+
+INSERT INTO TipoDictamen(nombreTipoDictamen) VALUES('De Expediente');
+INSERT INTO TipoDictamen(nombreTipoDictamen) VALUES('De Opinión');
+INSERT INTO TipoDictamen(nombreTipoDictamen) VALUES('De Patronato');
+
+
+INSERT INTO Dependencia(nombreDependencia) VALUES('Secretaría Municipal');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Comisión de Finanzas');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Comisión de Tierras');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Catastro');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Departamento Municipalde Justicia');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Recaudación y control Financiero');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Licitaciones, control y Seguimiento');
+INSERT INTO Dependencia(nombreDependencia) VALUES('D.O.T. Ordenamiento Territorial');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Recursos Humanos');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Comisión de Patronatos');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Impugnaciones y Reclamos');
+INSERT INTO Dependencia(nombreDependencia) VALUES('UGASAN');
+INSERT INTO Dependencia(nombreDependencia) VALUES('UNGIR');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Despacho Municipal');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Transparencia Municipal');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Desechos Sólidos');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Trans 450');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Dirección de Gestión Comunitaria');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Pisos dignos (Convivienda)');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Acceso a la Tierra');
+INSERT INTO Dependencia(nombreDependencia) VALUES('Movilidad Urbana');
+
+
+INSERT INTO Asunto(nombreAsunto) VALUES('Nota de Credito');
+INSERT INTO Asunto(nombreAsunto) VALUES('Compensación');
+INSERT INTO Asunto(nombreAsunto) VALUES('Exoneración');
+INSERT INTO Asunto(nombreAsunto) VALUES('Prescripción');
+INSERT INTO Asunto(nombreAsunto) VALUES('Dominio Pleno');
+INSERT INTO Asunto(nombreAsunto) VALUES('Impugnación');
+INSERT INTO Asunto(nombreAsunto) VALUES('Denuncia');
+INSERT INTO Asunto(nombreAsunto) VALUES('Reclamo');
+INSERT INTO Asunto(nombreAsunto) VALUES('Suspensión');
+INSERT INTO Asunto(nombreAsunto) VALUES('Donación');
+INSERT INTO Asunto(nombreAsunto) VALUES('Recurso de Apelación');
+INSERT INTO Asunto(nombreAsunto) VALUES('Recurso de Reposión');
+
+
+INSERT INTO TipoLugar(nombreTipoLugar) VALUES('Aldea');
+INSERT INTO TipoLugar(nombreTipoLugar) VALUES('Colonia');
+INSERT INTO TipoLugar(nombreTipoLugar) VALUES('Barrio');
+INSERT INTO TipoLugar(nombreTipoLugar) VALUES('Caserío');
+
+
+INSERT INTO Privilegio(nombrePrivilegio, descripcionPrivilegio) VALUES('Visualizar', 'Derecho a usar la opción de busqueda y visualizar los registros');
+INSERT INTO Privilegio(nombrePrivilegio, descripcionPrivilegio) VALUES('Crear', 'Permiso para crear las diferentes fichas de entreada y seguimiento');
+INSERT INTO Privilegio(nombrePrivilegio, descripcionPrivilegio) VALUES('Modificar', 'Permiso para modificar las diferentes fichas guardadas en el sistema');
+INSERT INTO Privilegio(nombrePrivilegio, descripcionPrivilegio) VALUES('Archivar', 'Derecho a utilizar la opción de archivar');
+INSERT INTO Privilegio(nombrePrivilegio, descripcionPrivilegio) VALUES('Administrar', 'Derecho a utilizar todas las funciones del sitema');
+
+
+INSERT INTO CargoEmpleado(nombreCargoEmpleado) VALUES('Abogada(o)');
+INSERT INTO CargoEmpleado(nombreCargoEmpleado) VALUES('Auxilar de Archivos');
+INSERT INTO CargoEmpleado(nombreCargoEmpleado) VALUES('Secretaria(o)');
+INSERT INTO CargoEmpleado(nombreCargoEmpleado) VALUES('Gerente');
+INSERT INTO CargoEmpleado(nombreCargoEmpleado) VALUES('Sub-Gerente');
+
+
+INSERT INTO Empleado(numEmpleado, nombresEmpleado, apellidosEmpleado, activo, idCargo, fechaNacimiento) VALUES(24359, 'Ada', 'Puerto', true, 2, STR_TO_DATE('1-01-2012', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombresEmpleado, apellidosEmpleado, activo, idCargo, fechaNacimiento) VALUES(31556, 'Carolina', 'Arambu', true, 2, STR_TO_DATE('1-01-2012', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombresEmpleado, apellidosEmpleado, activo, idCargo, fechaNacimiento) VALUES(13207, 'Alba', 'Granados', true, 2, STR_TO_DATE('1-01-2012', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombresEmpleado, apellidosEmpleado, activo, idCargo, fechaNacimiento) VALUES(15355, 'Karla', 'Mairena', true, 2, STR_TO_DATE('1-01-2012', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombresEmpleado, apellidosEmpleado, activo, idCargo, fechaNacimiento) VALUES(20061, 'Elsa', 'López', true, 3, STR_TO_DATE('1-01-2012', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombresEmpleado, apellidosEmpleado, activo, idCargo, fechaNacimiento) VALUES(11643, 'Marielos', 'Sanchez', true, 3, STR_TO_DATE('1-01-2012', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombresEmpleado, apellidosEmpleado, activo, idCargo, fechaNacimiento) VALUES(22760, 'Mirian', 'Rivera', true, 1, STR_TO_DATE('1-01-2012', '%d-%m-%Y') );
+
+/*STR_TO_DATE("22/8/2018 14:43:26", "%M/%d/%Y %H:%i:%s");*/
+
+
