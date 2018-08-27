@@ -6,10 +6,7 @@ populateSelectsController.populateDependencia = (req, res, next) => {
       
     	connection.query('SELECT idDependencia, nombreDependencia FROM Dependencia', [], (err, results) => {
         	if (err) return next(err);
-        	var string=JSON.stringify(results)
-        	console.log(string);
-        	//results[0].RESULT;
-        	// -> 1
+        	var string=JSON.stringify(results);
         
         	res.json(string);
       	});
@@ -24,11 +21,8 @@ populateSelectsController.populateEmpleadoReceptor = (req, res, next) => {
       
     	connection.query('SELECT numEmpleado, nombresEmpleado, apellidosEmpleado FROM Empleado WHERE activo=1', [], (err, results) => {
         	if (err) return next(err);
-        	var string=JSON.stringify(results)
-        	console.log(string);
-        	//results[0].RESULT;
-        	// -> 1
-        
+        	var string=JSON.stringify(results);
+        	
         	res.json(string);
       	});
       
@@ -42,7 +36,7 @@ populateSelectsController.populateAbogadoAsignado = (req, res, next) => {
     	connection.query('SELECT numEmpleado, nombresEmpleado, apellidosEmpleado FROM ' +
     		'(Empleado WHERE activo="true" and idCargo=1', [], (err, results) => {
         if (err) return next(err);
-        var string=JSON.stringify(results)
+        var string=JSON.stringify(results);
         console.log(string);
         //results[0].RESULT;
         // -> 1
@@ -76,11 +70,8 @@ populateSelectsController.populateAsunto = (req, res, next) => {
       
     	connection.query('SELECT idAsunto, nombreAsunto FROM Asunto', [], (err, results) => {
         if (err) return next(err);
-        var string=JSON.stringify(results)
-        console.log(string);
-        //results[0].RESULT;
-        // -> 1
-        
+        var string=JSON.stringify(results);
+       
         res.json(string);
       });
       

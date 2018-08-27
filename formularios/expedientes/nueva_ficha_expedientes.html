@@ -160,17 +160,17 @@
 
 			            <div class="medium-3 small-12 cell">
 			              	<label>Hora:</label>
-			              	<input id="hora_entrada" name="hora_entrada" type="number" value="1" min="1" max="12">
+			              	<input id="hora_entrada" name="hora_entrada" type="number" value="1" min="1" max="12" ng-model="hora_entrada">
 			            </div>
 
 			            <div class="medium-3 small-12 cell">
 			              	<label>Minutos:</label>
-			              	<input id="minuto_entrada" name="minuto_entrada" type="number" value="0" min="0" max="59">
+			              	<input id="minuto_entrada" name="minuto_entrada" type="number" value="0" min="0" max="59" ng-model="minuto_entrada">
 			            </div>
 
 			            <div class="medium-3 small-12 cell">
 			              	<label>AM/PM:</label>
-			                <select id="" name="">
+			                <select id="ampm" name="ampm" ng-model="ampm">
 					           	<option value="am">AM</option>
 					           	<option value="pm">PM</option>
 			            	</select>
