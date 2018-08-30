@@ -65,49 +65,40 @@
       		<form class="grid-container grid-padding-x" ng-app="formApp" ng-controller="formCtrl">
             	<div class="grid-x grid-padding-x">
             		<div class="medium-6 small-12 cell medium-offset-3">
-                		<label>Interesado(a): <input type="text" placeholder="Nombre del interesado" id="interesado" name="interesado"/></label> 
+                		<input type="text" placeholder="Nombre del interesado" id="interesado" name="interesado" ng-model="interesado"/></label>
               		</div>
               	</div>
             	<div class="grid-x grid-padding-x">
               		<div class="medium-6 small-12 cell medium-offset-3">
-                		<label>tipo de Patronato:</label>
-                		<select id="tipo_patronato_select" name="tipo_patronato_select">
-		                	<option value="husker">Catastro</option>
-		                	<option value="starbuck">Tierras</option>
-		                	<option value="hotdog">Finanzas</option>
-		                	<option value="apollo">Trnas450</option>
+                		<label>tipo de Lugar:</label>
+                		<select id="tipo_lugar_select" name="tipo_lugar_select" ng-model="tipo_lugar_select" ng-options="x.nombreTipoLugar for x in tipoLugarList">
                 		</select>
               		</div>
             	</div>
 
             	<div class="grid-x grid-padding-x">
             		<div class="medium-6 small-12 cell medium-offset-3">
-                		<label>Nombre de la Colonia: <input type="text" id="nombre_colonia" name="nombre_colonia" /></label> 
+                		<label>Nombre de la Colonia: <input type="text" id="nombre_colonia" name="nombre_colonia" ng-model="nombre_colonia" /></label> 
               		</div>
               	</div>
 
               	<div class="grid-x grid-padding-x">
             		<div class="medium-6 small-12 cell medium-offset-3">
-                		<label>Asunto: <input type="text" placeholder="Asunto de la petición del patronato" id="asunto_patronato" name="asunto_patronato"/></label> 
+                		<label>Asunto: <input type="text" placeholder="Asunto de la petición del patronato" id="asunto_patronato" name="asunto_patronato" ng-model="asunto_patronato"/></label> 
               		</div>
               	</div>
 
               	<div class="grid-x grid-padding-x">
 	            	<div class="medium-6 small-12 cell medium-offset-3">
-		              		<label>folios</label>
-		              		<input type="number" value="0" min="0" id="num_folios_patronato" name="num_folios_patronato">
+		              		<label>folios: </label>
+		              		<input type="number" value="0" min="0" id="num_folios" name="num_folios" ng-model="num_folios">
 		              	</div>
 	            </div>
 
             	<div class="grid-x grid-padding-x">
               		<div class="medium-6 small-12 cell medium-offset-3">
-              			<label>Recibido Por: </label>
-                		<select id="empleado_receptor" name="empleado_receptor">
-		                	<option value="husker">Miriam</option>
-		                	<option value="starbuck">Marielos</option>
-		                	<option value="hotdog">Elsa</option>
-		                	<option value="apollo">Karen Bonilla</option>
-                		</select>
+              			<label>Recibido Por:</label>
+                		<select id="empleado_receptor_select" name="empleado_receptor_select" ng-model="empleado_receptor_select" ng-options="x.nombreEmpleado for x in empleadoReceptorList"></select>
               		</div>
             	</div>
 
@@ -128,17 +119,17 @@
 
 			            <div class="medium-3 small-12 cell">
 			              	<label>Hora:</label>
-			              	<input id="hora_entrada" name="hora_entrada" type="number" value="1" min="1" max="12">
+			              	<input id="hora_entrada" name="hora_entrada" type="number" value="1" min="1" max="12" ng-model="hora_entrada">
 			            </div>
 
 			            <div class="medium-3 small-12 cell">
 			              	<label>Minutos:</label>
-			              	<input id="minuto_entrada" name="minuto_entrada" type="number" value="0" min="0" max="59">
+			              	<input id="minuto_entrada" name="minuto_entrada" type="number" value="0" min="0" max="59" ng-model="minuto_entrada">
 			            </div>
 
 			            <div class="medium-3 small-12 cell">
 			              	<label>AM/PM:</label>
-			                <select id="" name="">
+			                <select id="ampm" name="ampm" ng-model="ampm">
 					           	<option value="am">AM</option>
 					           	<option value="pm">PM</option>
 			            	</select>
@@ -168,7 +159,9 @@
 	    <script src="../../js/header.js"></script>
 	    <script src="../../js/footer.js"></script>
 	    <script src="../../js/barraMenu.js" type="text/javascript"></script>
-	    <script type="text/javascript" src="../../js/ficha_entrada_expediente.js"></script>
+	    <script src="../../js/applications/formApp.js" type="text/javascript"></script>
+	    <script src="../../js/services/formUtilities.js" type="text/javascript"></script>
+	    <script src="../../js/controllers/formularios/patronatos/ficha_entrada_patronato.js"></script>
 	    <script type="text/javascript">
 
 	    	window.onload = function(){

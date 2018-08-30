@@ -27,7 +27,7 @@
 }*/
 
 
-#asignar_btn, #descargar_btn, #remitir_btn, #modificar_btn {
+#asignar_btn, #descargar_btn, #remitir_btn, #revisar_btn, #remitirCP_btn, #reingresoCP_btn {
 	font-weight: bold;
 	background-color: #4da6ff;
     color: #fefefe;

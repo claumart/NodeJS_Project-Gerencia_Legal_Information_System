@@ -8,12 +8,12 @@ var cors = require('cors');
 var bodyParser = require('body-parser');
 var myConnection = require('./connection');
 
-var tablaRouter = require('./routes/tabla');
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 //rutas agregadas por mi
 var populateRouter = require('./routes/population/populateSelects');
 var formulariosExpedientesRouter = require('./routes/formularios/expedientes');
+var formulariosOpinionesRouter = require('./routes/formularios/opiniones');
+var formulariosPatronatosRouter = require('./routes/formularios/patronatos');
+var seguimientoExpedientesRouter = require('./routes/seguimiento/seguimientoExpedientes');
 
 var app = express();
 
@@ -43,10 +43,9 @@ app.use(myConnection.dbConnection);
 
 app.use('/', populateRouter);
 app.use('/', formulariosExpedientesRouter);
-app.use('/', tablaRouter);
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
+app.use('/', formulariosOpinionesRouter);
+app.use('/', formulariosPatronatosRouter);
+app.use('/', seguimientoExpedientesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

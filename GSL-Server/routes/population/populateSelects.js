@@ -10,9 +10,9 @@ router.post('/populate/select/abogadoAsignado', populateSelectsController.popula
 
 router.post('/populate/select/asunto', populateSelectsController.populateAsunto);
 
-/*router.post('/populate/select/estadoExpediente', populateSelectsController);
+router.post('/populate/select/tipoLugar', populateSelectsController.populateTipoLugar);
 
-router.post('/populate/select/tipoLugar', populateSelectsController);
+/*router.post('/populate/select/estadoExpediente', populateSelectsController);
 
 router.post('/populate/select/cargoEmpleado', populateSelectsController);*/
 

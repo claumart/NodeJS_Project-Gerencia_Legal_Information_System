@@ -65,37 +65,35 @@
       		<form class="grid-container grid-padding-x" ng-app="formApp" ng-controller="formCtrl">
             	<div class="grid-x grid-padding-x">
             		<div class="medium-6 small-12 cell medium-offset-3">
-                		<label>Interesado(a): <input type="text" placeholder="Nombre del interesado" id="interesado" name="interesado"/></label> 
+                		<label>Interesado(a): <input type="text" placeholder="Nombre del interesado" id="interesado" name="interesado" ng-model="interesado"/></label>
               		</div>
               	</div>
             	<div class="grid-x grid-padding-x">
               		<div class="medium-6 small-12 cell medium-offset-3">
                 		<label>Procedencia:</label>
-                		<select id="procedencia_select" name="procedencia_select">
-		                	<option value="husker">Catastro</option>
-		                	<option value="starbuck">Tierras</option>
-		                	<option value="hotdog">Finanzas</option>
-		                	<option value="apollo">Trnas450</option>
-                		</select>
+                		<select id="procedencia_select" name="procedencia" ng-model="procedencia_select" ng-options="x.nombreDependencia for x in dependenciaList"></select>
               		</div>
             	</div>
            
 	            <div class="grid-x grid-padding-x">
 	            	<div class="medium-6 small-12 cell medium-offset-3">
 	                	<label>Número de Oficio:</label>
-		              		<input type="text" name="prueba" id="num_oficio" name="num_oficio">
+		              		<input type="text" name="prueba" id="num_oficio" name="num_oficio" ng-model="num_oficio">
 	              	</div>
 	            </div>
 
 	            <div class="grid-x grid-padding-x">
               		<div class="medium-6 small-12 cell medium-offset-3">
+              			<label>Asunto:</label>
+			            <select id="asunto_select" name="asunto_select" ng-model="asunto_select" ng-options="x.nombreAsunto for x in asuntoList">
+			            </select>
+              		</div>
+            	</div>
+
+	            <div class="grid-x grid-padding-x">
+              		<div class="medium-6 small-12 cell medium-offset-3">
               			<label>Recibido Por:</label>
-                		<select id="empleado_receptor" name="empleado_receptor">
-		                	<option value="husker">Miriam</option>
-		                	<option value="starbuck">Marielos</option>
-		                	<option value="hotdog">Elsa</option>
-		                	<option value="apollo">Karen Bonilla</option>
-                		</select>
+                		<select id="empleado_receptor_select" name="empleado_receptor_select" ng-model="empleado_receptor_select" ng-options="x.nombreEmpleado for x in empleadoReceptorList"></select>
               		</div>
             	</div>
 
@@ -111,22 +109,22 @@
 		            <div class="grid-x grid-padding-x">  	
 		              	<div class="medium-3 small-12 cell">
 			              	<label>Fecha de Entrada:</label>
-							<input type="date" id="fecha_entrada" name="fecha_entrada">
+							<input type="date" id="fecha_entrada" name="fecha_entrada" ng-model="fecha_entrada">
 			            </div>
 
 			            <div class="medium-3 small-12 cell">
 			              	<label>Hora:</label>
-			              	<input id="hora_entrada" name="hora_entrada" type="number" value="1" min="1" max="12">
+			              	<input id="hora_entrada" name="hora_entrada" type="number" value="1" min="1" max="12" ng-model="hora_entrada">
 			            </div>
 
 			            <div class="medium-3 small-12 cell">
 			              	<label>Minutos:</label>
-			              	<input id="minuto_entrada" name="minuto_entrada" type="number" value="0" min="0" max="59">
+			              	<input id="minuto_entrada" name="minuto_entrada" type="number" value="0" min="0" max="59" ng-model="minuto_entrada">
 			            </div>
 
 			            <div class="medium-3 small-12 cell">
 			              	<label>AM/PM:</label>
-			                <select id="" name="">
+			                <select id="ampm" name="ampm" ng-model="ampm">
 					           	<option value="am">AM</option>
 					           	<option value="pm">PM</option>
 			            	</select>
@@ -139,7 +137,7 @@
 	      				<button class="button" type="button" id="atras_btn" onclick="window.history.back();">Atras</button>
 	   				</fieldset>
 		        	<fieldset class="medium-2 small-6 cell">
-	      				<button class="button" type="submit" value="Submit" id="registrar_btn">Registar</button>
+	      				<button class="button" type="submit" value="Submit" id="registrar_btn" ng-click="validarFormulario()">Registar</button>
 	   				</fieldset>
    				</div>
           	</form>
@@ -153,7 +151,9 @@
 	    <script src="../../js/header.js"></script>
 	    <script src="../../js/footer.js"></script>
 	    <script src="../../js/barraMenu.js" type="text/javascript"></script>
-	    <script type="text/javascript" src="../../js/ficha_entrada_expediente.js"></script>
+	    <script src="../../js/applications/formApp.js" type="text/javascript"></script>
+	    <script src="../../js/services/formUtilities.js" type="text/javascript"></script>
+	    <script src="../../js/controllers/formularios/opiniones/ficha_entrada_opinion.js"></script>
 	    <script type="text/javascript">
 
 	    	window.onload = function(){

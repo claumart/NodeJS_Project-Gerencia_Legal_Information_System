@@ -77,7 +77,7 @@
             	<div class="grid-x grid-padding-x">
               		<div class="medium-6 small-12 cell medium-offset-3">
               			<label>Recibido Por:</label>
-                		<select id="empleado_receptor_select" name="empleado_receptor_select" ng-model="empleado_receptor_select" ng-options="x.nombresEmpleado for x in empleadoReceptorList"></select>
+                		<select id="empleado_receptor_select" name="empleado_receptor_select" ng-model="empleado_receptor_select" ng-options="x.nombreEmpleado for x in empleadoReceptorList"></select>
               		</div>
             	</div>
 
@@ -198,7 +198,9 @@
 	    <script src="../../js/header.js"></script>
 	    <script src="../../js/footer.js"></script>
 	    <script src="../../js/barraMenu.js" type="text/javascript"></script>
-	    <script src="../../js/ficha_entrada_expediente.js"></script>
+	    <script src="../../js/applications/formApp.js" type="text/javascript"></script>
+	    <script src="../../js/services/formUtilities.js" type="text/javascript"></script>
+	    <script src="../../js/controllers/formularios/expedientes/ficha_entrada_expediente.js"></script>
 	    <script type="text/javascript">
 
 	    	window.onload = function(){

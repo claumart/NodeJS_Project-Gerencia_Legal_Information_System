@@ -51,8 +51,7 @@ DROP TABLE IF EXISTS `Empleado` ;
 
 CREATE TABLE IF NOT EXISTS `Empleado` (
   `numEmpleado` INT NOT NULL,
-  `nombresEmpleado` VARCHAR(40) NOT NULL,
-  `apellidosEmpleado` VARCHAR(40) NOT NULL,
+  `nombreEmpleado` VARCHAR(80) NOT NULL,
   `activo` TINYINT NOT NULL,
   `idCargo` INT NOT NULL,
   `fechaNacimiento` DATE NOT NULL,
@@ -131,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaExpediente` (
   `idEmpleadoReceptor` INT NOT NULL,
   `fechaEntrada` DATETIME NOT NULL,
   `idAbogadoAsignado` INT NULL,
-  `fechaAsignación` DATETIME NULL,
+  `fechaAsignacion` DATETIME NULL,
   `fechaDescargo` DATETIME NULL,
   `idDependenciaRemision` INT NULL,
   `fechaRemision` DATETIME NULL,
@@ -329,6 +328,7 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaPatronato` (
   `fechaDescargo` DATETIME NULL,
   `fechaRemision` DATETIME NULL,
   `recibidoPor` VARCHAR(45) NULL,
+  `idEstadoPatronato` INT NOT NULL,
   `idDictamen` INT NULL,
   PRIMARY KEY (`idFichaEntradaPatronato`),
   CONSTRAINT `FEP_idTipoLugar_FK`
@@ -351,6 +351,11 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaPatronato` (
     REFERENCES `Dictamen` (`idDictamen`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+  CONSTRAINT `FEP_idEstadoPatronato_FK`
+    FOREIGN KEY (`idEstadoPatronato`)
+    REFERENCES `EstadoExpediente` (`idEstadoExpediente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
 ENGINE = InnoDB;
 
 ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idTipoLugar_FK_idx` (`idTipoLugar` ASC);
@@ -362,6 +367,8 @@ ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idAbogadoAsignado_FK_idx` (`i
 ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idDictamen_FK_idx` (`idDictamen` ASC);
 
 ALTER TABLE `FichaEntradaPatronato` ADD UNIQUE `idDictamen_UNIQUE` (`idDictamen` ASC);
+
+ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idEstadoPatronato_idx` (`idEstadoPatronato` ASC);
 
 
 -- -----------------------------------------------------
@@ -616,6 +623,83 @@ INSERT INTO Empleado(numEmpleado, nombresEmpleado, apellidosEmpleado, activo, id
 INSERT INTO Empleado(numEmpleado, nombresEmpleado, apellidosEmpleado, activo, idCargo, fechaNacimiento) VALUES(11643, 'Marielos', 'Sanchez', true, 3, STR_TO_DATE('1-01-2012', '%d-%m-%Y') );
 INSERT INTO Empleado(numEmpleado, nombresEmpleado, apellidosEmpleado, activo, idCargo, fechaNacimiento) VALUES(22760, 'Mirian', 'Rivera', true, 2, STR_TO_DATE('1-01-2012', '%d-%m-%Y') );
 
+/*ALTER TABLE `empleado` CHANGE `nombresEmpleado` `nombreEmpleado` VARCHAR(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `fichaentradaexpediente` CHANGE `fechaAsignación` `fechaAsignacion` DATETIME NULL DEFAULT NULL;*/
 /*STR_TO_DATE("22/8/2018 14:43:26", "%M/%d/%Y %H:%i:%s");*/
 
+
+/*
+SELECT fichaexp.idFichaEntradaExpediente as idficha, Expediente.numExpediente, Expediente.folios, Procedencia.nombreDependencia as nombreProcedencia, fichaexp.interesado, asunto.nombreAsunto, empleadoReceptor.nombreEmpleado as nombreEmpleadoReceptor, fichaexp.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado, fichaexp.fechaAsignacion, fichaexp.fechaDescargo, fichaexp.recibidoPor, EstadoExpediente.nombreEstadoExpediente, Dictamen.numDictamen 
+FROM fichaentradaexpediente as fichaexp 
+  LEFT JOIN fichaEntradaExpedienteXExpediente as fichaxexp 
+    ON fichaexp.idFichaEntradaExpediente = fichaxexp.idFichaEntradaExpediente
+    LEFT JOIN Expediente
+    ON Expediente.idExpediente = fichaxexp.idExpediente
+    LEFT JOIN Dependencia as Procedencia
+        ON Procedencia.idDependencia = fichaexp.idProcedencia
+  LEFT JOIN Asunto 
+        ON Asunto.idAsunto = fichaexp.idAsunto
+  LEFT JOIN Empleado as empleadoReceptor
+        ON empleadoReceptor.numEmpleado = fichaexp.idEmpleadoReceptor
+  LEFT JOIN empleado as abogado 
+        ON abogado.numEmpleado = fichaexp.idAbogadoAsignado
+    LEFT JOIN EstadoExpediente 
+        ON EstadoExpediente.idEstadoExpediente = fichaexp.idEstadoExpediente
+  LEFT JOIN Dictamen 
+        ON Dictamen.idDictamen = fichaexp.idDictamen
+        
+UNION
+
+SELECT fichaexp.idFichaEntradaExpediente as idficha, Expediente.numExpediente, Expediente.folios, Procedencia.nombreDependencia as nombreProcedencia, fichaexp.interesado, asunto.nombreAsunto, empleadoReceptor.nombreEmpleado as nombreEmpleadoReceptor, fichaexp.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado, fichaexp.fechaAsignacion, fichaexp.fechaDescargo, fichaexp.recibidoPor, EstadoExpediente.nombreEstadoExpediente, Dictamen.numDictamen 
+FROM fichaentradaexpediente as fichaexp 
+  RIGHT JOIN fichaEntradaExpedienteXExpediente as fichaxexp 
+    ON fichaexp.idFichaEntradaExpediente = fichaxexp.idFichaEntradaExpediente
+    RIGHT JOIN Expediente
+    ON Expediente.idExpediente = fichaxexp.idExpediente
+    RIGHT JOIN Dependencia as Procedencia
+        ON Procedencia.idDependencia = fichaexp.idProcedencia
+  RIGHT JOIN Asunto 
+        ON Asunto.idAsunto = fichaexp.idAsunto
+  RIGHT JOIN Empleado as empleadoReceptor
+        ON empleadoReceptor.numEmpleado = fichaexp.idEmpleadoReceptor
+  RIGHT JOIN empleado as abogado 
+        ON abogado.numEmpleado = fichaexp.idAbogadoAsignado
+    RIGHT JOIN EstadoExpediente 
+        ON EstadoExpediente.idEstadoExpediente = fichaexp.idEstadoExpediente
+  RIGHT JOIN Dictamen 
+        ON Dictamen.idDictamen = fichaexp.idDictamen
+    
+GROUP BY fichaxexp.idFichaEntradaExpediente
+
+*/
+
+/*
+SELECT fichaexp.idFichaEntradaExpediente as idficha, Expediente.numExpediente, Procedencia.nombreDependencia as nombreProcedencia, asunto.nombreAsunto, fichaexp.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado, fichaexp.idEstadoExpediente
+FROM fichaentradaexpediente as fichaexp 
+  LEFT JOIN fichaEntradaExpedienteXExpediente as fichaxexp 
+    ON fichaexp.idFichaEntradaExpediente = fichaxexp.idFichaEntradaExpediente
+    LEFT JOIN Expediente
+    ON Expediente.idExpediente = fichaxexp.idExpediente
+    LEFT JOIN Dependencia as Procedencia
+        ON Procedencia.idDependencia = fichaexp.idProcedencia
+  LEFT JOIN Asunto 
+        ON Asunto.idAsunto = fichaexp.idAsunto
+  LEFT JOIN empleado as abogado 
+        ON abogado.numEmpleado = fichaexp.idAbogadoAsignado
+WHERE fichaexp.idEstadoExpediente = 1        
+UNION
+SELECT fichaexp.idFichaEntradaExpediente as idficha, Expediente.numExpediente, Procedencia.nombreDependencia as nombreProcedencia, asunto.nombreAsunto, fichaexp.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado, fichaexp.idEstadoExpediente
+FROM fichaentradaexpediente as fichaexp 
+  RIGHT JOIN fichaEntradaExpedienteXExpediente as fichaxexp 
+    ON fichaexp.idFichaEntradaExpediente = fichaxexp.idFichaEntradaExpediente
+    RIGHT JOIN Expediente
+    ON Expediente.idExpediente = fichaxexp.idExpediente
+    RIGHT JOIN Dependencia as Procedencia
+        ON Procedencia.idDependencia = fichaexp.idProcedencia
+  RIGHT JOIN Asunto 
+        ON Asunto.idAsunto = fichaexp.idAsunto
+  RIGHT JOIN empleado as abogado 
+        ON abogado.numEmpleado = fichaexp.idAbogadoAsignado
+WHERE fichaexp.idEstadoExpediente = 1
+*/
 
