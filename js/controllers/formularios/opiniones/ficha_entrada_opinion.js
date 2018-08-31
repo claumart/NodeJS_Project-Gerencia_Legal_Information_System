@@ -67,7 +67,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
                                 window.alert("Todo bien con fecha actual " + now);
                                 $http({
                                         method : "POST",
-                                        url : "http://localhost:3000/formularios/opiniones/registrar/fechaActual",
+                                        url : "http://localhost:3000/formularios/opiniones/registrar",
                                         data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
                                             numOficio : numOficioValidado, idAsunto : $scope.asunto_select.idAsunto,
                                             numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, fecha : now
@@ -88,7 +88,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
                                             window.alert("Todo bien con fecha personalizda " + fechaPersonalizada);
                                             $http({
                                                     method : "POST",
-                                                    url : "http://localhost:3000/formularios/opiniones/registrar/fechaPersonalizada",
+                                                    url : "http://localhost:3000/formularios/opiniones/registrar",
                                                     data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
                                                         numOficio : numOficioValidado, idAsunto : $scope.asunto_select.idAsunto,
                                                         numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, fecha : fechaPersonalizada

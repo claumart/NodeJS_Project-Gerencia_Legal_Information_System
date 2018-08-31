@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 var myConnection = require('./connection');
 
 //rutas agregadas por mi
-var populateRouter = require('./routes/population/populateSelects');
+var populateRouter = require('./routes/population/population');
 var formulariosExpedientesRouter = require('./routes/formularios/expedientes');
 var formulariosOpinionesRouter = require('./routes/formularios/opiniones');
 var formulariosPatronatosRouter = require('./routes/formularios/patronatos');

@@ -171,38 +171,31 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities) {
     $scope.darSeguimientoExpediente = (idFicha)=>{
         switch ($scope.accion) {
             case "asignar":
-                var newUrl = "formularios/expedientes/ficha_de_asignacion_expedientes.html?idFicha=" + idFicha;
+                var newUrl = "formularios/expedientes/ficha_de_asignacion_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "descargar":
-               var newUrl = "formularios/expedientes/ficha_de_asignacion_expedientes.html?idFicha=" + idFicha;
+               var newUrl = "formularios/expedientes/ficha_de_descargo_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "revisar":
-                var newUrl = "formularios/expedientes/ficha_de_asignacion_expedientes.html?idFicha=" + idFicha;
+                var newUrl = "formularios/expedientes/ficha_de_revision_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "remitir":
-                var newUrl = "formularios/expedientes/ficha_de_asignacion_expedientes.html?idFicha=" + idFicha;
+                var newUrl = "formularios/expedientes/ficha_de_remision_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
             case "remitirConPrevio":
-                var newUrl = "formularios/expedientes/ficha_de_asignacion_expedientes.html?idFicha=" + idFicha;
+                var newUrl = "formularios/expedientes/ficha_de_remision_conprevio_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "reingresar":
-                var newUrl = "formularios/expedientes/ficha_de_asignacion_expedientes.html?idFicha=" + idFicha;
+                var newUrl = "formularios/expedientes/ficha_de_reingreso_conprevio_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
-            default:
-                window.alert("Error de sistema");
             
         }
     };
 
 });
 
-
-/*function darSeguimientoExpediente(accion, idFicha){
-        var newUrl = "formularios/expedientes/ficha_de_asignacion_expedientes.html?idFicha=" + idFicha;
-        window.location.href = newUrl;
-*/
