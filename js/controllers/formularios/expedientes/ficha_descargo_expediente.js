@@ -1,5 +1,6 @@
 app.controller("formCtrl", function($scope, $http, $window, utilities) {
     $scope.urlParams = utilities.getAllUrlParams($window.location.href);
+    $scope.numExpedientes = "";
 
     $http({
             method : "POST",
@@ -19,15 +20,12 @@ app.controller("formCtrl", function($scope, $http, $window, utilities) {
     });
 
     $scope.validarFormulario = ()=> {
-        if($scope.fecha_asignacion != null) {
-            var date = new Date($scope.fecha_descargo);
-            var dateTime = date.toLocaleString('es-GB');
-            dateTime = utilities.formatearFechaActual(dateTime);
-            var onlyDate = dateTime.split(' ')[0];
+        if($scope.fecha_descargo != null) {
+            var fechaValidada = utilities.validarFecha($scope.fecha_descargo);
             $http({
                 method : "POST",
                 url : "http://localhost:3000/formularios/expedientes/descargar",
-                data : { fecha : onlyDate, idFicha : $scope.urlParams.idFicha
+                data : { fecha : fechaValidada, idFicha : $scope.urlParams.idFicha
                 }
             }).then(function mySuccess(response) {
                 $window.location.href = "../../seguimiento_expedientes.html#titulo_seguimiento";

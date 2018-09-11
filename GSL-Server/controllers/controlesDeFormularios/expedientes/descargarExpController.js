@@ -11,7 +11,7 @@ descargarExpController.descargarExpedientes = (req, res, next) => {
                 console.log(err);
                 return next(err);
             }
-        	res.status(status.OK).json({ message: 'Expedientes asignados correctamente' });
+        	res.status(status.OK).json({ message: 'Expedientes descargados correctamente' });
       	});
       
     });

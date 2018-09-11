@@ -22,7 +22,7 @@ router.post('/formularios/expedientes/descargar', descargarExpController.descarg
 
 
 /****************************************Revisión de Expedientes********************************************/
-//router.post('/formularios/expedientes/revisar', revisarExpController.revisarExpedientes);
+router.post('/formularios/expedientes/revisar', revisarExpController.crearDictamen);
 
 
 /****************************************Remisión de Expedientes********************************************/
@@ -33,5 +33,6 @@ router.post('/formularios/expedientes/descargar', descargarExpController.descarg
 //router.post('/formularios/expedientes/remitirConPrevio', providenciaExpController.remitirConPrevio);
 
 //router.post('/formularios/expedientes/reingresarConPrevio', providenciaExpController.reingresarConPrevio);
+router.get('/', revisarExpController.verDir);
 
 module.exports = router;

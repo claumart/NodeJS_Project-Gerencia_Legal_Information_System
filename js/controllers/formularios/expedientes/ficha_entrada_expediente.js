@@ -27,7 +27,7 @@ app.service('limpieza', function() {
     }
 });
 
-app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
+app.controller("formCtrl", function($scope, $http, utilities, limpieza, urlUtility) {
 	$scope.acumulados = "No";
 	$scope.tipo_fecha = "actual";
 	$scope.numAcumulados = 1;
@@ -36,6 +36,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
 	$scope.hora_entrada = 1;
 	$scope.minuto_entrada = 0;
 	$scope.ampm = "am";
+    $scope.serverUrl = urlUtility.getServerUrl();
 
 	$scope.agregarExpediente = ()=> {
 		var acumuladosBox = document.getElementById('si_acumulados_box');
@@ -87,7 +88,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
 
 	$http({
     	method : "POST",
-    	url : "http://localhost:3000/populate/select/dependencia"
+    	url : $scope.serverUrl + "/populate/select/dependencia"
     }).then(function mySuccess(response) {
 		var lista = JSON.parse(response.data);
         $scope.dependenciaList = lista;
@@ -98,7 +99,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
 
 	$http({
         	method : "POST",
-        	url : "http://localhost:3000/populate/select/empleadoReceptor"
+        	url : $scope.serverUrl + "/populate/select/empleadoReceptor"
     	}).then(function mySuccess(response) {
     		var lista = JSON.parse(response.data);
         	$scope.empleadoReceptorList = lista;
@@ -108,7 +109,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
 
     $http({
         	method : "POST",
-        	url : "http://localhost:3000/populate/select/asunto"
+        	url : $scope.serverUrl + "/populate/select/asunto"
     	}).then(function mySuccess(response) {
     		var lista = JSON.parse(response.data);
         	$scope.asuntoList = lista;
@@ -132,7 +133,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
                                         now = utilities.formatearFechaActual(now);
     									$http({
 									        	method : "POST",
-									        	url : "http://localhost:3000/formularios/expedientes/registrar/noAcumulado",
+									        	url : $scope.serverUrl + "/formularios/expedientes/registrar/noAcumulado",
 									        	data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
 									        		numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, numExpediente : numExpValidado,
 									        		folios : $scope.num_folios_NA, idAsunto : $scope.asunto_NA_select.idAsunto, fecha : now
@@ -152,7 +153,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
     												window.alert("Todo bien con fecha personalizda " + fechaPersonalizada);
     												$http({
 												        	method : "POST",
-												        	url : "http://localhost:3000/formularios/expedientes/registrar/noAcumulado",
+												        	url : $scope.serverUrl + "/formularios/expedientes/registrar/noAcumulado",
 												        	data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
 												        		numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, numExpediente : numExpValidado,
 												        		folios : $scope.num_folios_NA, idAsunto : $scope.asunto_NA_select.idAsunto, fecha : fechaPersonalizada
@@ -212,7 +213,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
                                                         var numeroExpedientes = parseInt($scope.numAcumulados, 10); 
                                                         $http({
                                                             method : "POST",
-                                                            url : "http://localhost:3000/formularios/expedientes/registrar/acumulado",
+                                                            url : $scope.serverUrl + "/formularios/expedientes/registrar/acumulado",
                                                             data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
                                                                 numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, numExpedientes : numExpedientes,
                                                                 folios : numerosFolios, idAsunto : $scope.asunto_A_select.idAsunto, fecha : now, cantidadExpedientes : numeroExpedientes
@@ -247,7 +248,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
 			                                                        var numeroExpedientes = parseInt($scope.numAcumulados, 10); 
 			                                                        $http({
 			                                                            method : "POST",
-			                                                            url : "http://localhost:3000/formularios/expedientes/registrar/acumulado",
+			                                                            url : $scope.serverUrl + "/formularios/expedientes/registrar/acumulado",
 			                                                            data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
 												        					numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, numExpedientes : numExpedientes,
 												        					folios : numerosFolios, idAsunto : $scope.asunto_A_select.idAsunto, fecha : fechaPersonalizada, cantidadExpedientes : numeroExpedientes

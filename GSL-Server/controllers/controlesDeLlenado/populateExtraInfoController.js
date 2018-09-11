@@ -19,4 +19,24 @@ populateExtraInfoController.getNombreExpedientes = (req, res, next) => {
 }
 
 
+populateExtraInfoController.existeDictamen = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        connection.query("SELECT idDictamen FROM Dictamen WHERE numDictamen = ?", [req.body.numDictamen], (err, results) => {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+
+            if(results.length > 0) {
+                res.send(true);
+            } else{
+                res.send(false);
+            }
+        });
+      
+    });
+}
+
+
 module.exports = populateExtraInfoController;

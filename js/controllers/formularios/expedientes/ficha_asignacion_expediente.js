@@ -1,5 +1,6 @@
 app.controller("formCtrl", function($scope, $http, $window, utilities) {
     $scope.urlParams = utilities.getAllUrlParams($window.location.href);
+    $scope.numExpedientes = "";
 
     $http({
             method : "POST",

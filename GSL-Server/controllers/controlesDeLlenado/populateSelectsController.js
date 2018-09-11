@@ -63,7 +63,6 @@ populateSelectsController.populateAsunto = (req, res, next) => {
     	connection.query('SELECT idAsunto, nombreAsunto FROM Asunto', [], (err, results) => {
         if (err) return next(err);
         var string=JSON.stringify(results);
-       
         res.json(string);
       });
       

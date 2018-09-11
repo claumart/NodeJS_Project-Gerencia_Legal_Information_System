@@ -10,7 +10,7 @@
 	padding: 1vw;
 }
 
-#si_acumulados_controllers {
+#si_acumulados_controllers, #paginas_controllers {
 	align-items: flex-end;
 }
 
@@ -24,5 +24,11 @@
 
 h6 {
 	padding-bottom: 2vh;	
+}
+
+.alerta {
+	color: #990000;
+	text-align: center;
+
 }
 

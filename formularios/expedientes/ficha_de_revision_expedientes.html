@@ -60,50 +60,57 @@
           				<h3 id="titulo_formulario">Revisión de Expedientes</h3>
         			</div>
       			</div>
-	      		<div class="grid-x grid-padding-x">
-	        		<div class="large-12 cell">
-	          			<h5>Expedientes a descargar:<h6>651-P2-2018</h6></h5>
-	        		</div>
-	      		</div>
 	      	</div>
       		<form class="grid-container grid-padding-x" ng-app="formApp" ng-controller="formCtrl" enctype="multipart/form-data">
+      			<div class="grid-x grid-padding-x">
+	        		<div class="large-12 cell">
+	          			<h5>Expedientes a revisar:<h6>{{numExpedientes}}</h6></h5>
+	        		</div>
+	      		</div>
 				<div class="grid-x grid-padding-x">  	
 		            <div class="medium-6 small-12 cell medium-offset-3">
-			           	<label>Numero de Dictamen:</label>
-			           	<input type="text" id="num_dictamen" name="num_dictamen">
+			           	<label>Número de Dictamen:</label>
+			           	<input type="text" id="num_dictamen" name="num_dictamen" ng-model="num_dictamen">
+			        </div>
+			        <div class="medium-6 small-12 cell medium-offset-3">
+			           	<label class="alerta" ng-show="mostrarDictamen">Ya existe un dictamen con este número en la base de datos, por favor ingrese un número de dictamen diferente</label>
 			        </div>
 			    </div>
-
 	            <div id="paginas_dictamen_box">
-		            <div class="grid-x grid-padding-x" id="si_acumulados_controllers">
-
+		            <div class="grid-x grid-padding-x" id="paginas_controllers">
 		              	<fieldset class="medium-2 small-12 cell">
-		              		<button type="button" id="add_exp_btn" class="button secondary" ng-clik()>Agregar Página</button>
+		              		<button type="button" id="add_exp_btn" class="button secondary" ng-click="agregarPagina()">Agregar Página</button>
 		              	</fieldset>
 
 		              	<fieldset class="medium-4 small-12 cell">
-		              		<button type="button" id="delete_last_btn" class="button secondary">Eliminar última Página</button>
+		              		<button type="button" id="delete_last_btn" class="button secondary" ng-click="eliminarUltimaPagina()">Eliminar última Página</button>
+		              	</fieldset>
+		              	<fieldset class="medium-2 small-12 cell">
+		              		<input type="number" name="numPaginas" id="numPaginas" value="1" style="display: none" ng-model="numPaginas">
 		              	</fieldset>
 		            </div>
-		            <div class="grid-x grid-padding-x" id="expediente1" name="expediente1">
+		            <div class="grid-x grid-padding-x" id="pagina1">
 		              	<div class="medium-3 small-12 cell">
-		              		<label for="imageFile">Página # 1</label>
+		              		<label>Página # 1</label>
 		              	</div>
 		              	<div class="medium-9 small-12 cell">
-		              		<input name="imageFile" type="file" accept="image/*" id="imageFile">
-
+		              		<input name="imageFiles[]" type="file" accept="image/*" id="image_pagina1" class="files" ng-model="image_pagina1">
 		              	</div>
-
-		              	
 		            </div>
 	        	</div>
+
+	        	<div class="grid-x grid-padding-x">  	
+			        <div class="medium-6 small-12 cell medium-offset-3">
+			           	<label class="alerta" ng-show="mostrarPaginas">Por favor selecciones todas las imagenes correspondientes a las páginas del dictamen</label>
+			        </div>
+			    </div>
 
    				<div class="grid-x grid-padding-x">
 	        		<fieldset class="medium-2 small-6 cell medium-offset-4">
 	      				<button class="button" type="button" id="atras_btn" onclick="window.history.back();">Atras</button>
 	   				</fieldset>
 		        	<fieldset class="medium-2 small-6 cell">
-	      				<button class="button" type="submit" value="Submit" id="descargar_btn">Descargar</button>
+	      				<button class="button" type="submit" value="Submit" id="descargar_btn" ng-click="validarFormulario()">Revisar</button>
 	   				</fieldset>
    				</div>
           	</form>
@@ -119,7 +126,10 @@
 	    <script src="../../js/header.js"></script>
 	    <script src="../../js/footer.js"></script>
 	    <script src="../../js/barraMenu.js" type="text/javascript"></script>
-	    <script type="text/javascript" src="../../js/ficha_entrada_expediente.js"></script>
+	   	<script src="../../js/applications/formApp.js" type="text/javascript"></script>
+	    <script src="../../js/services/formUtilities.js" type="text/javascript"></script>
+	    <script src="../../js/services/urlUtility.js" type="text/javascript"></script>
+	    <script src="../../js/controllers/formularios/expedientes/ficha_revision_expediente.js"></script>
 	    <script type="text/javascript">
 
 	    	window.onload = function(){
