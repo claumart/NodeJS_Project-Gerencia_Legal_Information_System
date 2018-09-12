@@ -37,6 +37,7 @@ app.use(cookieParser());
 //Agragada por mi
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dictamenes')));
 
 //Connection handle
 app.use(myConnection.dbConnection);

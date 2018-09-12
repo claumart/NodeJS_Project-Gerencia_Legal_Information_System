@@ -19,6 +19,6 @@ router.post('/populate/select/cargoEmpleado', populateSelectsController);*/
 
 /*************************Informacion extra******************************/
 router.post('/populate/formularios/nombreExpedientes', populateExtraInfoController.getNombreExpedientes);
-router.post('/populate/formularios/existeDictamen', populateExtraInfoController.existeDictamen);
+router.post('/extraInfo/formularios/existeDictamen', populateExtraInfoController.existeDictamen);
 
 module.exports = router;

@@ -60,37 +60,32 @@
           				<h3 id="titulo_formulario">Remisión de Expedientes</h3>
         			</div>
       			</div>
-      			<div class="grid-x grid-padding-x">
-        			<div class="large-12 cell">
-          				<h5>Expedientes a remitir:<h6>890-SA-2014</h6></h5>
-        			</div>
-      			</div>
       		</div>
 
 
       		<form class="grid-container grid-padding-x" ng-app="formApp" ng-controller="formCtrl">
+      			<div class="grid-x grid-padding-x">
+        			<div class="large-12 cell">
+          				<h5>Expedientes a remitir: <h6>{{numExpedientes}}</h6></h5>
+        			</div>
+      			</div>
             	<div class="grid-x grid-padding-x">
               		<div class="medium-6 small-12 cell medium-offset-3">
                 		<label>Dependencia a Remitir:</label>
-                		<select id="procedencia_select" name="procedencia_select">
-		                	<option value="husker">Catastro</option>
-		                	<option value="starbuck">Tierras</option>
-		                	<option value="hotdog">Finanzas</option>
-		                	<option value="apollo">Trans450</option>
-                		</select>
+                		<select id="dependencia_a_remitir_select" name="dependencia_a_remitir_select" ng-model="dependencia_a_remitir_select" ng-options="x.nombreDependencia for x in dependenciaList"></select>
               		</div>
             	</div>
 
             	<div class="grid-x grid-padding-x">
             		<div class="medium-6 small-12 cell medium-offset-3">
-                		<label>Recibido Por: <input type="text" placeholder="Nombre de la persona que recibió el expediente" id="nombre_recibio" name="nombre_recibio"/></label> 
+                		<label>Recibido Por: <input type="text" placeholder="Nombre de la persona que recibió el expediente" id="nombre_recibio" name="nombre_recibio" ng-model="nombre_recibio"/></label> 
               		</div>
               	</div>
 
             	<div class="grid-x grid-padding-x ultimo_parametro">	
 					<div class="medium-6 small-12 cell medium-offset-3">
 						<label>Fecha de Remisión:</label>
-						<input type="date" id="fecha_remisión" name="fecha_remisión">
+						<input type="date" id="fecha_remision" name="fecha_remision" ng-model="fecha_remision">
 					</div>
 				</div>
 
@@ -99,7 +94,7 @@
 	      				<button class="button" type="button" id="atras_btn" onclick="window.history.back();">Atras</button>
 	   				</fieldset>
 		        	<fieldset class="medium-2 small-6 cell">
-	      				<button class="button" type="submit" value="Submit" id="remitir_btn">Remitir</button>
+	      				<button class="button" type="submit" value="Submit" id="remitir_btn" ng-click="validarFormulario()">Remitir</button>
 	   				</fieldset>
    				</div>
           	</form>
@@ -113,7 +108,10 @@
 	    <script src="../../js/header.js"></script>
 	    <script src="../../js/footer.js"></script>
 	    <script src="../../js/barraMenu.js" type="text/javascript"></script>
-	    <script type="text/javascript" src="../../js/ficha_entrada_expediente.js"></script>
+	   	<script src="../../js/applications/formApp.js" type="text/javascript"></script>
+	    <script src="../../js/services/formUtilities.js" type="text/javascript"></script>
+	    <script src="../../js/services/urlUtility.js" type="text/javascript"></script>
+	    <script src="../../js/controllers/formularios/expedientes/ficha_remision_expediente.js"></script>
 	    <script type="text/javascript">
 
 	    	window.onload = function(){

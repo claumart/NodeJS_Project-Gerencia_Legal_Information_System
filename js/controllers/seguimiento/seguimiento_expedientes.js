@@ -67,7 +67,6 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities) {
 	$scope.mostrarExpedientesRevisados = ()=> {
 		$scope.accion = "remitir";
         $scope.textoBoton = "Remitir";
-
 		$http({
         	method : "POST",
         	url : "http://localhost:3000/seguimiento/expedientes/mostrar/revisados"
@@ -94,7 +93,7 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities) {
 	};
 
 	$scope.mostrarExpedientesAsignados2 = ()=> {
-		$scope.accion = "remitirConPrevio";
+		$scope.accion = "conPrevio";
         $scope.textoBoton = "Remitir Con Previo";
 
 		$http({
@@ -185,12 +184,13 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities) {
             case "remitir":
                 var newUrl = "formularios/expedientes/ficha_de_remision_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
-            case "remitirConPrevio":
-                var newUrl = "formularios/expedientes/ficha_de_remision_conprevio_expedientes.html#titulo_formulario?idFicha=" + idFicha;
+                break;
+            case "conPrevio":
+                var newUrl = "formularios/expedientes/ficha_de_remision_con_previo_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "reingresar":
-                var newUrl = "formularios/expedientes/ficha_de_reingreso_conprevio_expedientes.html#titulo_formulario?idFicha=" + idFicha;
+                var newUrl = "formularios/expedientes/ficha_de_reingreso_con_previo_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             

@@ -1,10 +1,11 @@
-app.controller("formCtrl", function($scope, $http, $window, utilities) {
+app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtility) {
     $scope.mostrarDictamen = false;
     $scope.mostrarPaginas = false;
     $scope.urlParams = utilities.getAllUrlParams($window.location.href);
     $scope.numExpedientes = "";
     $scope.numPaginas = 1;
     $scope.serverUrl = urlUtility.getServerUrl();
+    $scope.num_dictamen = "";
 
 
     $http({
@@ -70,44 +71,55 @@ app.controller("formCtrl", function($scope, $http, $window, utilities) {
         $scope.mostrarDictamen = false;
         $scope.mostrarPaginas = false;
         var dictamenExistente;
-        $http({
-            method : "POST",
-            url : $scope.serverUrl + "/populate/formularios/existeDictamen",
-            data : {numDictamen : $scope.num_dictamen}
-        }).then(function mySuccess(response) {
-            
-        }, function myError(response) {
-            console.log(response.statusText);
-        });
-
-
-        var fd = new FormData();
-        const inputs = document.getElementsByClassName('files');
-        const inputFiles = Array.from(inputs);
-        console.log(inputFiles);
-        console.log(inputFiles.length);
-        //console.log(inputs);
-        for(i = 0;  i < inputFiles.length; i++) {
-            if(inputFiles[i].files[0] != null){
-                fd.append('imageFiles[]', inputFiles[i].files[0]);
-                if(i == inputFiles.length - 1){
-                    $http({
-                        method : "POST",
-                        url : "../../pruebaImagenes.php",
-                        data : fd,
-                        transformRequest: angular.identity,
-                        headers: {'Content-Type': undefined}
-                    }).then(function mySuccess(response) {
-                        console.log(response.data);
-                    }, function myError(response) {
-                        console.log(response.statusText);
-                    });      
+        if($scope.num_dictamen.length < 26 && $scope.num_dictamen.trim().length > 0){
+            var numDictamenValidado = utilities.eliminateSpace($scope.num_dictamen.toUpperCase().trim());
+            $http({
+                method : "POST",
+                url : $scope.serverUrl + "/extraInfo/formularios/existeDictamen",
+                data : {numDictamen : numDictamenValidado}
+            }).then(function mySuccess(response) {
+                if(!response.data) {
+                    var fd = new FormData();
+                    const inputs = document.getElementsByClassName('files');
+                    const inputFiles = Array.from(inputs);
+                    console.log(inputFiles);
+                    console.log(inputFiles.length);
+                    //console.log(inputs);
+                    for(i = 0;  i < inputFiles.length; i++) {
+                        if(inputFiles[i].files[0] != null){
+                            fd.append('imageFiles[]', inputFiles[i].files[0]);
+                            if(i == inputFiles.length - 1){
+                                fd.append('numDictamen', numDictamenValidado);
+                                fd.append('idFicha', $scope.urlParams.idFicha);
+                                $http({
+                                    method : "POST",
+                                    url : "../../pruebaImagenes.php",
+                                    data : fd,
+                                    transformRequest: angular.identity,
+                                    headers: {'Content-Type': undefined}
+                                }).then(function mySuccess(response) {
+                                    $window.location.href = "../../seguimiento_expedientes.html#titulo_seguimiento";
+                                }, function myError(response) {
+                                    console.log(response.statusText);
+                                });      
+                            }
+                        }else{
+                            $scope.mostrarPaginas = true;
+                            break;
+                        }
+                    }
+                }else{
+                   $scope.mostrarDictamen = true; 
                 }
-            }else{
-                $scope.mostrarPaginas = true;
-                break;
-            }
+            }, function myError(response) {
+                console.log(response.statusText);
+            });
+
+        }else {
+            window.alert("El campo Número de dictamen es muy largo o está vacío, por favor ingrese un valor valido y sin espacios");
         }
+        
+        
     };
 
 

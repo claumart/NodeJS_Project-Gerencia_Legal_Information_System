@@ -1,10 +1,11 @@
-app.controller("formCtrl", function($scope, $http, $window, utilities) {
+app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtility) {
     $scope.urlParams = utilities.getAllUrlParams($window.location.href);
     $scope.numExpedientes = "";
+    $scope.serverUrl = urlUtility.getServerUrl();
 
     $http({
             method : "POST",
-            url : "http://localhost:3000/populate/formularios/nombreExpedientes",
+            url : $scope.serverUrl + "/populate/formularios/nombreExpedientes",
             data : {idFicha : $scope.urlParams.idFicha}
         }).then(function mySuccess(response) {
             var lista = JSON.parse(response.data);
@@ -24,7 +25,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities) {
             var fechaValidada = utilities.validarFecha($scope.fecha_descargo);
             $http({
                 method : "POST",
-                url : "http://localhost:3000/formularios/expedientes/descargar",
+                url : $scope.serverUrl + "/formularios/expedientes/descargar",
                 data : { fecha : fechaValidada, idFicha : $scope.urlParams.idFicha
                 }
             }).then(function mySuccess(response) {

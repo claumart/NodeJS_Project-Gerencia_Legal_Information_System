@@ -230,7 +230,8 @@ DROP TABLE IF EXISTS `RevisionExpediente` ;
 CREATE TABLE IF NOT EXISTS `RevisionExpediente` (
   `idRevisionExpediente` INT NOT NULL AUTO_INCREMENT,
   `idFichaEntradaExpediente` INT NOT NULL,
-  `idDependenciaRemison` INT NOT NULL,
+  `idDependenciaRemision` INT NOT NULL,
+  `recibidoPor` VARCHAR(45) NOT NULL,
   `fechaRemison` DATE NOT NULL,
   `idDependenciaRegreso` INT NULL,
   `fechaRegreso` DATETIME NULL,

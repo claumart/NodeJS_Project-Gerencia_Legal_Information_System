@@ -26,11 +26,11 @@ router.post('/formularios/expedientes/revisar', revisarExpController.crearDictam
 
 
 /****************************************Remisión de Expedientes********************************************/
-//router.post('/formularios/expedientes/remitir', remitirExpController.remitirExpedientes);
+router.post('/formularios/expedientes/remitir', remitirExpController.remitirExpedientes);
 
 
 /****************************************Providencia de Expedientes********************************************/
-//router.post('/formularios/expedientes/remitirConPrevio', providenciaExpController.remitirConPrevio);
+router.post('/formularios/expedientes/remitirConPrevio', providenciaExpController.remitirConPrevio);
 
 //router.post('/formularios/expedientes/reingresarConPrevio', providenciaExpController.reingresarConPrevio);
 router.get('/', revisarExpController.verDir);
