@@ -9,5 +9,5 @@ module.exports.dbConnection = myConnection(mysql,{
     user: dbUser,
     password : pass,
     port : 3306, //port mysql
-    database:'gerencialegal_amdc'
+    database:'gerencialegal_amdc_test'
 },'request');

@@ -17,7 +17,7 @@ footer {
 #footer_divisor h5 {
 	text-align: center;
 	color: #f2f2f2;
-	font-family: fantasy;
+	font-family: arial;
 	font-weight: bold;
 	padding-top: 4%;
 }
@@ -32,7 +32,7 @@ footer {
 #footer_content p {
 	text-align: center;
 	color: #f2f2f2;
-	font-family: fantasy;
+	font-family: arial;
 	font-weight: bold;
 	font-size: 1.6em;
 	padding-top: 15vh;

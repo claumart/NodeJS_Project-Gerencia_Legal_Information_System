@@ -12,7 +12,8 @@ app.service('limpieza', function() {
     }
 });
 
-app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
+app.controller("formCtrl", function($scope, $http, utilities, limpieza, urlUtility) {
+    $scope.serverUrl = urlUtility.getServerUrl();
 	$scope.tipo_fecha = "actual";
 	$scope.interesado = "";
 	$scope.num_oficio = "";
@@ -23,7 +24,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
 	//$scope.populateDependencia = ()=> {
 		$http({
         	method : "POST",
-        	url : "http://localhost:3000/populate/select/dependencia"
+        	url : $scope.serverUrl + "/populate/select/dependencia"
     	}).then(function mySuccess(response) {
     		var lista = JSON.parse(response.data);
         	$scope.dependenciaList = lista;
@@ -34,7 +35,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
 
 	$http({
         	method : "POST",
-        	url : "http://localhost:3000/populate/select/empleadoReceptor"
+        	url : $scope.serverUrl + "/populate/select/empleadoReceptor"
     	}).then(function mySuccess(response) {
     		var lista = JSON.parse(response.data);
         	$scope.empleadoReceptorList = lista;
@@ -44,7 +45,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
 
     $http({
         	method : "POST",
-        	url : "http://localhost:3000/populate/select/asunto"
+        	url : $scope.serverUrl + "/populate/select/asunto"
     	}).then(function mySuccess(response) {
     		var lista = JSON.parse(response.data);
         	$scope.asuntoList = lista;
@@ -67,7 +68,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
                                 window.alert("Todo bien con fecha actual " + now);
                                 $http({
                                         method : "POST",
-                                        url : "http://localhost:3000/formularios/opiniones/registrar",
+                                        url : $scope.serverUrl + "/formularios/opiniones/registrar",
                                         data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
                                             numOficio : numOficioValidado, idAsunto : $scope.asunto_select.idAsunto,
                                             numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, fecha : now
@@ -88,7 +89,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza) {
                                             window.alert("Todo bien con fecha personalizda " + fechaPersonalizada);
                                             $http({
                                                     method : "POST",
-                                                    url : "http://localhost:3000/formularios/opiniones/registrar",
+                                                    url : $scope.serverUrl + "/formularios/opiniones/registrar",
                                                     data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
                                                         numOficio : numOficioValidado, idAsunto : $scope.asunto_select.idAsunto,
                                                         numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, fecha : fechaPersonalizada
