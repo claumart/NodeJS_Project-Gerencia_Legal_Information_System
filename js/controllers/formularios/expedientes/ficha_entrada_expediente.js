@@ -10,6 +10,7 @@ app.service('limpieza', function() {
         scope.hora_entrada = 1;
         scope.minuto_entrada = 0;
         scope.ampm = "am";
+        scope.apoderado = "";
         scope.num_expediente_NA = "";
         scope.num_folios_NA = 0;
         scope.asunto_NA_select = null;
@@ -36,6 +37,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza, urlUtili
 	$scope.hora_entrada = 1;
 	$scope.minuto_entrada = 0;
 	$scope.ampm = "am";
+    $scope.apoderado = "";
     $scope.serverUrl = urlUtility.getServerUrl();
 
 	$scope.agregarExpediente = ()=> {
@@ -131,40 +133,40 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza, urlUtili
                                         var date = new Date();
                                         var now = date.toLocaleString('es-GB');
                                         now = utilities.formatearFechaActual(now);
-    									$http({
-									        	method : "POST",
-									        	url : $scope.serverUrl + "/formularios/expedientes/registrar/noAcumulado",
-									        	data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
-									        		numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, numExpediente : numExpValidado,
-									        		folios : $scope.num_folios_NA, idAsunto : $scope.asunto_NA_select.idAsunto, fecha : now
-									        	}
-									    	}).then(function mySuccess(response) {
+                                        var apoderadoLegal = $scope.apoderado.trim();
+                                            $http({
+                                                method : "POST",
+                                                url : $scope.serverUrl + "/formularios/expedientes/registrar/noAcumulado",
+                                                data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
+                                                    numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, numExpediente : numExpValidado,
+                                                    folios : $scope.num_folios_NA, idAsunto : $scope.asunto_NA_select.idAsunto, fecha : now,
+                                                    apoderado : apoderadoLegal
+                                                }
+                                            }).then(function mySuccess(response) {
                                                 limpieza.limpiarRegistrarExpForm($scope);
-									    		console.log(response.data);
-									    	}, function myError(response) {
-									        	console.log(response.statusText);
-									    });
+                                            }, function myError(response) {
+                                                console.log(response.statusText);
+                                            });
 
     								}else if($scope.tipo_fecha == "personalizada"){
     									if($scope.fecha_entrada != null) {
     										if(!isNaN($scope.hora_entrada) && $scope.hora_entrada >= 1 && $scope.hora_entrada <= 12){
     											if(!isNaN($scope.minuto_entrada) && $scope.minuto_entrada >= 0 && $scope.minuto_entrada <= 59){
     												var fechaPersonalizada = utilities.formatearFechaPersonalizada($scope.fecha_entrada, $scope.hora_entrada, $scope.minuto_entrada, $scope.ampm);
-    												window.alert("Todo bien con fecha personalizda " + fechaPersonalizada);
-    												$http({
-												        	method : "POST",
-												        	url : $scope.serverUrl + "/formularios/expedientes/registrar/noAcumulado",
-												        	data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
-												        		numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, numExpediente : numExpValidado,
-												        		folios : $scope.num_folios_NA, idAsunto : $scope.asunto_NA_select.idAsunto, fecha : fechaPersonalizada
-												        	}
-												    	}).then(function mySuccess(response) {
+    												var apoderadoLegal = $scope.apoderado.trim();
+                                                        $http({
+                                                            method : "POST",
+                                                            url : $scope.serverUrl + "/formularios/expedientes/registrar/noAcumulado",
+                                                            data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
+                                                                numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, numExpediente : numExpValidado,
+                                                                folios : $scope.num_folios_NA, idAsunto : $scope.asunto_NA_select.idAsunto, fecha : fechaPersonalizada,
+                                                                apoderado : apoderadoLegal
+                                                            }
+                                                        }).then(function mySuccess(response) {
                                                             limpieza.limpiarRegistrarExpForm($scope);
-												    		console.log(response.data);
-												    	}, function myError(response) {
-												        	console.log(response.statusText);
-												    });
-
+                                                        }, function myError(response) {
+                                                            console.log(response.statusText);
+                                                        });
     											}else {
     											window.alert("Por favor seleccione un rango de minutos valido entre 0 a 59");
     											}
@@ -210,25 +212,25 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza, urlUtili
                                                     numExpedientes[j-1] = numExpValidado;
                                                     numerosFolios[j-1] = inputFolio.value;
                                                     if(j == numeroExpedientes){
-                                                        var numeroExpedientes = parseInt($scope.numAcumulados, 10); 
-                                                        $http({
-                                                            method : "POST",
-                                                            url : $scope.serverUrl + "/formularios/expedientes/registrar/acumulado",
-                                                            data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
-                                                                numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, numExpedientes : numExpedientes,
-                                                                folios : numerosFolios, idAsunto : $scope.asunto_A_select.idAsunto, fecha : now, cantidadExpedientes : numeroExpedientes
-                                                            }
-                                                        }).then(function mySuccess(response) {
-                                                            limpieza.limpiarRegistrarExpForm($scope);
-                                                            console.log(response.data);
-                                                            }, function myError(response) {
-                                                             console.log(response.statusText);
-                                                        });
+                                                        var numeroExpedientes = parseInt($scope.numAcumulados, 10);
+                                                        var apoderadoLegal = $scope.apoderado.trim();
+                                                            $http({
+                                                                method : "POST",
+                                                                url : $scope.serverUrl + "/formularios/expedientes/registrar/acumulado",
+                                                                data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
+                                                                    numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, numExpedientes : numExpedientes,
+                                                                    folios : numerosFolios, idAsunto : $scope.asunto_A_select.idAsunto, fecha : now, 
+                                                                    cantidadExpedientes : numeroExpedientes, apoderado : apoderadoLegal
+                                                                }
+                                                            }).then(function mySuccess(response) {
+                                                                limpieza.limpiarRegistrarExpForm($scope);
+                                                                console.log(response.data);
+                                                                }, function myError(response) {
+                                                                 console.log(response.statusText);
+                                                            });
 
                                                     }
                                                 }
-                                                window.alert("Todo bien con fecha actual " + now);
-
     	    								}else if($scope.tipo_fecha == "personalizada"){
     	    									if($scope.fecha_entrada != null) {
     	    										if(!isNaN($scope.hora_entrada) && $scope.hora_entrada >= 1 && $scope.hora_entrada <= 12){
@@ -245,24 +247,24 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza, urlUtili
                                                                 numExpedientes[j-1] = numExpValidado;
 			                                                    numerosFolios[j-1] = inputFolio.value;
 			                                                    if(j == numeroExpedientes){
-			                                                        var numeroExpedientes = parseInt($scope.numAcumulados, 10); 
-			                                                        $http({
-			                                                            method : "POST",
-			                                                            url : $scope.serverUrl + "/formularios/expedientes/registrar/acumulado",
-			                                                            data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
-												        					numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, numExpedientes : numExpedientes,
-												        					folios : numerosFolios, idAsunto : $scope.asunto_A_select.idAsunto, fecha : fechaPersonalizada, cantidadExpedientes : numeroExpedientes
-												        				}
-			                                                        }).then(function mySuccess(response) {
+			                                                        var numeroExpedientes = parseInt($scope.numAcumulados, 10);
+                                                                    var apoderadoLegal = $scope.apoderado.trim();
+                                                                        $http({
+                                                                        method : "POST",
+                                                                        url : $scope.serverUrl + "/formularios/expedientes/registrar/acumulado",
+                                                                        data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
+                                                                            numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, numExpedientes : numExpedientes,
+                                                                            folios : numerosFolios, idAsunto : $scope.asunto_A_select.idAsunto, fecha : fechaPersonalizada, 
+                                                                            cantidadExpedientes : numeroExpedientes, apoderado : apoderadoLegal
+                                                                        }
+                                                                    }).then(function mySuccess(response) {
                                                                         limpieza.limpiarRegistrarExpForm($scope);
-			                                                            console.log(response.data);
-			                                                            }, function myError(response) {
-			                                                             console.log(response.statusText);
-			                                                        });
-
+                                                                        console.log(response.data);
+                                                                        }, function myError(response) {
+                                                                         console.log(response.statusText);
+                                                                    });
 			                                                    }
     	    												}
-    	    												window.alert("Todo bien con fecha personalizda " + fechaPersonalizada);
 
     	    											}else {
     	    											window.alert("Por favor seleccione una hora valida entre 1 a 12");

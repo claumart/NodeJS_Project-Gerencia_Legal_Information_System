@@ -19,6 +19,42 @@ populateExtraInfoController.getNombreExpedientes = (req, res, next) => {
 }
 
 
+populateExtraInfoController.getNombreOpiniones = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        var query = "SELECT numOficio FROM fichaEntradaOpinion as fichaOpinion " +
+        "WHERE fichaOpinion.idFichaEntradaOpinion =?";
+        connection.query(query, [req.body.idFicha], (err, results) => {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            var string=JSON.stringify(results);
+            res.json(string);
+        });
+      
+    });
+}
+
+
+populateExtraInfoController.getNombrePatronatos = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        var query = "SELECT numOficio FROM fichaEntradaOpinion as fichaOpinion " +
+        "WHERE fichaOpinion.idFichaEntradaOpinion =?";
+        connection.query(query, [req.body.idFicha], (err, results) => {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            var string=JSON.stringify(results);
+            res.json(string);
+        });
+      
+    });
+}
+
+
 populateExtraInfoController.existeDictamen = (req, res, next) => {
     req.getConnection((err, connection)=> {
         if (err) return next(err);

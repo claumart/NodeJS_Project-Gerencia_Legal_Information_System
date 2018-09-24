@@ -9,6 +9,8 @@ app.service('limpieza', function() {
         scope.hora_entrada = 1;
         scope.minuto_entrada = 0;
         scope.ampm = "am";
+        scope.asunto_textarea = "";
+        scope.apoderado = "";
     }
 });
 
@@ -20,18 +22,20 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza, urlUtili
 	$scope.hora_entrada = 1;
 	$scope.minuto_entrada = 0;
 	$scope.ampm = "am";
+    $scope.asunto_textarea = "";
+    $scope.apoderado = "";
 
-	//$scope.populateDependencia = ()=> {
-		$http({
-        	method : "POST",
-        	url : $scope.serverUrl + "/populate/select/dependencia"
-    	}).then(function mySuccess(response) {
-    		var lista = JSON.parse(response.data);
-        	$scope.dependenciaList = lista;
-    	}, function myError(response) {
-        	console.log(response.statusText);
-    	});
-	//};
+
+	$http({
+        method : "POST",
+        url : $scope.serverUrl + "/populate/select/dependencia"
+    }).then(function mySuccess(response) {
+    	var lista = JSON.parse(response.data);
+        $scope.dependenciaList = lista;
+    }, function myError(response) {
+        console.log(response.statusText);
+    });
+
 
 	$http({
         	method : "POST",
@@ -43,39 +47,30 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza, urlUtili
         	console.log(response.statusText);
     });
 
-    $http({
-        	method : "POST",
-        	url : $scope.serverUrl + "/populate/select/asunto"
-    	}).then(function mySuccess(response) {
-    		var lista = JSON.parse(response.data);
-        	$scope.asuntoList = lista;
-    	}, function myError(response) {
-        	console.log(response.statusText);
-    });
-
     $scope.validarFormulario = ()=> {
     	if($scope.interesado.length < 46 && $scope.interesado.trim().length > 0){
             var interesadoValidado = $scope.interesado.trim();
     		if($scope.procedencia_select != null){
                 if($scope.num_oficio.length < 31 && $scope.num_oficio.trim().length > 0){
                     var numOficioValidado = utilities.eliminateSpace($scope.num_oficio.toUpperCase().trim());
-                    if($scope.asunto_select != null){
+                    console.log("El valor de asunto es " + $scope.asunto_textarea);
+                    if($scope.asunto_textarea.length < 201 && $scope.asunto_textarea.trim().length > 0){
         			    if($scope.empleado_receptor_select != null){
                             if($scope.tipo_fecha == "actual"){
                                 var date = new Date();
                                 var now = date.toLocaleString('es-GB');
                                 now = utilities.formatearFechaActual(now);
-                                window.alert("Todo bien con fecha actual " + now);
+                                var apoderadoLegal = $scope.apoderado.trim();
                                 $http({
                                         method : "POST",
                                         url : $scope.serverUrl + "/formularios/opiniones/registrar",
                                         data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
-                                            numOficio : numOficioValidado, idAsunto : $scope.asunto_select.idAsunto,
-                                            numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, fecha : now
+                                            numOficio : numOficioValidado, asunto : $scope.asunto_textarea,
+                                            numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, fecha : now,
+                                            apoderado : apoderadoLegal
                                         }
                                     }).then(function mySuccess(response) {
                                         limpieza.limpiarRegistrarOpinionForm($scope);
-                                        console.log(response.data);
 
                                     }, function myError(response) {
                                         console.log(response.statusText);
@@ -86,13 +81,14 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza, urlUtili
                                     if(!isNaN($scope.hora_entrada) && $scope.hora_entrada >= 1 && $scope.hora_entrada <= 12){
                                         if(!isNaN($scope.minuto_entrada) && $scope.minuto_entrada >= 0 && $scope.minuto_entrada <= 59){
                                             var fechaPersonalizada = utilities.formatearFechaPersonalizada($scope.fecha_entrada, $scope.hora_entrada, $scope.minuto_entrada, $scope.ampm);
-                                            window.alert("Todo bien con fecha personalizda " + fechaPersonalizada);
+                                            var apoderadoLegal = $scope.apoderado.trim();
                                             $http({
                                                     method : "POST",
                                                     url : $scope.serverUrl + "/formularios/opiniones/registrar",
                                                     data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
-                                                        numOficio : numOficioValidado, idAsunto : $scope.asunto_select.idAsunto,
-                                                        numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, fecha : fechaPersonalizada
+                                                        numOficio : numOficioValidado, asunto : $scope.asunto_textarea,
+                                                        numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, fecha : fechaPersonalizada,
+                                                        apoderado : apoderadoLegal
                                                     }
                                                 }).then(function mySuccess(response) {
                                                     limpieza.limpiarRegistrarOpinionForm($scope);
@@ -116,7 +112,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza, urlUtili
         				    window.alert("Por favor seleccione el empleado que recibe los expedientes");
         			    }
                     }else{
-                        window.alert("Por favor seleccione el asunto del expediente");
+                        window.alert("El campo Asunto es muy largo o está vacío, por favor ingrese un valor valido y sin espacios");
                     } 
                 }else {
                     window.alert("El campo Número de oficio es muy largo o está vacío, por favor ingrese un valor valido y sin espacios");

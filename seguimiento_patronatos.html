@@ -12,12 +12,10 @@
 	    <link rel="stylesheet" href="css/footer.css">
 	    <link rel="stylesheet" href="css/seguimiento.css">
 	    <script src="js/angular.min.js"></script>
-  </head>
+  	</head>
 
 	<body>
 		<header>
-			<h1>Gerencia de Servicios Legales</h1>
-			<img src="images/logo_amdc.png">
 		</header>
 
 		<div class="title-bar" data-responsive-toggle="gsl-menu" data-hide-for="medium">
@@ -49,15 +47,9 @@
 					    <li><a href="modulo_administrador.html">Opciones de Administrador</a></li>
 			    	</ul>
 				</div>
-			  	<!--<div class="top-bar-right">
-			    	<ul class="menu">
-			      		<li><input type="search" placeholder="Search"></li>
-			      		<li><button type="button" class="button">Search</button></li>
-			    	</ul>
-			  	</div>-->
 			</div>
 
-			<!--------------------------Fin del top Bar--------------------------------------------------->
+			<!-----------------------------Fin del top Bar------------------------------->
 			<div class="grid-container grid-padding-x">
       			<div class="grid-x grid-padding-x">
         			<div class="large-12 cell">
@@ -65,78 +57,85 @@
         			</div>
       			</div>
       		</div>
-      		<form class="grid-container full" ng-app="seguimientoApp" ng-controller="seguimientoCtrl">
-				<div class="grid-x grid-padding-x" id="buscador_principal">
-					<div class="small-6 medium-2 cell" id="buscar_por_label">
-						<label>Buscar por nombre de colonia/aldea/caserío:</label>
-			      	</div>
-					<div class="small-6 medium-8 cell">
-						<fieldset><input type="search" placeholder="Buscar"></fieldset>
-			      	</div>
-			      	<div class="small-12 medium-2 cell">
-			      		<fieldset><button type="button" class="button" id="search_btn">Buscar</button></fieldset>
-			      	</div>
-	      		</div>
-	      		<div class="grid-x grid-padding-x">
-	      			<fieldset class="medium-4 small-12 cell">
-		            	<button type="button" id="asignar_btn" class="button secondary">Asignar</button>
-		            </fieldset>
-		            <fieldset class="medium-4 small-12 cell">
-		            	<button type="button" id="descargar_btn" class="button secondary">Descargar</button>
-		            </fieldset>
-		            <fieldset class="medium-4 small-12 cell">
-		            	<button type="button" id="remitir_btn" class="button secondary">Remitir</button>
-		            </fieldset>
-	      		</div>
-	      		
-	      	</form>
-	      	<div class="grid-container fluid">
-	      		<div class="grid-x grid-padding-x">
-	      			<div class="small-12 cell">
-	      				<table  id="tabla_principal">
-							<thead>
-						    	<tr>
-						    		<th>Número de expedientes</th>
-						      		<th>Interesado</th>
-						      		<th>Procedencia</th>
-						      		<th>Listo Para</th>
-						    	</tr>
-						  	</thead>
-						  	<tbody>
-						    	<tr>
-						    		<td>075-G2-2017</td>
-						    		<td>Ana Maria López</td>
-						    		<td>Catastro</td>
-						    		<td><button type="button" class="button secondary" 
-						    			onclick="window.location.href = 'formularios/patronatos/ficha_de_asignacion_patronatos.html#titulo_formulario';">Asignar</button></td>
-						    	</tr>
-						    	<tr>
-						      		<td>651-P2-2018</td>
-						    		<td>Pedro rodrigo Sánchez</td>
-						    		<td>tierras</td>
-						    		<td><button type="button" class="button secondary"
-						    			onclick="window.location.href = 'formularios/patronatos/ficha_de_descargo_patronatos.html#titulo_formulario';">Descargar</button></td>
-						    	</tr>
-						    	<tr>
-						      		<td>890-SA-2014</td>
-						    		<td>Jose Manuel Rivera</td>
-						    		<td>Recaudación</td>
-						    		<td><button type="button" class="button secondary"
-						    			onclick="window.location.href = 'formularios/patronatos/ficha_de_remision_patronatos.html#titulo_formulario';">Remitir</button></td>
-						    	</tr>
-						  	</tbody>
-						</table>
-	      			</div>
-	      		</div>
+      		<div ng-app="seguimientoApp" ng-controller="seguimientoCtrl">
+	      		<form class="grid-container full">
+					<div class="grid-x grid-padding-x" id="buscador_principal">
+						<div class="small-6 medium-2 cell" id="buscar_por_label">
+							<label>Buscar por nombre de Patronato:</label>
+				      	</div>
+						<div class="small-6 medium-8 cell">
+							<fieldset><input type="search" placeholder="Escriba el nombre del patronato aquí" name="nombre_patronato" id="nombre_patronato" ng-model="nombre_patronato"></fieldset>
+				      	</div>
+				      	<div class="small-12 medium-2 cell">
+				      		<fieldset><button type="button" class="button" id="search_btn" ng-click="mostrarPatronato()">Buscar</button></fieldset>
+				      	</div>
+		      		</div>
+		      		<div class="grid-x grid-padding-x">
+		      			<fieldset class="large-3 small-12 cell">
+			            	<button type="button" id="asignar_btn" class="button secondary" ng-click="mostrarPatronatosRecibidos()">Asignar</button>
+			            </fieldset>
+			            <fieldset class="large-3 small-12 cell">
+			            	<button type="button" id="descargar_btn" class="button secondary" ng-click="mostrarPatronatosAsignados()">Descargar</button>
+			            </fieldset>
+			            <fieldset class="large-3 small-12 cell">
+			            	<button type="button" id="revisar_btn" class="button secondary" ng-click="mostrarPatronatosDescargados()">Revisar</button>
+			            </fieldset>
+			            <fieldset class="large-3 small-12 cell">
+			            	<button type="button" id="remitir_btn" class="button secondary" ng-click="mostrarPatronatosRevisados()">Remitir</button>
+			            </fieldset>
+		      		</div>
+		      		
+		      	</form>
+		      	<div class="grid-container fluid">
+		      		<div class="grid-x grid-padding-x">
+		      			<div class="small-12 cell">
+		      				<table  id="tabla_principal">
+								<thead>
+							    	<tr>
+							    		<th>Oficio</th>
+							      		<th>Procedencia</th>
+							      		<th>Asunto</th>
+							      		<th>Fecha de entrada</th>
+							      		<th>Abogado Asignado</th>
+							      		<th>Listo Para</th>
+							    	</tr>
+							  	</thead>
+							  	<tbody>
+							    	<tr ng-repeat="x in opinionesList track by $index">
+							    		<td>{{x.numOficio}}</td>
+							    		<td>{{x.nombreProcedencia}}</td>
+							    		<td>{{x.asunto}}</td>
+							    		<td>{{x.fechaEntrada}}</td>
+							    		<td>{{x.nombreAbogadoAsignado}}</td>
+							    		<td><button type="button" class="button secondary" ng-click="darSeguimientoOpinion(x.idficha)">{{textoBoton}}</button></td>
+							    	</tr>
+							  	</tbody>
+							</table>
+		      			</div>
+		      		</div>
+		      	</div>
 	      	</div>
 
-		<footer>
-			
+		<footer>	
 		</footer>
+
 		<script src="js/vendor/jquery.js"></script>
 	    <script src="js/vendor/what-input.js"></script>
 	    <script src="js/vendor/foundation.js"></script>
 	    <script src="js/app.js"></script>
+	    <script src="js/header.js"></script>
+	    <script src="js/footer.js"></script>
+	    <script src="js/barraMenu.js" type="text/javascript"></script>
+	    <script src="js/applications/seguimientoApp.js" type="text/javascript"></script>
+	    <script src="js/services/urlUtility.js" type="text/javascript"></script>
+	    <script src="js/controllers/seguimiento/seguimiento_patronatos.js"></script>
+	    <script type="text/javascript">
 
+	    	window.onload = function(){
+	    		loadHeader();
+	    		loadFooter();
+
+	    	}
+	    </script>
 	</body>
 </html>

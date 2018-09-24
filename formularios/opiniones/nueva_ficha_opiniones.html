@@ -68,6 +68,11 @@
                 		<label>Interesado(a): <input type="text" placeholder="Nombre del interesado" id="interesado" name="interesado" ng-model="interesado"/></label>
               		</div>
               	</div>
+              	<div class="grid-x grid-padding-x">
+            		<div class="medium-6 small-12 cell medium-offset-3">
+                		<label>Apoderado(a) Legal (opcional): <input type="text" placeholder="Nombre del abogado que lleva el caso" id="apoderado" name="apoderado" ng-model="apoderado"/></label> 
+              		</div>
+              	</div>
             	<div class="grid-x grid-padding-x">
               		<div class="medium-6 small-12 cell medium-offset-3">
                 		<label>Procedencia:</label>
@@ -85,11 +90,10 @@
 	            <div class="grid-x grid-padding-x">
               		<div class="medium-6 small-12 cell medium-offset-3">
               			<label>Asunto:</label>
-			            <select id="asunto_select" name="asunto_select" ng-model="asunto_select" ng-options="x.nombreAsunto for x in asuntoList">
+			            <textarea id="asunto_textarea" name="asunto_textarea" ng-model="asunto_textarea"></textarea>
 			            </select>
               		</div>
             	</div>
-
 	            <div class="grid-x grid-padding-x">
               		<div class="medium-6 small-12 cell medium-offset-3">
               			<label>Recibido Por:</label>

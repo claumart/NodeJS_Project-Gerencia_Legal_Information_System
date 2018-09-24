@@ -1,13 +1,17 @@
 var express = require('express');
 var router = express.Router();
-var registrarExpController = require('../../controllers/controlesDeFormularios/expedientes/registrarExpRecibidoController');
+var seguimientoOpinionController = require('../../controllers/controlesDeSeguimiento/seguimientoOpinionesController');
 
-router.post('/formularios/expedientes/registrar/noAcumuladoActual', registrarExpController.saveNoAcumuladoActual);
+router.post('/seguimiento/opiniones/mostrar/recibidas', seguimientoOpinionController.mostrarOpinionesRecibidas);
 
-router.post('/formularios/expedientes/registrar/noAcumuladoPersonalizada', registrarExpController.saveNoAcumuladoPersonalizada);
+router.post('/seguimiento/opiniones/mostrar/asignadas', seguimientoOpinionController.mostrarOpinionesAsignadas);
 
-router.post('/formularios/expedientes/registrar/acumuladoActual', registrarExpController.saveAcumuladoActual);
+router.post('/seguimiento/opiniones/mostrar/descargadas', seguimientoOpinionController.mostrarOpinionesDescargadas);
 
-router.post('/formularios/expedientes/registrar/acumuladoPersonalizada', registrarExpController.saveAcumuladoPersonalizada);
+router.post('/seguimiento/opiniones/mostrar/revisadas', seguimientoOpinionController.mostrarOpinionesRevisadas);
+
+router.post('/seguimiento/opiniones/mostrar/remitidas', seguimientoOpinionController.mostrarOpinionesRemitidas);
+
+router.post('/seguimiento/opiniones/mostrar/oficioParticular', seguimientoOpinionController.mostrarOpinionPorOficio);
 
 module.exports = router;

@@ -14,6 +14,7 @@ var formulariosExpedientesRouter = require('./routes/formularios/expedientes');
 var formulariosOpinionesRouter = require('./routes/formularios/opiniones');
 var formulariosPatronatosRouter = require('./routes/formularios/patronatos');
 var seguimientoExpedientesRouter = require('./routes/seguimiento/seguimientoExpedientes');
+var seguimientoOpinionesRouter = require('./routes/seguimiento/seguimientoOpiniones');
 
 var app = express();
 
@@ -47,7 +48,7 @@ app.use('/', formulariosExpedientesRouter);
 app.use('/', formulariosOpinionesRouter);
 app.use('/', formulariosPatronatosRouter);
 app.use('/', seguimientoExpedientesRouter);
-
+app.use('/', seguimientoOpinionesRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

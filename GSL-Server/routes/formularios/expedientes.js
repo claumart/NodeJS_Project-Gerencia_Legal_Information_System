@@ -7,11 +7,10 @@ var revisarExpController = require('../../controllers/controlesDeFormularios/exp
 var remitirExpController = require('../../controllers/controlesDeFormularios/expedientes/remitirExpController');
 var providenciaExpController = require('../../controllers/controlesDeFormularios/expedientes/providenciaExpController');
 
-/****************************************Registro de Expedientes********************************************/
+/******************************************Registro de Expedientes*********************************************/
 router.post('/formularios/expedientes/registrar/noAcumulado', registrarExpController.saveNoAcumulado);
 
 router.post('/formularios/expedientes/registrar/acumulado', registrarExpController.saveAcumulado);
-
 
 /****************************************Asignación de Expedientes********************************************/
 router.post('/formularios/expedientes/asignar', asignarExpController.asignarExpedientes);
