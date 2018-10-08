@@ -232,19 +232,38 @@ registrarExpController.saveAcumulado = (req, res, next) => {
 
         var contador = 0;
         for(i = 0; i< req.body.cantidadExpedientes; i++){
-                var numExpediente = req.body.numExpedientes[i];
-                var folios = req.body.folios[i];
-                await connection.query('SELECT idExpediente FROM Expediente WHERE numExpediente = ?', [req.body.numExpedientes[i]], (err, results) => {
-                    var index = req.body.cantidadExpedientes - contador--;
-                    var numExpediente = req.body.numExpedientes[index];
-                    var folios = req.body.folios[index];
-                    if (err) {
-                        console.log(err);
-                        return next(err);
-                    }
+            var numExpediente = req.body.numExpedientes[i];
+            var folios = req.body.folios[i];
+            await connection.query('SELECT idExpediente FROM Expediente WHERE numExpediente = ?', [req.body.numExpedientes[i]], (err, results) => {
+                var index = req.body.cantidadExpedientes - contador--;
+                var numExpediente = req.body.numExpedientes[index];
+                var folios = req.body.folios[index];
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
 
-                    if(results.length > 0) {
-                        expedienteId = results[0].idExpediente;
+                if(results.length > 0) {
+                    expedienteId = results[0].idExpediente;
+
+                    connection.query('INSERT INTO FichaEntradaExpedienteXExpediente(idFichaEntradaExpediente, idExpediente) VALUES(?, ?)', [fichaEntradaId, expedienteId], (err, rows) => {
+                        if (err) {
+                            console.log(err);
+                            return next(err);
+                        }
+                        contador++;
+                        if(contador==req.body.cantidadExpedientes) {
+                            res.status(status.OK).json({ message: 'Registro guardado correctamente' });
+                        }
+                    });
+                }else{
+                    connection.query('INSERT INTO Expediente(numExpediente, folios) VALUES(?, ?)', [numExpediente, folios], (err, rows) => {
+                        if (err) {
+                            console.log(err);
+                            return next(err);
+                        }
+                        //res.status(status.OK).json({ message: 'Registro guardado correctamente' });
+                        expedienteId = rows.insertId;
 
                         connection.query('INSERT INTO FichaEntradaExpedienteXExpediente(idFichaEntradaExpediente, idExpediente) VALUES(?, ?)', [fichaEntradaId, expedienteId], (err, rows) => {
                             if (err) {
@@ -256,33 +275,14 @@ registrarExpController.saveAcumulado = (req, res, next) => {
                                 res.status(status.OK).json({ message: 'Registro guardado correctamente' });
                             }
                         });
-                    }else{
-                        connection.query('INSERT INTO Expediente(numExpediente, folios) VALUES(?, ?)', [numExpediente, folios], (err, rows) => {
-                            if (err) {
-                                console.log(err);
-                                return next(err);
-                            }
-                            //res.status(status.OK).json({ message: 'Registro guardado correctamente' });
-                            expedienteId = rows.insertId;
 
-                            connection.query('INSERT INTO FichaEntradaExpedienteXExpediente(idFichaEntradaExpediente, idExpediente) VALUES(?, ?)', [fichaEntradaId, expedienteId], (err, rows) => {
-                                if (err) {
-                                    console.log(err);
-                                    return next(err);
-                                }
-                                contador++;
-                                if(contador==req.body.cantidadExpedientes) {
-                                    res.status(status.OK).json({ message: 'Registro guardado correctamente' });
-                                }
-                            });
+                    });
+                }
 
-                        });
-                    }
-
-                });
+            });
                 
-                contador++;
-            }  
+            contador++;
+        }  
 
     });     
 }

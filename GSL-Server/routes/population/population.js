@@ -11,11 +11,11 @@ router.post('/populate/select/abogadoAsignado', populateSelectsController.popula
 
 router.post('/populate/select/asunto', populateSelectsController.populateAsunto);
 
-router.post('/populate/select/tipoLugar', populateSelectsController.populateTipoLugar);
+router.post('/populate/select/tipoComunidad', populateSelectsController.populateTipoComunidad);
 
-/*router.post('/populate/select/estadoExpediente', populateSelectsController);
+router.post('/populate/select/estadoExpediente', populateSelectsController.populateEstadoExpediente);
 
-router.post('/populate/select/cargoEmpleado', populateSelectsController);*/
+/*router.post('/populate/select/cargoEmpleado', populateSelectsController);*/
 
 /*************************Informacion extra******************************/
 router.post('/populate/formularios/nombreExpedientes', populateExtraInfoController.getNombreExpedientes);

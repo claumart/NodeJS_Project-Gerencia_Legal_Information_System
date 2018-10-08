@@ -1,7 +1,7 @@
 var status = require('http-status');
-var remitirOficioController = {};
+var remitirPatronatoController = {};
 
-remitirOficioController.remitirOpinion = (req, res, next) => {
+remitirPatronatoController.remitirPatronato = (req, res, next) => {
   req.getConnection((err, connection)=> {
     	if (err) return next(err);
       	var query = "UPDATE FichaEntradaPatronato SET idDependenciaRemision = ?, fechaRemision = STR_TO_DATE(?, \'%d-%m-%Y\'), " +
@@ -17,4 +17,4 @@ remitirOficioController.remitirOpinion = (req, res, next) => {
   });
 }
 
-module.exports = remitirOficioController;
+module.exports = remitirPatronatoController;

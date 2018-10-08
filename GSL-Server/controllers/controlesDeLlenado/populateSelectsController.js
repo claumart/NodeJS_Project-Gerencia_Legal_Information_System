@@ -34,10 +34,10 @@ populateSelectsController.populateAbogadoAsignado = (req, res, next) => {
         var query = 'SELECT numEmpleado, nombreEmpleado FROM ' +
             'Empleado WHERE activo=? and idCargo=?';
     	connection.query(query, [true, 1], (err, results) => {
-        if (err) return next(err);
-        var string=JSON.stringify(results);
-        res.json(string);
-      });
+	        if (err) return next(err);
+	        var string=JSON.stringify(results);
+	        res.json(string);
+      	});
       
     });
 }
@@ -45,13 +45,11 @@ populateSelectsController.populateAbogadoAsignado = (req, res, next) => {
 populateSelectsController.populateEstadoExpediente = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
-      
-    	connection.query('SELECT idEstadoExpediente, nombreEstadoExpediente, descripciónEstadoExpediente FROM EstadoExpediente', [], (err, results) => {
-        if (err) return next(err);
-        var string=JSON.stringify(results)
-        console.log(string);
-        res.json(string);
-      });
+    	connection.query('SELECT idEstadoExpediente, nombreEstadoExpediente as nombreEstado FROM EstadoExpediente', [], (err, results) => {
+	        if (err) return next(err);
+	        var string=JSON.stringify(results);
+	        res.json(string);
+	    });
       
     });
 }
@@ -68,11 +66,11 @@ populateSelectsController.populateAsunto = (req, res, next) => {
       
     });
 }
-populateSelectsController.populateTipoLugar = (req, res, next) => {
+populateSelectsController.populateTipoComunidad = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
       
-    	connection.query('SELECT idTipoLugar, nombreTipoLugar FROM TipoLugar', [], (err, results) => {
+    	connection.query('SELECT idTipoComunidad, nombreTipoComunidad FROM TipoComunidad', [], (err, results) => {
         if (err) return next(err);
         var string=JSON.stringify(results)
         res.json(string);

@@ -1,6 +1,6 @@
 app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtility) {
     $scope.urlParams = utilities.getAllUrlParams($window.location.href);
-    $scope.numExpedientes = "";
+    $scope.numPatronatos = "";
     $scope.serverUrl = urlUtility.getServerUrl();
 
     $http({
@@ -11,9 +11,9 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
             var lista = JSON.parse(response.data);
             for(i = 0; i< lista.length; i++){
                 if(i == 0){
-                    $scope.numExpedientes += lista[i].numExpediente;  
+                    $scope.numPatronatos += lista[i].numPatronato;  
                 }else{
-                    $scope.numExpedientes += ', ' + lista[i].numExpediente;
+                    $scope.numPatronatos += ', ' + lista[i].numPatronato;
                 }
             }
         }, function myError(response) {
@@ -25,11 +25,11 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
             var fechaValidada = utilities.validarFecha($scope.fecha_descargo);
             $http({
                 method : "POST",
-                url : $scope.serverUrl + "/formularios/expedientes/descargar",
+                url : $scope.serverUrl + "/formularios/patronatos/descargar",
                 data : { fecha : fechaValidada, idFicha : $scope.urlParams.idFicha
                 }
             }).then(function mySuccess(response) {
-                $window.location.href = "../../seguimiento_expedientes.html#titulo_seguimiento";
+                $window.location.href = "../../seguimiento_patronatos.html#titulo_seguimiento";
             }, function myError(response) {
                 console.log(response.statusText);
             });

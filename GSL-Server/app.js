@@ -7,6 +7,7 @@ var cors = require('cors');
 //Agragada por mi
 var bodyParser = require('body-parser');
 var myConnection = require('./connection');
+var fileUpload = require('express-fileupload');
 
 //rutas agregadas por mi
 var populateRouter = require('./routes/population/population');
@@ -30,6 +31,7 @@ app.use(function(req, res, next) {
 
 app.use(cors());
 
+app.use(fileUpload());
 
 app.use(logger('dev'));
 app.use(express.json());
