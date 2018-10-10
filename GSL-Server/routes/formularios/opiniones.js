@@ -9,7 +9,7 @@ var remitirOficioController = require('../../controllers/controlesDeFormularios/
 router.post('/formularios/opiniones/registrar', registrarOficioController.saveOpinion);
 router.post('/formularios/opiniones/asignar', asignarOficioController.asignarOpinion);
 router.post('/formularios/opiniones/descargar', descargarOficioController.descargarOpinion);
-//router.post('/formularios/opiniones/revisar', revisarOficioController.revisarOpinion);
+router.post('/formularios/opiniones/revisar', revisarOficioController.revisarOpinion);
 router.post('/formularios/opiniones/remitir', remitirOficioController.remitirOpinion);
 
 

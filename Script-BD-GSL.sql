@@ -547,26 +547,6 @@ CREATE TABLE IF NOT EXISTS `ExpedientePatronato` (
 )
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `ArchivoAdjunto`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `ArchivoAdjunto` ;
-
-CREATE TABLE IF NOT EXISTS `ArchivoAdjunto` (
-  `idArchivoAdjunto` INT NOT NULL AUTO_INCREMENT,
-  `nombreArchivoAdjunto` VARCHAR(50) NOT NULL,
-  `idDictamen` INT NOT NULL,
-  PRIMARY KEY (`idArchivoAdjunto`),
-  CONSTRAINT `ArchivoAdjunto_idDictamen_FK`
-    FOREIGN KEY (`idDictamen`)
-    REFERENCES `Dictamen` (`idDictamen`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-ALTER TABLE `ArchivoAdjunto` ADD INDEX `ArchivoAdjunto_idDictamen_FK_idx` (`idDictamen` ASC);
-
 -- -----------------------------------------------------
 -- Table `PaginaArchivoAdjunto`
 -- -----------------------------------------------------
@@ -574,20 +554,20 @@ DROP TABLE IF EXISTS `PaginaArchivoAdjunto` ;
 
 CREATE TABLE IF NOT EXISTS `PaginaArchivoAdjunto` (
   `idPaginaArchivoAdjunto` INT NOT NULL AUTO_INCREMENT,
-  `idArchivoAdjunto` INT NOT NULL,
+  `idDictamen` INT NOT NULL,
   `numeroPagina` INT NOT NULL,
   `urlPagina` VARCHAR(90) NOT NULL,
   PRIMARY KEY (`idPaginaArchivoAdjunto`),
-  CONSTRAINT `PAA_idArchivoAdjunto_FK`
-    FOREIGN KEY (`idArchivoAdjunto`)
-    REFERENCES `ArchivoAdjunto` (`idArchivoAdjunto`)
+  CONSTRAINT `PAA_idDictamen_FK`
+    FOREIGN KEY (`idDictamen`)
+    REFERENCES `Dictamen` (`idDictamen`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 ALTER TABLE `PaginaArchivoAdjunto` ADD UNIQUE `urlPaginaArchivo_UNIQUE` (`urlPagina` ASC);
 
-ALTER TABLE `PaginaArchivoAdjunto` ADD INDEX `PAA_idArchivoAdjunto_FK_idx` (`idArchivoAdjunto` ASC);
+ALTER TABLE `PaginaArchivoAdjunto` ADD INDEX `PAA_idDictamen_FK_idx` (`idDictamen` ASC);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

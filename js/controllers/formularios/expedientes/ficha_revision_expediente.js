@@ -84,9 +84,6 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                         var fd = new FormData();
                         const inputs = document.getElementsByClassName('files');
                         const inputFiles = Array.from(inputs);
-                        console.log(inputFiles);
-                        console.log(inputFiles.length);
-                        //console.log(inputs);
                         for(i = 0;  i < inputFiles.length; i++) {
                             if(inputFiles[i].files[0] != null){
                                 fd.append('imageFiles', inputFiles[i].files[0]);

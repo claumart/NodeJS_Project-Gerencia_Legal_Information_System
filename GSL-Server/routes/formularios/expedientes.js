@@ -31,7 +31,5 @@ router.post('/formularios/expedientes/remitir', remitirExpController.remitirExpe
 /****************************************Providencia de Expedientes********************************************/
 router.post('/formularios/expedientes/remitirConPrevio', providenciaExpController.remitirConPrevio);
 
-//router.post('/formularios/expedientes/reingresarConPrevio', providenciaExpController.reingresarConPrevio);
-router.get('/', revisarExpController.verDir);
 
 module.exports = router;
