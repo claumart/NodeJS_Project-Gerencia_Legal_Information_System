@@ -16,6 +16,7 @@ var formulariosOpinionesRouter = require('./routes/formularios/opiniones');
 var formulariosPatronatosRouter = require('./routes/formularios/patronatos');
 var seguimientoExpedientesRouter = require('./routes/seguimiento/seguimientoExpedientes');
 var seguimientoOpinionesRouter = require('./routes/seguimiento/seguimientoOpiniones');
+var busquedaRouter = require('./routes/buscar/buscar');
 
 var app = express();
 
@@ -51,6 +52,8 @@ app.use('/', formulariosOpinionesRouter);
 app.use('/', formulariosPatronatosRouter);
 app.use('/', seguimientoExpedientesRouter);
 app.use('/', seguimientoOpinionesRouter);
+app.use('/', busquedaRouter);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

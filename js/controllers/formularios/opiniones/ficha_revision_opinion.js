@@ -121,7 +121,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                 }).then(function mySuccess(response) {
                     if(!response.data) {
                         var fd = new FormData();
-                        fd.append('fecha', $scope.fecha_revision);
+                        fd.append('fecha', fechaValidada);
                         fd.append('numDictamen', numDictamenValidado);
                         fd.append('idFicha', $scope.urlParams.idFicha);
                         const dic_inputs = document.getElementsByClassName('dic_files');

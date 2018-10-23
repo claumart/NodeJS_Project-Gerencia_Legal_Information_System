@@ -4,10 +4,10 @@ var revisarExpController = {};
 var path = require('../dictamenPath');
 
 revisarExpController.crearDictamen = (req, res, next) => {
-	req.getConnection(async function(err, connection){
+	req.getConnection(function(err, connection){
         if (err) return next(err);
         var DictamenId;
-        await connection.query('INSERT INTO Dictamen(numDictamen, idTipoDictamen) VALUES(?, ?)', [req.body.numDictamen, 1], (err, rows) => {
+        connection.query('INSERT INTO Dictamen(numDictamen, idTipoDictamen) VALUES(?, ?)', [req.body.numDictamen, 1], (err, rows) => {
             if (err) {
                 console.log(err);
                 return next(err);

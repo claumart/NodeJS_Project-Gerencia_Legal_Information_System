@@ -13,10 +13,15 @@ app.service("utilities", function() {
     };
 });
 
-app.controller("seguimientoCtrl", function($scope, $http, $window, utilities) {
+app.controller("detailCtrl", function($scope, $http, $window, utilities) {
 	$scope.accion = "";
     $scope.textoBoton = "";
     $scope.serverUrl = urlUtility.getServerUrl();
+
+    $scope.construirGaleria();
+    $scope.construirGaleria = ()=>{
+
+    };
 
 	$scope.mostrarExpedientesRecibidos = ()=> {
 		$scope.accion = "asignar";

@@ -4,10 +4,10 @@ var revisarOficioController = {};
 var path = require('../dictamenPath');
 
 revisarOficioController.revisarOpinion = (req, res, next) => {
-	req.getConnection(async function(err, connection){
+	req.getConnection(function(err, connection){
         if (err) return next(err);
         var DictamenId;
-        await connection.query('INSERT INTO Dictamen(numDictamen, idTipoDictamen) VALUES(?, ?)', [req.body.numDictamen, 2], (err, rows) => {
+        connection.query('INSERT INTO Dictamen(numDictamen, idTipoDictamen) VALUES(?, ?)', [req.body.numDictamen, 2], (err, rows) => {
             if (err) {
                 console.log(err);
                 return next(err);

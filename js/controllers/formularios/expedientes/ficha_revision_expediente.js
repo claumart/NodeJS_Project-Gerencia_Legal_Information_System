@@ -88,7 +88,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                             if(inputFiles[i].files[0] != null){
                                 fd.append('imageFiles', inputFiles[i].files[0]);
                                 if(i == inputFiles.length - 1){
-                                    fd.append('fecha', $scope.fecha_revision);
+                                    fd.append('fecha', fechaValidada);
                                     fd.append('numDictamen', numDictamenValidado);
                                     fd.append('idFicha', $scope.urlParams.idFicha);
                                     $http({

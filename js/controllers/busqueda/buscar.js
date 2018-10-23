@@ -1,3 +1,26 @@
+app.service("utilities", function() {
+	this.formatearFecha = (lista)=> {
+		for(x in lista){
+			var d = new Date(lista[x].fechaEntrada);
+    		var n = d.toLocaleString();
+    		lista[x].fechaEntrada = n;
+		}
+		return lista;
+	};
+
+    this.formatearFechaActual = (fecha)=> {
+    	return fecha.replace(/\//g, "-");
+    };
+
+    this.validarFecha = (fecha)=> {
+        var date = new Date(fecha);
+        var dateTime = date.toLocaleString('es-GB');
+        dateTime = this.formatearFechaActual(dateTime);
+        var onlyDate = dateTime.split(' ')[0];
+    	return onlyDate;
+    };
+});
+
 app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtility) {
 	$scope.tipo_fecha1 = "fecha_especifica";
 	$scope.tipo_fecha2 = "fecha_especifica";
@@ -7,9 +30,10 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 	$scope.empleado_receptor_select = "";
 	$scope.asunto_select = "";
 	$scope.abogado_asignado_select = "";
+	$scope.dependencia_remision_select = "";
 	$scope.estado_expediente_select = "";
 	$scope.tipo_busqueda_select = "exp";
-
+	$scope.usar_fechas = false;
 	
 	$http({
     	method : "POST",
@@ -96,4 +120,199 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 			$scope.buscar_input = $scope.estado_expediente_select.nombreEstado;
 		}
 	};
+
+
+	$scope.ValidarBusqueda = ()=> {
+		switch($scope.tipo_busqueda_select) {
+			case  "exp":
+				ValidarRegistroExp();
+				break;
+			case  "opn":
+				//ValidarRegistroOpn();
+				break;
+			case  "ptt":
+				//ValidarRegistroPtt();
+				break;
+			case  "dcm":
+				//ValidarRegistroDcm();
+				break;
+		}
+	};
+
+	ValidarRegistroExp = ()=> {
+		switch($scope.parametro_busqueda) {
+			case  "numExpediente":
+				if($scope.buscar_input.length != ""){
+					BuscarExpPorParametrosTipo1("numExpediente", $scope.buscar_input);
+				}
+				break;
+			case  "interesado":
+				if($scope.buscar_input.length != ""){
+					BuscarExpPorParametrosTipo1("interesado", $scope.buscar_input);
+				}
+				break;
+			case  "apoderadoLegal":
+				if($scope.buscar_input.length != ""){
+					BuscarExpPorParametrosTipo1("apoderadoLegal", $scope.buscar_input);
+				}
+				break;
+			case  "procedencia":
+				if($scope.procedencia_select != null){
+					BuscarExpPorParametrosTipo1("procedencia", $scope.procedencia_select.idDependencia);
+				}
+				break;
+			case  "empleadoReceptor":
+				if($scope.empleado_receptor_select != null){
+					BuscarExpPorParametrosTipo1("empleadoReceptor", $scope.empleado_receptor_select.numEmpleado);
+				}
+				break;
+			case  "asunto":
+				if($scope.asunto_select != null){
+					BuscarExpPorParametrosTipo1("asunto", $scope.asunto_select.idAsunto);
+				}
+				break;
+			case  "abogadoAsignado":
+				if($scope.abogado_asignado_select != null){
+					BuscarExpPorParametrosTipo1("abogadoAsignado", $scope.abogado_asignado_select.numEmpleado);
+				}
+				break;
+			case  "dependenciaRemision":
+				if($scope.dependencia_remision_select != null){
+					BuscarExpPorParametrosTipo1("dependenciaRemision", $scope.dependencia_remision_select.idDependencia);
+				}
+				break;
+			case  "estadoExpediente":
+				if($scope.estado_expediente_select != null){
+					BuscarExpPorParametrosTipo1("estadoExpediente", $scope.estado_expediente_select.idEstadoExpediente );
+				}
+				break;
+			case  "fechaEntrada":
+				BuscarExpPorParametrosTipo2("fechaEntrada");
+				break;
+			case  "fechaAsignacion":
+				BuscarExpPorParametrosTipo2("fechaAsignacion");
+				break;
+			case  "fechaDescargo":
+				BuscarExpPorParametrosTipo2("fechaDescargo");
+				break;
+			case  "fechaRemision":
+				BuscarExpPorParametrosTipo2("fechaRemision");
+				break;
+			default:
+				window.alert("Por favor seleccione un parametro de busqueda");
+		}
+
+	};
+
+	BuscarExpPorParametrosTipo1 = (nombreParametro, valor)=>{
+		if($scope.usar_fechas) {
+			if($scope.tipo_fecha1 == "fecha_especifica") {
+				if($scope.fecha_dia1 != null) {
+					var fechaValidada = utilities.validarFecha($scope.fecha_dia1);
+					$http({
+			        	method : "POST",
+			        	url : $scope.serverUrl + "/buscar/expedientes/parametros1/conFecha",
+			        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+			        		fecha : fechaValidada
+                		}
+			    	}).then(function mySuccess(response) {
+			    		var lista = JSON.parse(response.data);
+			        	$scope.resultadosList = utilities.formatearFecha(lista);
+			    	}, function myError(response) {
+			        	console.log(response.statusText);
+			    	});
+				}else{
+					window.alert("Por favor seleccione la fecha para realizar la busqueda");
+				}
+
+			}else if($scope.tipo_fecha1 == "fecha_rango") {
+				if($scope.fecha_inicio1 != null) {
+					var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio1);
+					if($scope.fecha_fin1 != null) {
+						var fechaFinValidada = utilities.validarFecha($scope.fecha_fin1);
+						$http({
+				        	method : "POST",
+				        	url : $scope.serverUrl + "/buscar/expedientes/parametros1/conFecha",
+				        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+				        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada
+                			}
+				    	}).then(function mySuccess(response) {
+				    		var lista = JSON.parse(response.data);
+				        	$scope.resultadosList = utilities.formatearFecha(lista);
+				    	}, function myError(response) {
+				        	console.log(response.statusText);
+				    	});
+					}else{
+						window.alert("Por favor seleccione la fecha de finalización para realizar la busqueda");
+					}
+
+				}else{
+					window.alert("Por favor seleccione la fecha de inicio para realizar la busqueda");
+				}
+			}
+		}else {
+			$http({
+			    method : "POST",
+			   	url : $scope.serverUrl + "/buscar/expedientes/parametros1/sinFecha",
+			   	data : {parametroBusqueda : nombreParametro, valorParametro : valor
+                }
+			}).then(function mySuccess(response) {
+			    var lista = JSON.parse(response.data);
+			    $scope.resultadosList = utilities.formatearFecha(lista);
+			}, function myError(response) {
+			    console.log(response.statusText);
+			});
+		}
+	};
+
+	BuscarExpPorParametrosTipo2 = (nombreParametro)=>{
+		if($scope.tipo_fecha2 == "fecha_especifica") {
+			if($scope.fecha_dia2 != null) {
+				var fechaValidada = utilities.validarFecha($scope.fecha_dia2);
+				$http({
+			        method : "POST",
+			        url : $scope.serverUrl + "/buscar/expedientes/parametros2/conFecha",
+			        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada
+                	}
+			    }).then(function mySuccess(response) {
+			    	var lista = JSON.parse(response.data);
+			       	$scope.resultadosList = utilities.formatearFecha(lista);
+			    }, function myError(response) {
+			       	console.log(response.statusText);
+			   	});
+			}else{
+				window.alert("Por favor seleccione la fecha para realizar la busqueda");
+			}
+		}else if($scope.tipo_fecha2 == "fecha_rango") {
+			if($scope.fecha_inicio2 != null) {
+				var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio2);
+				if($scope.fecha_fin2 != null) {
+					var fechaFinValidada = utilities.validarFecha($scope.fecha_fin2);
+					$http({
+				        method : "POST",
+				       	url : $scope.serverUrl + "/buscar/expedientes/parametros2/conFecha",
+				       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
+				        	fechaFin : fechaFinValidada
+                		}
+				    }).then(function mySuccess(response) {
+				   		var lista = JSON.parse(response.data);
+				       	$scope.resultadosList = utilities.formatearFecha(lista);
+				   	}, function myError(response) {
+				       	console.log(response.statusText);
+			    	});
+				}else{
+					window.alert("Por favor seleccione la fecha de finalización para realizar la busqueda");
+				}
+
+			}else{
+				window.alert("Por favor seleccione la fecha de inicio para realizar la busqueda");
+			}
+		}
+	};
+
+	$scope.verDetalles = (idFicha)=> {
+		var newUrl = "detalle.html?idFicha=" + idFicha;
+		$window.open(newUrl, "_blank");
+	};
+
 });

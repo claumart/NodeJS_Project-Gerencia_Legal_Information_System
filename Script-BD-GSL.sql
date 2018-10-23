@@ -377,7 +377,6 @@ DROP TABLE IF EXISTS `FichaEntradaOpinion` ;
 CREATE TABLE IF NOT EXISTS `FichaEntradaOpinion` (
   `idFichaEntradaOpinion` INT NOT NULL AUTO_INCREMENT,
   `idProcedencia` INT NOT NULL,
-  `interesado` VARCHAR(45) NOT NULL,
   `apoderadoLegal` VARCHAR(45) NULL,
   `asunto` VARCHAR(200) NOT NULL,
   `numOficio` VARCHAR(30) NOT NULL,

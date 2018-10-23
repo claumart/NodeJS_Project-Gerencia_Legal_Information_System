@@ -37,9 +37,9 @@
 					    </li>
 					    <li><a href="#0">Dar seguimiento</a>
 					    	<ul class="submenu menu vertical" data-submenu>
-						        <li><a href="seguimiento_expedientes.html#titulo_seguimiento">A expedientes</a></li>
-						        <li><a href="seguimiento_opiniones.html#titulo_seguimiento">A opiniones</a></li>
-						        <li><a href="seguimiento_patronatos.html#titulo_seguimiento">A patronatos</a></li>
+						        <li><a href="seguimiento/seguimiento_expedientes.html#titulo_seguimiento">A expedientes</a></li>
+						        <li><a href="seguimiento/seguimiento_opiniones.html#titulo_seguimiento">A opiniones</a></li>
+						        <li><a href="seguimiento/seguimiento_patronatos.html#titulo_seguimiento">A patronatos</a></li>
 					        </ul>
 					    </li>
 					    <li><a href="buscar.html">Buscar</a></li>
@@ -67,7 +67,7 @@
 						<fieldset><input type="search" placeholder="Buscar" id="buscar_input" name="buscar_input" ng-model="buscar_input"></fieldset>
 			      	</div>
 			      	<div class="medium-2 small-2 cell">
-			      		<fieldset><button type="button" class="button" id="search_btn" ng-click="buscarRegistro()">Buscar</button></fieldset>
+			      		<fieldset><button type="button" class="button" id="search_btn" ng-click="ValidarBusqueda()">Buscar</button></fieldset>
 			      	</div>
 	      		</div>
 
@@ -84,64 +84,67 @@
 	      						<div class="accordion-content" data-tab-content >
 	      							<div class="grid-x grid-padding-x">
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="numExpediente" ng-model="parametro_busqueda"><label for="">Por número de expediente | oficio | Dictamen</label>
+											<input type="radio" name="parametro_busqueda" value="numExpediente" ng-model="parametro_busqueda"><label>Por número de expediente | oficio | Dictamen</label>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="interesado" ng-model="parametro_busqueda"><label for="">Por nombre del interesado</label>
+											<input type="radio" name="parametro_busqueda" value="interesado" ng-model="parametro_busqueda"><label>Por nombre del interesado</label>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="procedencia" ng-change="copyProcedenciaValue()" ng-model="parametro_busqueda"><label for="">Por procedencia</label>
+											<input type="radio" name="parametro_busqueda" value="apoderadoLegal" ng-model="parametro_busqueda"><label>Por apoderado Legal</label>
+										</div>
+										<div class="small-12 cell search_param">
+											<input type="radio" name="parametro_busqueda" value="procedencia" ng-change="copyProcedenciaValue()" ng-model="parametro_busqueda"><label>Por procedencia</label>
 			                				<select id="procedencia_select" name="procedencia_select" ng-model="procedencia_select" ng-change="copyProcedenciaValue()" ng-options="x.nombreDependencia for x in dependenciaList"></select>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="empleadoReceptor" ng-change="copyEmpleadoReceptorValue()" ng-model="parametro_busqueda"><label for="">Empleado receptor</label>
+											<input type="radio" name="parametro_busqueda" value="empleadoReceptor" ng-change="copyEmpleadoReceptorValue()" ng-model="parametro_busqueda"><label>Empleado receptor</label>
 					                		<select id="empleado_receptor_select" name="empleado_receptor_select" ng-model="empleado_receptor_select" ng-change="copyEmpleadoReceptorValue()" ng-options="x.nombreEmpleado for x in empleadoReceptorList"></select>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="asunto" ng-change="copyAsuntoValue()" ng-model="parametro_busqueda"><label for="">Asunto</label>
+											<input type="radio" name="parametro_busqueda" value="asunto" ng-change="copyAsuntoValue()" ng-model="parametro_busqueda"><label>Asunto</label>
 					                		<select id="asunto_select" name="asunto_select" ng-model="asunto_select" ng-change="copyAsuntoValue()" ng-options="x.nombreAsunto for x in asuntoList"></select>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="abogadoAsignado" ng-change="copyAbogadoAsignadoValue()" ng-model="parametro_busqueda"><label for="">Por abogado asignado</label>
+											<input type="radio" name="parametro_busqueda" value="abogadoAsignado" ng-change="copyAbogadoAsignadoValue()" ng-model="parametro_busqueda"><label>Por abogado asignado</label>
 					                		<select id="abogado_asignado_select" name="abogado_asignado_select" ng-model="abogado_asignado_select" ng-change="copyAbogadoAsignadoValue()" ng-options="x.nombreEmpleado for x in abogadoAsignadoList"></select>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="dependenciaRemision" ng-change="copyDependicaRemisionValue()" ng-model="parametro_busqueda"><label for="">Por dependencia de remisión</label>
+											<input type="radio" name="parametro_busqueda" value="dependenciaRemision" ng-change="copyDependicaRemisionValue()" ng-model="parametro_busqueda"><label>Por dependencia de remisión</label>
 											<select id="dependencia_remision_select" name="dependencia_remision_select" ng-model="dependencia_remision_select" ng-change="copyDependicaRemisionValue()" ng-options="x.nombreDependencia for x in dependenciaList">
 			                				</select>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="estadoExpediente" ng-change="copyEstadoExpedienteValue()" ng-model="parametro_busqueda"><label for="">Por estado de expediente</label>
+											<input type="radio" name="parametro_busqueda" value="estadoExpediente" ng-change="copyEstadoExpedienteValue()" ng-model="parametro_busqueda"><label>Por estado de expediente</label>
 											<select id="estado_expediente_select" name="estado_expediente_select" ng-model="estado_expediente_select" ng-change="copyEstadoExpedienteValue()" ng-options="x.nombreEstado for x in estadoExpedienteList">
 			                				</select>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="checkbox" id="usar_fechas" name="usar_fechas" ng-model="usar_fechas"><label for="">Combinar la busqueda con fechas</label>
+											<input type="checkbox" id="usar_fechas" name="usar_fechas" ng-model="usar_fechas"><label>Combinar la busqueda con fechas</label>
 										</div>
 									</div>
 									<div class="grid-x" ng-show="usar_fechas">
 										<div class="grid-x grid-padding-x">
 											<div class="small-6 cell search_param">
-												<input type="radio" name="tipo_fecha1" value="fecha_especifica" checked ng-model="tipo_fecha1"><label for="">Fecha específica</label>
+												<input type="radio" name="tipo_fecha1" value="fecha_especifica" checked ng-model="tipo_fecha1"><label>Fecha específica</label>
 											</div>
 											<div class="small-6 cell search_param">
-												<input type="radio" name="tipo_fecha1" value="fecha_rango" ng-model="tipo_fecha1"><label for="">Rango de fechas</label>
+												<input type="radio" name="tipo_fecha1" value="fecha_rango" ng-model="tipo_fecha1"><label>Rango de fechas</label>
 											</div>
 										</div>
 										<div class="grid-x grid-padding-x" ng-show="tipo_fecha1=='fecha_especifica'">	
 											<div class="small-12 cell search_param">
 												<label>Fecha específica:</label>
-												<input type="date" id="bday" name="bday">
+												<input type="date" name="fecha_dia1" id="fecha_dia1" ng-model="fecha_dia1">
 											</div>
 										</div>
 										<div class="grid-x grid-padding-x" ng-show="tipo_fecha1=='fecha_rango'">	
 											<div class="small-12 cell">
 												<label>Fecha de inicio:</label>
-												<input type="date" id="fecha_inico" name="fecha_inico">
+												<input type="date" name="fecha_inicio1" id="fecha_inicio1" ng-model="fecha_inicio1">
 											</div>
 											<div class="small-12 cell search_param">
 												<label>Fecha de finalización:</label>
-												<input type="date" id="fecha_inico" name="fecha_fin">
+												<input type="date" name="fecha_fin1" id="fecha_fin1" ng-model="fecha_fin1">
 											</div>
 										</div>
 									</div>
@@ -155,40 +158,43 @@
 											<h5 id="titulo_menu_fecha">Por Fecha De:</h5>
 										</div>
 										<div class="small-12 cell">
-											<input type="radio" name="parametro_busqueda" value="fechaEntrada" ng-model="parametro_busqueda"><label for="">Entrada</label>
+											<input type="radio" name="parametro_busqueda" value="fechaEntrada" ng-model="parametro_busqueda"><label>Entrada</label>
 										</div>
 										<div class="small-12 cell">
-											<input type="radio" name="parametro_busqueda" value="fechaAsignacion" ng-model="parametro_busqueda"><label for="">Asignación</label>
+											<input type="radio" name="parametro_busqueda" value="fechaAsignacion" ng-model="parametro_busqueda"><label>Asignación</label>
 										</div>
 										<div class="small-12 cell">
-											<input type="radio" name="parametro_busqueda" value="fechaDescargo" ng-model="parametro_busqueda"><label for="">Descargo</label>
+											<input type="radio" name="parametro_busqueda" value="fechaDescargo" ng-model="parametro_busqueda"><label>Descargo</label>
+										</div>
+										<div class="small-12 cell">
+											<input type="radio" name="parametro_busqueda" value="fechaRevision" ng-model="parametro_busqueda"><label>Revisión</label>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="fechaRemision" ng-model="parametro_busqueda"><label for="">Remisión</label>
+											<input type="radio" name="parametro_busqueda" value="fechaRemision" ng-model="parametro_busqueda"><label>Remisión</label>
 										</div>
 									</div>
 									<div class="grid-x grid-padding-x">
 										<div class="small-6 cell search_param">
-											<input type="radio" name="tipo_fecha2" value="fecha_especifica" checked ng-model="tipo_fecha2"><label for="">Fecha específica</label>
+											<input type="radio" name="tipo_fecha2" value="fecha_especifica" checked ng-model="tipo_fecha2"><label>Fecha específica</label>
 										</div>
 										<div class="small-6 cell search_param">
-											<input type="radio" name="tipo_fecha2" value="fecha_rango" ng-model="tipo_fecha2"><label for="">Rango de fechas</label>
+											<input type="radio" name="tipo_fecha2" value="fecha_rango" ng-model="tipo_fecha2"><label>Rango de fechas</label>
 										</div>
 									</div>
 									<div class="grid-x grid-padding-x" ng-show="tipo_fecha2=='fecha_especifica'">	
 										<div class="small-12 cell search_param">
 											<label>Fecha específica:</label>
-											<input type="date" id="bday" name="bday">
+											<input type="date" name="fecha_dia2" id="fecha_dia2" ng-model="fecha_dia2">
 										</div>
 									</div>
 									<div class="grid-x grid-padding-x" ng-show="tipo_fecha2=='fecha_rango'">	
 										<div class="small-12 cell">
 											<label>Fecha de inicio:</label>
-											<input type="date" id="fecha_inico" name="fecha_inico">
+											<input type="date" name="fecha_inicio2" id="fecha_inicio2" ng-model="fecha_inicio2">
 										</div>
 										<div class="small-12 cell search_param">
 											<label>Fecha de finalización:</label>
-											<input type="date" id="fecha_inico" name="fecha_fin">
+											<input type="date" name="fecha_fin2" id="fecha_fin2" ng-model="fecha_fin2">
 										</div>
 									</div>
     							</div>
@@ -199,44 +205,25 @@
 			      	<div class="medium-9 small-12 cell">
 						<div class="grid-x">
 							<div class="small-12 cell">
-								<table  id="tabla_principal">
+								<table  id="tabla_expedientes">
 									<thead>
-								    	<tr>
-								    		<th>Número de expedientes</th>
-								      		<th>Interesado</th>
+							    		<tr>
+								    		<th>Expediente</th>
 								      		<th>Procedencia</th>
+								      		<th>Asunto</th>
 								      		<th>Fecha de entrada</th>
-								      		<th id="resultado_parametro_busqueda">Abogada(o) asignada(o)</th>
-								      		<th>Acción</th>
+								      		<th>Abogado Asignado</th>
+								      		<th>Especificaciones</th>
 								    	</tr>
-								  	</thead>
+							  		</thead>
 								  	<tbody>
-								    	<tr>
-								    		<td>075-G2-2017</td>
-								    		<td>Ana Maria López</td>
-								    		<td>Catastro</td>
-								    		<td>20/06/2017</td>
-								    		<td>Carolina Arambu</td>
-								    		<td><button type="button" class="button secondary ver_btn" 
-								    			data-open="ficha_detalle">Ver detalles</button></td>
-								    	</tr>
-								    	<tr>
-								      		<td>084-J9-2016, 093-J9-2016, 142-E8-2015</td>
-								    		<td>Eduardo Fabricio Carcamo</td>
-								    		<td>Finanzas</td>
-								    		<td>02/11/2016</td>
-								    		<td>Carolina Arambu</td>
-								    		<td><button type="button" class="button secondary ver_btn" 
-								    			data-open="ficha_detalle">Ver detalles</button></td>
-								    	</tr>
-								    	<tr>
-								      		<td>070-E-2018</td>
-								    		<td>Sandra Victoria Castro</td>
-								    		<td>Dirección de Gestión</td>
-								    		<td>07/05/2018</td>
-								    		<td>Carolina Arambu</td>
-								    		<td><button type="button" class="button secondary ver_btn" 
-								    			data-open="ficha_detalle">Ver detalles</button></td>
+								    	<tr ng-repeat="x in resultadosList track by $index">
+								    		<td>{{x.numExpediente}}</td>
+								    		<td>{{x.nombreProcedencia}}</td>
+								    		<td>{{x.nombreAsunto}}</td>
+								    		<td>{{x.fechaEntrada}}</td>
+								    		<td>{{x.nombreAbogadoAsignado}}</td>
+								    		<td><button type="button" class="button secondary" ng-click="verDetalles(x.idficha)">Ver Detalles</button></td>
 								    	</tr>
 								  	</tbody>
 								</table>
@@ -269,7 +256,6 @@
 	    <script src="js/barraMenu.js" type="text/javascript"></script>
 	    <script src="js/applications/searchApp.js" type="text/javascript"></script>
 	    <script src="js/services/urlUtility.js" type="text/javascript"></script>
-	    <script src="js/services/formUtilities.js" type="text/javascript"></script>
 	    <script src="js/controllers/busqueda/buscar.js" type="text/javascript"></script>
 	    <script type="text/javascript">
 

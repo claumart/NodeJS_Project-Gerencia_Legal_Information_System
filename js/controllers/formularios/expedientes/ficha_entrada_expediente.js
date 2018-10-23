@@ -130,7 +130,7 @@ app.controller("formCtrl", function($scope, $http, utilities, limpieza, urlUtili
     						if(!isNaN($scope.num_folios_NA) && $scope.num_folios_NA > 0){
     							if($scope.asunto_NA_select != null){
     								if($scope.tipo_fecha == "actual"){
-                                        var date = new Date();
+                                        var now = date.toLocaleString('es-GB');
                                         var now = date.toLocaleString('es-GB');
                                         now = utilities.formatearFechaActual(now);
                                         var apoderadoLegal = $scope.apoderado.trim();
