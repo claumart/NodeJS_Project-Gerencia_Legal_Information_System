@@ -13,7 +13,7 @@ app.service("utilities", function() {
     };
 });
 
-app.controller("seguimientoCtrl", function($scope, $http, $window, utilities) {
+app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, urlUtility) {
 	$scope.accion = "";
     $scope.textoBoton = "";
     $scope.serverUrl = urlUtility.getServerUrl();

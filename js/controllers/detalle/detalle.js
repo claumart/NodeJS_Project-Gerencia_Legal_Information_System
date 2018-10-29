@@ -13,15 +13,99 @@ app.service("utilities", function() {
     };
 });
 
-app.controller("detailCtrl", function($scope, $http, $window, utilities) {
+app.controller("detailCtrl", function($scope, $http, $window, utilities, urlUtility) {
 	$scope.accion = "";
     $scope.textoBoton = "";
     $scope.serverUrl = urlUtility.getServerUrl();
+    $scope.slideIndex = 0;
+    $scope.imagenes = [{idDictamen : 3, numeroPagina : 1, urlPagina : '/2/dic2-pag1.jpg'},
+    {idDictamen : 3, numeroPagina : 2, urlPagina : '/2/dic2-pag2.jpg'},
+    {idDictamen : 3, numeroPagina : 3, urlPagina : '/2/dic2-pag3.png'},
+    {idDictamen : 3, numeroPagina : 2, urlPagina : '/2/img4.jpg'}];
+    $scope.construirGaleria = ()=>{
+        var imagesContainer = document.getElementById('imagesPreview');
+        for(let i = 0; i<= $scope.imagenes.length; i++){
+            if(i < 3){
+                var imageBox = document.createElement('div');
+                imageBox.setAttribute('class', 'column');
+                var img = document.createElement('img');
+                img.setAttribute('src', $scope.serverUrl + $scope.imagenes[i].urlPagina);
+                img.setAttribute('class', 'hover-shadow');
+                img.setAttribute('onclick', 'angular.element(this).scope().openModal('+ i +')');
+                imageBox.appendChild(img);
+                imagesContainer.appendChild(imageBox);
+            }else{
+                var moreImages =  $scope.imagenes.length - i;
+                if(moreImages > 0){
+                    var textoBox = document.createElement('div');
+                    var divBox = document.createElement('div');
+                    textoBox.setAttribute('class', 'column');
+                    divBox.setAttribute('id', 'text_image_number');
+                    divBox.setAttribute('onclick', 'angular.element(this).scope().openModal('+ i +')');
+                    var texto = document.createElement('h4');
+                    texto.innerHTML = '+ ' + moreImages;
+                    divBox.appendChild(texto);
+                    textoBox.appendChild(divBox);
+                    imagesContainer.appendChild(textoBox);
+                }
+                break;
+            }
+        }
+    };
 
     $scope.construirGaleria();
-    $scope.construirGaleria = ()=>{
 
-    };
+    // Open the Modal
+    $scope.openModal = (n)=> {
+        document.getElementById('myModal').style.display = "block";
+        $scope.currentSlide(n);
+    }
+
+    // Close the Modal
+    $scope.closeModal = ()=> {
+        document.getElementById('myModal').style.display = "none";
+    }
+
+    // Next/previous controls
+    $scope.minusSlides = ()=> {
+        if($scope.slideIndex ==0) {
+            $scope.showSlides($scope.slideIndex = $scope.imagenes.length -1);
+        }else{
+            $scope.showSlides($scope.slideIndex -= 1);
+        }
+    }
+
+    $scope.plusSlides = ()=> {
+        if($scope.slideIndex == $scope.imagenes.length -1) {
+            $scope.showSlides($scope.slideIndex = 0);
+        }else{
+            $scope.showSlides($scope.slideIndex += 1);
+        }
+    }
+
+    // Thumbnail image controls
+    $scope.currentSlide = (n)=> {
+        $scope.showSlides($scope.slideIndex = n);
+    }
+
+    $scope.showSlides = (n)=> {
+        var container = document.getElementById('myContent');
+        container.removeChild(document.getElementById('actualSlide'));
+        var mySlideContainer = document.createElement('div');
+        var imageText = document.createElement('div');
+        var img = document.createElement('img');
+        var imageNumber = n +1;
+        mySlideContainer.setAttribute('id', 'actualSlide');
+        mySlideContainer.setAttribute('class', 'mySlides');
+        imageText.setAttribute('class', 'numbertext');
+        imageText. innerHTML = imageNumber + '/' + $scope.imagenes.length;
+        img.setAttribute('src', $scope.serverUrl + $scope.imagenes[n].urlPagina);
+        //img.setAttribute('style', 'width:100%');
+        mySlideContainer.appendChild(imageText);
+        mySlideContainer.appendChild(img);
+        container.appendChild(mySlideContainer);
+
+    }
 
 	$scope.mostrarExpedientesRecibidos = ()=> {
 		$scope.accion = "asignar";
@@ -205,4 +289,5 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities) {
     };
 
 });
+
 

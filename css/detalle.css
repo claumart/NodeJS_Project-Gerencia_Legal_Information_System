@@ -38,9 +38,10 @@ h6 {
 	height: 30vh;
 	overflow: hidden;
 }
+
 .row > .column {
-  padding: 0 8px;
-  width: 25%;
+  padding: 2%;
+  width: 23%;
   
 }
 
@@ -61,24 +62,27 @@ h6 {
   display: none;
   position: fixed;
   z-index: 1;
-  padding-top: 5vh;
-  padding-bottom: 5vh;
+  padding-top: 60px;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 /* Modal Content */
 .modal-content {
   position: relative;
-  background-color: #fefefe;
+  background-color: rgba(0, 0, 0, 0.5);
   margin: auto;
-  padding: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-bottom: 60px;
   width: 90%;
-  max-width: 1200px;
+  max-width: 1000px;
 }
 
 /* The Close Button */
@@ -100,11 +104,10 @@ h6 {
 
 /* Hide the slides by default */
 .mySlides {
-  display: none;
-}
-
-.mySlides img{
-
+  /*display: none;*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Next & previous buttons */
@@ -154,10 +157,6 @@ h6 {
   color: white;
 }
 
-img.demo {
-  opacity: 0.6;
-}
-
 .active,
 .demo:hover {
   opacity: 1;
@@ -169,5 +168,25 @@ img.hover-shadow {
 
 .hover-shadow:hover {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+/*********************************Mi CSS***************************************/
+#text_image_number {
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+  	justify-content: center;
+  	align-items: center;
+  	padding: 6%;
+  }
+
+#text_image_number h4{
+	text-align: center;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+#text_image_number:hover {
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 1px 8px 22px 0 rgba(0, 0, 0, 0.19);
 }
 
