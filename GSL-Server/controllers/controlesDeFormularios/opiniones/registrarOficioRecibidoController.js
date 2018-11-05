@@ -6,7 +6,7 @@ registrarOficioController.saveOpinion = (req, res, next) => {
     	if (err) return next(err);
         if(req.body.apoderado != "") {
             await connection.query('INSERT INTO FichaEntradaOpinion(idProcedencia, apoderadoLegal, asunto, numOficio, idEmpleadoReceptor, fechaEntrada, idEstadoOpinion) ' +
-                'VALUES(?, ?, ?, ?, ?, ?, STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), ?)', [req.body.idProcedencia, req.body.apoderado, req.body.asunto, req.body.numOficio, 
+                'VALUES(?, ?, ?, ?, ?, STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), ?)', [req.body.idProcedencia, req.body.apoderado, req.body.asunto, req.body.numOficio, 
                 req.body.numEmpleadoReceptor, req.body.fecha, 1], (err, rows) => {
                 if (err) {
                     console.log(err);

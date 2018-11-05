@@ -1,1 +1,1 @@
-var app = angular.module("formApp", []);
+var app = angular.module("formApp", ['angular-loading-bar']);

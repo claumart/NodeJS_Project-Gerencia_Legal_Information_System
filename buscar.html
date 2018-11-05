@@ -56,7 +56,7 @@
 						<label>Buscar por:</label>
 			      	</div>
 					<div class="medium-3 small-12 cell">
-                		<select id="tipo_busqueda_select" name="tipo_busqueda_select" ng-model="tipo_busqueda_select">
+                		<select id="tipo_busqueda_select" name="tipo_busqueda_select" ng-model="tipo_busqueda_select" ng-change="limpiarParametrosDeBusqueda()">
 		                	<option value="exp" checked>Expedientes</option>
 		                	<option value="opn">Opiniones</option>
 		                	<option value="ptt">Patronatos</option>
@@ -86,7 +86,7 @@
 										<div class="small-12 cell search_param">
 											<input type="radio" name="parametro_busqueda" value="numExpediente" ng-model="parametro_busqueda"><label>Por número de expediente | oficio | Dictamen</label>
 										</div>
-										<div class="small-12 cell search_param">
+										<div class="small-12 cell search_param" ng-show="tipo_busqueda_select=='exp'||tipo_busqueda_select=='ptt'">
 											<input type="radio" name="parametro_busqueda" value="interesado" ng-model="parametro_busqueda"><label>Por nombre del interesado</label>
 										</div>
 										<div class="small-12 cell search_param">
@@ -97,18 +97,18 @@
 			                				<select id="procedencia_select" name="procedencia_select" ng-model="procedencia_select" ng-change="copyProcedenciaValue()" ng-options="x.nombreDependencia for x in dependenciaList"></select>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="empleadoReceptor" ng-change="copyEmpleadoReceptorValue()" ng-model="parametro_busqueda"><label>Empleado receptor</label>
+											<input type="radio" name="parametro_busqueda" value="empleadoReceptor" ng-change="copyEmpleadoReceptorValue()" ng-model="parametro_busqueda"><label>Por empleado receptor</label>
 					                		<select id="empleado_receptor_select" name="empleado_receptor_select" ng-model="empleado_receptor_select" ng-change="copyEmpleadoReceptorValue()" ng-options="x.nombreEmpleado for x in empleadoReceptorList"></select>
 										</div>
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="asunto" ng-change="copyAsuntoValue()" ng-model="parametro_busqueda"><label>Asunto</label>
-					                		<select id="asunto_select" name="asunto_select" ng-model="asunto_select" ng-change="copyAsuntoValue()" ng-options="x.nombreAsunto for x in asuntoList"></select>
+											<input type="radio" name="parametro_busqueda" value="asunto" ng-change="copyAsuntoValue()" ng-model="parametro_busqueda"><label>Por asunto</label>
+					                		<select id="asunto_select" name="asunto_select" ng-model="asunto_select" ng-change="copyAsuntoValue()" ng-options="x.nombreAsunto for x in asuntoList" ng-show="tipo_busqueda_select=='exp'"></select>
 										</div>
 										<div class="small-12 cell search_param">
 											<input type="radio" name="parametro_busqueda" value="abogadoAsignado" ng-change="copyAbogadoAsignadoValue()" ng-model="parametro_busqueda"><label>Por abogado asignado</label>
 					                		<select id="abogado_asignado_select" name="abogado_asignado_select" ng-model="abogado_asignado_select" ng-change="copyAbogadoAsignadoValue()" ng-options="x.nombreEmpleado for x in abogadoAsignadoList"></select>
 										</div>
-										<div class="small-12 cell search_param">
+										<div class="small-12 cell search_param" ng-show="tipo_busqueda_select=='exp'||tipo_busqueda_select=='ptt'">
 											<input type="radio" name="parametro_busqueda" value="dependenciaRemision" ng-change="copyDependicaRemisionValue()" ng-model="parametro_busqueda"><label>Por dependencia de remisión</label>
 											<select id="dependencia_remision_select" name="dependencia_remision_select" ng-model="dependencia_remision_select" ng-change="copyDependicaRemisionValue()" ng-options="x.nombreDependencia for x in dependenciaList">
 			                				</select>

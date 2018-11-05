@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var buscarRegistroExpedienteController = require('../../controllers/controlesDeBusqueda/buscarExpedientesController');
+var buscarRegistroOpinionController = require('../../controllers/controlesDeBusqueda/buscarOpinionesController');
 
 router.post('/buscar/expedientes/parametros1/sinFecha', buscarRegistroExpedienteController.parametros1SinFecha);
 
@@ -8,6 +9,11 @@ router.post('/buscar/expedientes/parametros1/conFecha', buscarRegistroExpediente
 
 router.post('/buscar/expedientes/parametros2/conFecha', buscarRegistroExpedienteController.parametros2ConFecha);
 
+router.post('/buscar/opiniones/parametros1/sinFecha', buscarRegistroOpinionController.parametros1SinFecha);
+
+router.post('/buscar/opiniones/parametros1/conFecha', buscarRegistroOpinionController.parametros1ConFecha);
+
+router.post('/buscar/opiniones/parametros2/conFecha', buscarRegistroOpinionController.parametros2ConFecha);
 
 
 module.exports = router;

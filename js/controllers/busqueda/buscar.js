@@ -100,10 +100,9 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 
 	};
 	$scope.copyAsuntoValue = ()=>{
-		if($scope.parametro_busqueda=="asunto"){
+		if($scope.parametro_busqueda=="asunto" && $scope.tipo_busqueda_select==""){
 			$scope.buscar_input = $scope.asunto_select.nombreAsunto;
 		}
-
 	};
 	$scope.copyAbogadoAsignadoValue = ()=>{
 		if($scope.parametro_busqueda=="abogadoAsignado"){
@@ -121,6 +120,10 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 		}
 	};
 
+	$scope.limpiarParametrosDeBusqueda = ()=>{
+		$scope.parametro_busqueda = "";
+	}
+
 
 	$scope.ValidarBusqueda = ()=> {
 		switch($scope.tipo_busqueda_select) {
@@ -128,7 +131,7 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				ValidarRegistroExp();
 				break;
 			case  "opn":
-				//ValidarRegistroOpn();
+				ValidarRegistroOpn();
 				break;
 			case  "ptt":
 				//ValidarRegistroPtt();
@@ -266,6 +269,167 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 	};
 
 	BuscarExpPorParametrosTipo2 = (nombreParametro)=>{
+		if($scope.tipo_fecha2 == "fecha_especifica") {
+			if($scope.fecha_dia2 != null) {
+				var fechaValidada = utilities.validarFecha($scope.fecha_dia2);
+				$http({
+			        method : "POST",
+			        url : $scope.serverUrl + "/buscar/expedientes/parametros2/conFecha",
+			        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada
+                	}
+			    }).then(function mySuccess(response) {
+			    	var lista = JSON.parse(response.data);
+			       	$scope.resultadosList = utilities.formatearFecha(lista);
+			    }, function myError(response) {
+			       	console.log(response.statusText);
+			   	});
+			}else{
+				window.alert("Por favor seleccione la fecha para realizar la busqueda");
+			}
+		}else if($scope.tipo_fecha2 == "fecha_rango") {
+			if($scope.fecha_inicio2 != null) {
+				var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio2);
+				if($scope.fecha_fin2 != null) {
+					var fechaFinValidada = utilities.validarFecha($scope.fecha_fin2);
+					$http({
+				        method : "POST",
+				       	url : $scope.serverUrl + "/buscar/expedientes/parametros2/conFecha",
+				       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
+				        	fechaFin : fechaFinValidada
+                		}
+				    }).then(function mySuccess(response) {
+				   		var lista = JSON.parse(response.data);
+				       	$scope.resultadosList = utilities.formatearFecha(lista);
+				   	}, function myError(response) {
+				       	console.log(response.statusText);
+			    	});
+				}else{
+					window.alert("Por favor seleccione la fecha de finalización para realizar la busqueda");
+				}
+
+			}else{
+				window.alert("Por favor seleccione la fecha de inicio para realizar la busqueda");
+			}
+		}
+	};
+
+	ValidarRegistroOpn = ()=> {
+		switch($scope.parametro_busqueda) {
+			case  "numExpediente":
+				if($scope.buscar_input.length != ""){
+					BuscarOpnPorParametrosTipo1("numExpediente", $scope.buscar_input);
+				}
+				break;
+			case  "apoderadoLegal":
+				if($scope.buscar_input.length != ""){
+					BuscarOpnPorParametrosTipo1("apoderadoLegal", $scope.buscar_input);
+				}
+				break;
+			case  "procedencia":
+				if($scope.procedencia_select != null){
+					BuscarOpnPorParametrosTipo1("procedencia", $scope.procedencia_select.idDependencia);
+				}
+				break;
+			case  "empleadoReceptor":
+				if($scope.empleado_receptor_select != null){
+					BuscarOpnPorParametrosTipo1("empleadoReceptor", $scope.empleado_receptor_select.numEmpleado);
+				}
+				break;
+			case  "asunto":
+				if($scope.asunto_select != null){
+					BuscarOpnPorParametrosTipo1("asunto", $scope.buscar_input);
+				}
+				break;
+			case  "abogadoAsignado":
+				if($scope.abogado_asignado_select != null){
+					BuscarOpnPorParametrosTipo1("abogadoAsignado", $scope.abogado_asignado_select.numEmpleado);
+				}
+				break;
+			case  "estadoExpediente":
+				if($scope.estado_expediente_select != null){
+					BuscarOpnPorParametrosTipo1("estadoExpediente", $scope.estado_expediente_select.idEstadoExpediente );
+				}
+				break;
+			case  "fechaEntrada":
+				BuscarOpnPorParametrosTipo2("fechaEntrada");
+				break;
+			case  "fechaAsignacion":
+				BuscarOpnPorParametrosTipo2("fechaAsignacion");
+				break;
+			case  "fechaDescargo":
+				BuscarOpnPorParametrosTipo2("fechaDescargo");
+				break;
+			case  "fechaRemision":
+				BuscarOpnPorParametrosTipo2("fechaRemision");
+				break;
+			default:
+				window.alert("Por favor seleccione un parametro de busqueda");
+		}
+
+	};
+
+	BuscarOpnPorParametrosTipo1 = (nombreParametro, valor)=>{
+		if($scope.usar_fechas) {
+			if($scope.tipo_fecha1 == "fecha_especifica") {
+				if($scope.fecha_dia1 != null) {
+					var fechaValidada = utilities.validarFecha($scope.fecha_dia1);
+					$http({
+			        	method : "POST",
+			        	url : $scope.serverUrl + "/buscar/expedientes/parametros1/conFecha",
+			        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+			        		fecha : fechaValidada
+                		}
+			    	}).then(function mySuccess(response) {
+			    		var lista = JSON.parse(response.data);
+			        	$scope.resultadosList = utilities.formatearFecha(lista);
+			    	}, function myError(response) {
+			        	console.log(response.statusText);
+			    	});
+				}else{
+					window.alert("Por favor seleccione la fecha para realizar la busqueda");
+				}
+
+			}else if($scope.tipo_fecha1 == "fecha_rango") {
+				if($scope.fecha_inicio1 != null) {
+					var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio1);
+					if($scope.fecha_fin1 != null) {
+						var fechaFinValidada = utilities.validarFecha($scope.fecha_fin1);
+						$http({
+				        	method : "POST",
+				        	url : $scope.serverUrl + "/buscar/expedientes/parametros1/conFecha",
+				        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+				        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada
+                			}
+				    	}).then(function mySuccess(response) {
+				    		var lista = JSON.parse(response.data);
+				        	$scope.resultadosList = utilities.formatearFecha(lista);
+				    	}, function myError(response) {
+				        	console.log(response.statusText);
+				    	});
+					}else{
+						window.alert("Por favor seleccione la fecha de finalización para realizar la busqueda");
+					}
+
+				}else{
+					window.alert("Por favor seleccione la fecha de inicio para realizar la busqueda");
+				}
+			}
+		}else {
+			$http({
+			    method : "POST",
+			   	url : $scope.serverUrl + "/buscar/expedientes/parametros1/sinFecha",
+			   	data : {parametroBusqueda : nombreParametro, valorParametro : valor
+                }
+			}).then(function mySuccess(response) {
+			    var lista = JSON.parse(response.data);
+			    $scope.resultadosList = utilities.formatearFecha(lista);
+			}, function myError(response) {
+			    console.log(response.statusText);
+			});
+		}
+	};
+
+	BuscarOpnPorParametrosTipo2 = (nombreParametro)=>{
 		if($scope.tipo_fecha2 == "fecha_especifica") {
 			if($scope.fecha_dia2 != null) {
 				var fechaValidada = utilities.validarFecha($scope.fecha_dia2);

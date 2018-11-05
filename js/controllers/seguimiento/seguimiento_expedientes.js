@@ -172,27 +172,27 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
     $scope.darSeguimientoExpediente = (idFicha)=>{
         switch ($scope.accion) {
             case "asignar":
-                var newUrl = "formularios/expedientes/ficha_de_asignacion_expedientes.html#titulo_formulario?idFicha=" + idFicha;
+                var newUrl = "../formularios/expedientes/ficha_de_asignacion_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "descargar":
-               var newUrl = "formularios/expedientes/ficha_de_descargo_expedientes.html#titulo_formulario?idFicha=" + idFicha;
+               var newUrl = "../formularios/expedientes/ficha_de_descargo_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "revisar":
-                var newUrl = "formularios/expedientes/ficha_de_revision_expedientes.html#titulo_formulario?idFicha=" + idFicha;
+                var newUrl = "../formularios/expedientes/ficha_de_revision_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "remitir":
-                var newUrl = "formularios/expedientes/ficha_de_remision_expedientes.html#titulo_formulario?idFicha=" + idFicha;
+                var newUrl = "../formularios/expedientes/ficha_de_remision_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "conPrevio":
-                var newUrl = "formularios/expedientes/ficha_de_remision_con_previo_expedientes.html#titulo_formulario?idFicha=" + idFicha;
+                var newUrl = "../formularios/expedientes/ficha_de_remision_con_previo_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "reingresar":
-                var newUrl = "formularios/expedientes/ficha_de_reingreso_con_previo_expedientes.html#titulo_formulario?idFicha=" + idFicha;
+                var newUrl = "../formularios/expedientes/ficha_de_reingreso_con_previo_expedientes.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             

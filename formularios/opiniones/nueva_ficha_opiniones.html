@@ -11,6 +11,7 @@
 	    <link rel="stylesheet" href="../../css/header.css">
 	    <link rel="stylesheet" href="../../css/footer.css">
 	    <link rel="stylesheet" href="../../css/formulario_fichas.css">
+	    <link rel='stylesheet' href='../../loading-bar/loading-bar.min.css' type='text/css' media='all' />
 	    <script src="../../js/angular.min.js"></script>
   </head>
 
@@ -62,11 +63,6 @@
       		</div>
 
       		<form class="grid-container grid-padding-x" ng-app="formApp" ng-controller="formCtrl">
-            	<div class="grid-x grid-padding-x">
-            		<div class="medium-6 small-12 cell medium-offset-3">
-                		<label>Interesado(a): <input type="text" placeholder="Nombre del interesado" id="interesado" name="interesado" ng-model="interesado"/></label>
-              		</div>
-              	</div>
               	<div class="grid-x grid-padding-x">
             		<div class="medium-6 small-12 cell medium-offset-3">
                 		<label>Apoderado(a) Legal (opcional): <input type="text" placeholder="Nombre del abogado que lleva el caso" id="apoderado" name="apoderado" ng-model="apoderado"/></label> 
@@ -154,6 +150,7 @@
 	    <script src="../../js/header.js"></script>
 	    <script src="../../js/footer.js"></script>
 	    <script src="../../js/barraMenu.js" type="text/javascript"></script>
+	    <script src='../../loading-bar/loading-bar.min.js' type='text/javascript'></script>
 	    <script src="../../js/applications/formApp.js" type="text/javascript"></script>
 	    <script src="../../js/services/formUtilities.js" type="text/javascript"></script>
 	    <script src="../../js/services/urlUtility.js" type="text/javascript"></script>

@@ -136,19 +136,19 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
     $scope.darSeguimientoOpinion = (idFicha)=>{
         switch ($scope.accion) {
             case "asignar":
-                var newUrl = "formularios/opiniones/ficha_de_asignacion_opiniones.html#titulo_formulario?idFicha=" + idFicha;
+                var newUrl = "../formularios/opiniones/ficha_de_asignacion_opiniones.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "descargar":
-               var newUrl = "formularios/opiniones/ficha_de_descargo_opiniones.html#titulo_formulario?idFicha=" + idFicha;
+               var newUrl = "../formularios/opiniones/ficha_de_descargo_opiniones.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "revisar":
-                var newUrl = "formularios/opiniones/ficha_de_revision_opiniones.html#titulo_formulario?idFicha=" + idFicha;
+                var newUrl = "../formularios/opiniones/ficha_de_revision_opiniones.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "remitir":
-                var newUrl = "formularios/opiniones/ficha_de_remision_opiniones.html#titulo_formulario?idFicha=" + idFicha;
+                var newUrl = "../formularios/opiniones/ficha_de_remision_opiniones.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             default:
