@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
+
 //Agragada por mi
 var bodyParser = require('body-parser');
 var myConnection = require('./connection');
@@ -17,6 +18,7 @@ var formulariosPatronatosRouter = require('./routes/formularios/patronatos');
 var seguimientoExpedientesRouter = require('./routes/seguimiento/seguimientoExpedientes');
 var seguimientoOpinionesRouter = require('./routes/seguimiento/seguimientoOpiniones');
 var busquedaRouter = require('./routes/buscar/buscar');
+var detalleRouter = require('./routes/detalle/detalle');
 
 var app = express();
 
@@ -53,6 +55,7 @@ app.use('/', formulariosPatronatosRouter);
 app.use('/', seguimientoExpedientesRouter);
 app.use('/', seguimientoOpinionesRouter);
 app.use('/', busquedaRouter);
+app.use('/', detalleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

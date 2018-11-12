@@ -227,39 +227,48 @@ ALTER TABLE `Expediente` ADD UNIQUE `numExpediente_UNIQUE` (`numExpediente` ASC)
 -- -----------------------------------------------------
 -- Table `RevisionExpediente`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `RevisionExpediente` ;
+DROP TABLE IF EXISTS `PrevisionExpediente` ;
 
-CREATE TABLE IF NOT EXISTS `RevisionExpediente` (
-  `idRevisionExpediente` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `PrevisionExpediente` (
+  `idPrevisionExpediente` INT NOT NULL AUTO_INCREMENT,
   `idFichaEntradaExpediente` INT NOT NULL,
   `idDependenciaRemision` INT NOT NULL,
+  `motivoRemision` VARCHAR(80) NULL,
   `recibidoPor` VARCHAR(45) NOT NULL,
   `fechaRemision` DATE NOT NULL,
   `idDependenciaRetorno` INT NULL,
+  `idEmpleadoReceptor` INT NULL,
   `fechaRetorno` DATE NULL,
-  PRIMARY KEY (`idRevisionExpediente`),
-  CONSTRAINT `RE_idFichaEntradaExpediente_FK`
+  PRIMARY KEY (`idPrevisionExpediente`),
+  CONSTRAINT `PE_idFichaEntradaExpediente_FK`
     FOREIGN KEY (`idFichaEntradaExpediente`)
     REFERENCES `FichaEntradaExpediente` (`idFichaEntradaExpediente`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `RE_idDependenciaRemision_FK`
+  CONSTRAINT `PE_idDependenciaRemision_FK`
     FOREIGN KEY (`idDependenciaRemision`)
     REFERENCES `Dependencia` (`idDependencia`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `RE_idDependenciaRetorno_FK`
+  CONSTRAINT `PE_idDependenciaRetorno_FK`
     FOREIGN KEY (`idDependenciaRetorno`)
     REFERENCES `Dependencia` (`idDependencia`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `PE_idEmpleadoReceptor_FK`
+    FOREIGN KEY (`idEmpleadoReceptor`)
+    REFERENCES `Empleado` (`numEmpleado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-ALTER TABLE `RevisionExpediente` ADD INDEX `RE_idFichaEntradaExpediente_FK_idx` (`idFichaEntradaExpediente` ASC);
+ALTER TABLE `PrevisionExpediente` ADD INDEX `PE_idFichaEntradaExpediente_FK_idx` (`idFichaEntradaExpediente` ASC);
 
-ALTER TABLE `RevisionExpediente` ADD INDEX `RE_idDependenciaRemision_FK_idx` (`idDependenciaRemision` ASC);
+ALTER TABLE `PrevisionExpediente` ADD INDEX `PE_idDependenciaRemision_FK_idx` (`idDependenciaRemision` ASC);
 
-ALTER TABLE `RevisionExpediente` ADD INDEX `RE_idDependenciaRetorno_FK_idx` (`idDependenciaRetorno` ASC);
+ALTER TABLE `PrevisionExpediente` ADD INDEX `PE_idDependenciaRetorno_FK_idx` (`idDependenciaRetorno` ASC);
+
+ALTER TABLE `PrevisionExpediente` ADD INDEX `PE_idEmpleadoReceptor_FK_idx` (`idEmpleadoReceptor` ASC);
 
 
 -- -----------------------------------------------------

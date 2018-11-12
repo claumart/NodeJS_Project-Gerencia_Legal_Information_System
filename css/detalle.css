@@ -3,6 +3,21 @@
 	text-align: center;
 }
 
+.titulo {
+  margin-top: 6%;
+  margin-bottom: 1%;
+  text-align: center;
+}
+
+h5 {
+  display: inline;
+  margin-right: 15px;
+}
+
+.fila {
+  margin-bottom: 10px;
+}
+
 #no_acumulados_box, #si_acumulados_box, #fecha_personalizada_box, #paginas_dictamen_box, #archivo_adjunto_box {
 	background-color: #e6e6e6;
 	border-radius: 25px;
@@ -31,6 +46,7 @@ h6 {
 	text-align: center;
 
 }
+
 
 
 /*************************LightBox*************************/
@@ -172,7 +188,7 @@ img.hover-shadow {
 
 
 /*********************************Mi CSS***************************************/
-#text_image_number {
+.text_image_number {
 	background-color: rgba(0, 0, 0, 0.5);
 	display: flex;
   	justify-content: center;
@@ -180,13 +196,13 @@ img.hover-shadow {
   	padding: 6%;
   }
 
-#text_image_number h4{
+.text_image_number h4{
 	text-align: center;
 	color: #ffffff;
 	font-weight: bold;
 }
 
-#text_image_number:hover {
+.text_image_number:hover {
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 1px 8px 22px 0 rgba(0, 0, 0, 0.19);
 }
 

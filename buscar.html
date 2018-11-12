@@ -43,7 +43,6 @@
 					        </ul>
 					    </li>
 					    <li><a href="buscar.html">Buscar</a></li>
-					    <li><a href="archivar.html">Archivar</a></li>
 					    <li><a href="modulo_administrador.html">Opciones de Administrador</a></li>
 			    	</ul>
 				</div>
@@ -60,7 +59,6 @@
 		                	<option value="exp" checked>Expedientes</option>
 		                	<option value="opn">Opiniones</option>
 		                	<option value="ptt">Patronatos</option>
-		                	<option value="dcm">Dictamenes</option>
                 		</select>
               		</div>
 					<div class="medium-6 small-10 cell">
@@ -84,7 +82,7 @@
 	      						<div class="accordion-content" data-tab-content >
 	      							<div class="grid-x grid-padding-x">
 										<div class="small-12 cell search_param">
-											<input type="radio" name="parametro_busqueda" value="numExpediente" ng-model="parametro_busqueda"><label>Por número de expediente | oficio | Dictamen</label>
+											<input type="radio" name="parametro_busqueda" value="numExpediente" ng-model="parametro_busqueda"><label>Por número de expediente | oficio</label>
 										</div>
 										<div class="small-12 cell search_param" ng-show="tipo_busqueda_select=='exp'||tipo_busqueda_select=='ptt'">
 											<input type="radio" name="parametro_busqueda" value="interesado" ng-model="parametro_busqueda"><label>Por nombre del interesado</label>
@@ -205,10 +203,10 @@
 			      	<div class="medium-9 small-12 cell">
 						<div class="grid-x">
 							<div class="small-12 cell">
-								<table  id="tabla_expedientes">
+								<table  id="tabla_expedientes" ng-show="tipo_busqueda_select=='exp'">
 									<thead>
 							    		<tr>
-								    		<th>Expediente</th>
+								    		<th>Expedientes</th>
 								      		<th>Procedencia</th>
 								      		<th>Asunto</th>
 								      		<th>Fecha de entrada</th>
@@ -217,10 +215,32 @@
 								    	</tr>
 							  		</thead>
 								  	<tbody>
-								    	<tr ng-repeat="x in resultadosList track by $index">
+								    	<tr ng-repeat="x in resultadosExpList track by $index">
 								    		<td>{{x.numExpediente}}</td>
 								    		<td>{{x.nombreProcedencia}}</td>
 								    		<td>{{x.nombreAsunto}}</td>
+								    		<td>{{x.fechaEntrada}}</td>
+								    		<td>{{x.nombreAbogadoAsignado}}</td>
+								    		<td><button type="button" class="button secondary" ng-click="verDetalles(x.idficha)">Ver Detalles</button></td>
+								    	</tr>
+								  	</tbody>
+								</table>
+								<table  id="tabla_opiniones" ng-show="tipo_busqueda_select=='opn'">
+									<thead>
+							    		<tr>
+								    		<th>Oficio</th>
+								      		<th>Procedencia</th>
+								      		<th>Asunto</th>
+								      		<th>Fecha de entrada</th>
+								      		<th>Abogado Asignado</th>
+								      		<th>Especificaciones</th>
+								    	</tr>
+							  		</thead>
+								  	<tbody>
+								    	<tr ng-repeat="x in resultadosOpnList track by $index">
+								    		<td>{{x.numOficio}}</td>
+								    		<td>{{x.nombreProcedencia}}</td>
+								    		<td>{{x.asunto}}</td>
 								    		<td>{{x.fechaEntrada}}</td>
 								    		<td>{{x.nombreAbogadoAsignado}}</td>
 								    		<td><button type="button" class="button secondary" ng-click="verDetalles(x.idficha)">Ver Detalles</button></td>

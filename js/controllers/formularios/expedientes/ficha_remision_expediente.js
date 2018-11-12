@@ -45,7 +45,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                             fecha : fechaValidada, idFicha : $scope.urlParams.idFicha
                         }
                     }).then(function mySuccess(response) {
-                        $window.location.href = "../../seguimiento_expedientes.html#titulo_seguimiento";
+                        $window.location.href = "../../seguimiento/seguimiento_expedientes.html#titulo_seguimiento";
                     }, function myError(response) {
                             console.log(response.statusText);
                     });

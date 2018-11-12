@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html  lang="es">
+	<head>
+		<title>Gerencia Legal</title>
+		<meta charset="utf-8">
+	    <meta http-equiv="x-ua-compatible" content="ie=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <link rel="icon" type="image/png" href="../images/logo_amdc.png">
+	    <link rel="stylesheet" href="../css/foundation.css">
+	    <link rel="stylesheet" href="../css/app.css">
+	    <link rel="stylesheet" href="../css/detalle.css">
+	    <link rel="stylesheet" href="../css/header.css">
+	    <link rel="stylesheet" href="../css/footer.css">
+	    <script src="../js/angular.min.js"></script>
+  </head>
+
+	<body>
+		<header >
+		</header>
+
+		<div class="title-bar" data-responsive-toggle="gsl-menu" data-hide-for="medium">
+			<button class="menu-icon" type="button" data-toggle></button>
+			<div class="title-bar-title">Menu</div>
+		</div>
+		<div class="top-bar" id="gsl-menu">
+			<div class="top-bar-left">
+			    <ul class="dropdown menu" data-dropdown-menu>
+			      	<li style="flex-basis: 60px" title="inicio">
+			      		<a href="index.html"><span><img src="../images/blue-home-icon.png" width="100%"></span></a>
+			      	</li>
+			      	<li class="has-submenu">
+			        	<a href="#0">Crear ficha de entrada</a>
+					    <ul class="submenu menu vertical" data-submenu>
+						    <li><a href="../formularios/expedientes/nueva_ficha_expedientes.html#titulo_registro">De expedientes</a></li>
+						    <li><a href="../formularios/opiniones/nueva_ficha_opiniones.html#titulo_registro">De opiniones</a></li>
+						    <li><a href="../formularios/patronatos/nueva_ficha_patronatos.html#titulo_registro">De patronatos</a></li>
+					    </ul>
+					</li>
+					<li><a href="#0">Dar seguimiento</a>
+					    <ul class="submenu menu vertical" data-submenu>
+						    <li><a href="../seguimiento/seguimiento_expedientes.html#titulo_seguimiento">A expedientes</a></li>
+						    <li><a href="../seguimiento/seguimiento_opiniones.html#titulo_seguimiento">A opiniones</a></li>
+						    <li><a href="../seguimiento/seguimiento_patronatos.html#titulo_seguimiento">A patronatos</a></li>
+					    </ul>
+					</li>
+					<li><a href="../buscar.html">Buscar</a></li>
+					<li><a href="../modulo_administrador.html">Opciones de Administrador</a></li>
+			    </ul>
+			</div>
+			
+		</div>
+
+		<div ng-app="detailApp" ng-controller="detailCtrl">
+			<h1 id="titulo_detalle">Detalle de Expediente</h1>
+			<section class="grid-container">
+				<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Estado del Proceso:</h5><span>{{nombreEstadoExpediente}}</span>
+        			</div>
+      			</div>
+				<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Número de expedientes:</h5><span>{{numExpediente}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Dependencia de Procedencia: </h5><span>{{nombreProcedencia}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Interesado: </h5><span>{{interesado}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Apoderado Legal: </h5><span>{{apoderadoLegal}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Asunto: </h5><span>{{nombreAsunto}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Recibido en GL por: </h5><span>{{nombreEmpleadoReceptor}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Fecha de Entrada: </h5><span>{{fechaEntrada}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Abogado Asignado: </h5><span>{{nombreAbogadoAsignado}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Fecha de Asignación: </h5><span>{{fechaAsignacion}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Fecha de Descargo: </h5><span>{{fechaDescargo}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Fecha de Revisión: </h5><span>{{fechaRevision}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Dependencia de Remisión: </h5><span>{{nombreDependenciaRemision}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Recibido al ser remitido por: </h5><span>{{recibidoPor}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Fecha de Remisón: </h5><span>{{fechaRemision}}</span>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x fila">
+        			<div class="large-12 cell">
+          				<h5>Número de Dictamen Asociado: </h5><span>{{numDictamen}}</span>
+        			</div>
+      			</div>
+			</section>
+
+
+			<section class="grid-container" ng-show="registroPrevios>0">
+				<div class="grid-x grid-padding-x">
+					<div class="small-12 cell">
+		      			<h4 class="titulo">Historial de Previos</h4>
+		      		</div>
+				</div>
+		      	<div class="grid-x  grid-padding-x">
+		      		<div class="small-12 cell">
+		      			<table  id="tabla_principal">
+							<thead>
+							    <tr>
+							    	<th>Dependecia de Remisión</th>
+							      	<th>Motivo</th>
+							      	<th>Recibido al Ser Remitido Por</th>
+							      	<th>Fecha de Remisión</th>
+							      	<th>Dependencia de Retorno</th>
+							      	<th>Recibido en GL Por</th>
+							      	<th>Fecha de Retorno</th>
+							    </tr>
+							</thead>
+							<tbody>
+							    <tr ng-repeat="x in previsionList track by $index">
+							    	<td>{{x.nombreDependenciaRemision}}</td>
+							    	<td>{{x.motivoRemision}}</td>
+							    	<td>{{x.recibidoPor}}</td>
+							    	<td>{{x.fechaRemision}}</td>
+							    	<td>{{x.nombreDependenciaRetorno}}</td>
+							    	<td>{{x.nombreEmpleadoReceptor}}</td>
+							    	<td>{{x.fechaRetorno}}</td>
+							    	
+							    </tr>
+							</tbody>
+						</table>
+		      		</div>
+		      	</div>
+	      	</section>
+
+	      	<section id="gallery_section" ng-show="numeroImagenes>0">
+	      		<div class="grid-x grid-padding-x">
+					<div class="small-12 cell">
+		      			<h4 class="titulo">Galería de Imagenes</h4>
+		      		</div>
+				</div>
+	      		<!-- Images used to open the lightbox -->
+				<div class="row" id="imagesPreview">
+				</div>
+
+				<!-- The Modal/Lightbox -->
+				<div id="myModal" class="modal">
+				  <span class="close cursor" ng-click="closeModal()">&times;</span>
+				  <div id="myContent" class="modal-content">
+
+				    <div id="actualSlide" class="mySlides">
+				    </div>
+				    <!-- Next/previous controls -->
+				    <a class="prev" ng-click="minusSlides()">&#10094;</a>
+				    <a class="next" ng-click="plusSlides()">&#10095;</a>
+
+				    <!-- Caption text -->
+				  </div>
+				</div> 
+	      	</section>
+
+			
+		</div>
+
+		<footer>
+			
+		</footer>
+		<script src="../js/vendor/jquery.js"></script>
+	    <script src="../js/vendor/what-input.js"></script>
+	    <script src="../js/vendor/foundation.js"></script>
+	    <script src="../js/app.js"></script>
+	    <script src="../js/header.js"></script>
+	    <script src="../js/footer.js"></script>
+	    <script src="../js/barraMenu.js" type="text/javascript"></script>
+	    <script src="../js/applications/detailApp.js" type="text/javascript"></script>
+	    <script src="../js/services/urlUtility.js" type="text/javascript"></script>
+	    <script src="../js/services/formUtilities.js" type="text/javascript"></script>
+	    <script src="../js/controllers/detalles/detalle_expediente.js"></script>
+	    <script type="text/javascript">
+
+	    	window.onload = function(){
+	    		loadHeader();
+	    		loadFooter();
+
+	    	}
+	    </script>
+	</body>
+</html>

@@ -7,7 +7,7 @@ populateSelectsController.populateDependencia = (req, res, next) => {
     	connection.query('SELECT idDependencia, nombreDependencia FROM Dependencia', [], (err, results) => {
         	if (err) return next(err);
         	var string=JSON.stringify(results);
-            console.log(__dirname);
+
         	res.json(string);
       	});
       

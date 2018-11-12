@@ -77,6 +77,13 @@
               		</div>
             	</div>
 
+            	<div class="grid-x grid-padding-x">
+              		<div class="medium-6 small-12 cell medium-offset-3">
+              			<label>Recibido Por:</label>
+                		<select id="empleado_receptor_select" name="empleado_receptor_select" ng-model="empleado_receptor_select" ng-options="x.nombreEmpleado for x in empleadoReceptorList"></select>
+              		</div>
+            	</div>
+            	
             	<div class="grid-x grid-padding-x ultimo_parametro">	
 					<div class="medium-6 small-12 cell medium-offset-3">
 						<label>Fecha de Reingreso:</label>

@@ -31,25 +31,40 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
         console.log(response.statusText);
     });
 
+    $http({
+            method : "POST",
+            url : $scope.serverUrl + "/populate/select/empleadoReceptor"
+        }).then(function mySuccess(response) {
+            var lista = JSON.parse(response.data);
+            $scope.empleadoReceptorList = lista;
+        }, function myError(response) {
+            console.log(response.statusText);
+    });
+
 
     $scope.validarFormulario = ()=> {
         if($scope.dependencia_reingreso_select != null){
-            if($scope.fecha_reingreso != null) {
-                var fechaValidada = utilities.validarFecha($scope.fecha_remision);
-                $http({
-                    method : "POST",
-                    url : $scope.serverUrl + "/formularios/expedientes/remitirConPrevio",
-                    data : {dependenciaReingreso : $scope.dependencia_reingreso_select.idDependencia,
-                        fecha : fechaValidada, idFicha : $scope.urlParams.idFicha
-                    }
-                }).then(function mySuccess(response) {
-                    $window.location.href = "../../seguimiento_expedientes.html#titulo_seguimiento";
-                }, function myError(response) {
-                    console.log(response.statusText);
-                });
+            if($scope.empleado_receptor_select != null){
+                if($scope.fecha_reingreso != null) {
+                    var fechaValidada = utilities.validarFecha($scope.fecha_reingreso);
+                    $http({
+                        method : "POST",
+                        url : $scope.serverUrl + "/formularios/expedientes/reingresarConPrevio",
+                        data : {dependenciaReingreso : $scope.dependencia_reingreso_select.idDependencia,
+                            numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado,
+                            fecha : fechaValidada, idFicha : $scope.urlParams.idFicha
+                        }
+                    }).then(function mySuccess(response) {
+                        $window.location.href = "../../seguimiento/seguimiento_expedientes.html#titulo_seguimiento";
+                    }, function myError(response) {
+                        console.log(response.statusText);
+                    });
+                }else{
+                    window.alert("Por favor seleccione la fecha de reingreso del expediente");
+                }  
             }else{
-                window.alert("Por favor seleccione la fecha de reingreso del expediente");
-            }  
+                window.alert("Por favor seleccione el empleado que recibe los expedientes");
+            }
         }else{
             window.alert("Por favor seleccione la dependecnia de reingreso");
         }  

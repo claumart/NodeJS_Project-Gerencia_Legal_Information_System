@@ -29,7 +29,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                 data : { fecha : fechaValidada, idFicha : $scope.urlParams.idFicha
                 }
             }).then(function mySuccess(response) {
-                $window.location.href = "../../seguimiento_opiniones.html#titulo_seguimiento";
+                $window.location.href = "../../seguimiento/seguimiento_opiniones.html#titulo_seguimiento";
             }, function myError(response) {
                 console.log(response.statusText);
             });

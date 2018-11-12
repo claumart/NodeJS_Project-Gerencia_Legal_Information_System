@@ -33,6 +33,7 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 	$scope.dependencia_remision_select = "";
 	$scope.estado_expediente_select = "";
 	$scope.tipo_busqueda_select = "exp";
+	$scope.nombreParametroId = "Expedientes";
 	$scope.usar_fechas = false;
 	
 	$http({
@@ -122,6 +123,8 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 
 	$scope.limpiarParametrosDeBusqueda = ()=>{
 		$scope.parametro_busqueda = "";
+		$scope.resultadosExpList = null;
+		$scope.resultadosOpnList = null;
 	}
 
 
@@ -135,9 +138,6 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				break;
 			case  "ptt":
 				//ValidarRegistroPtt();
-				break;
-			case  "dcm":
-				//ValidarRegistroDcm();
 				break;
 		}
 	};
@@ -220,7 +220,7 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
                 		}
 			    	}).then(function mySuccess(response) {
 			    		var lista = JSON.parse(response.data);
-			        	$scope.resultadosList = utilities.formatearFecha(lista);
+			        	$scope.resultadosExpList = utilities.formatearFecha(lista);
 			    	}, function myError(response) {
 			        	console.log(response.statusText);
 			    	});
@@ -241,7 +241,7 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
                 			}
 				    	}).then(function mySuccess(response) {
 				    		var lista = JSON.parse(response.data);
-				        	$scope.resultadosList = utilities.formatearFecha(lista);
+				        	$scope.resultadosExpList = utilities.formatearFecha(lista);
 				    	}, function myError(response) {
 				        	console.log(response.statusText);
 				    	});
@@ -261,7 +261,7 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
                 }
 			}).then(function mySuccess(response) {
 			    var lista = JSON.parse(response.data);
-			    $scope.resultadosList = utilities.formatearFecha(lista);
+			    $scope.resultadosExpList = utilities.formatearFecha(lista);
 			}, function myError(response) {
 			    console.log(response.statusText);
 			});
@@ -279,7 +279,7 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
                 	}
 			    }).then(function mySuccess(response) {
 			    	var lista = JSON.parse(response.data);
-			       	$scope.resultadosList = utilities.formatearFecha(lista);
+			       	$scope.resultadosExpList = utilities.formatearFecha(lista);
 			    }, function myError(response) {
 			       	console.log(response.statusText);
 			   	});
@@ -299,7 +299,7 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
                 		}
 				    }).then(function mySuccess(response) {
 				   		var lista = JSON.parse(response.data);
-				       	$scope.resultadosList = utilities.formatearFecha(lista);
+				       	$scope.resultadosExpList = utilities.formatearFecha(lista);
 				   	}, function myError(response) {
 				       	console.log(response.statusText);
 			    	});
@@ -375,13 +375,13 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 					var fechaValidada = utilities.validarFecha($scope.fecha_dia1);
 					$http({
 			        	method : "POST",
-			        	url : $scope.serverUrl + "/buscar/expedientes/parametros1/conFecha",
+			        	url : $scope.serverUrl + "/buscar/opiniones/parametros1/conFecha",
 			        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
 			        		fecha : fechaValidada
                 		}
 			    	}).then(function mySuccess(response) {
 			    		var lista = JSON.parse(response.data);
-			        	$scope.resultadosList = utilities.formatearFecha(lista);
+			        	$scope.resultadosOpnList = utilities.formatearFecha(lista);
 			    	}, function myError(response) {
 			        	console.log(response.statusText);
 			    	});
@@ -396,13 +396,13 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 						var fechaFinValidada = utilities.validarFecha($scope.fecha_fin1);
 						$http({
 				        	method : "POST",
-				        	url : $scope.serverUrl + "/buscar/expedientes/parametros1/conFecha",
+				        	url : $scope.serverUrl + "/buscar/opiniones/parametros1/conFecha",
 				        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
 				        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada
                 			}
 				    	}).then(function mySuccess(response) {
 				    		var lista = JSON.parse(response.data);
-				        	$scope.resultadosList = utilities.formatearFecha(lista);
+				        	$scope.resultadosOpnList = utilities.formatearFecha(lista);
 				    	}, function myError(response) {
 				        	console.log(response.statusText);
 				    	});
@@ -417,12 +417,12 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 		}else {
 			$http({
 			    method : "POST",
-			   	url : $scope.serverUrl + "/buscar/expedientes/parametros1/sinFecha",
+			   	url : $scope.serverUrl + "/buscar/opiniones/parametros1/sinFecha",
 			   	data : {parametroBusqueda : nombreParametro, valorParametro : valor
                 }
 			}).then(function mySuccess(response) {
 			    var lista = JSON.parse(response.data);
-			    $scope.resultadosList = utilities.formatearFecha(lista);
+			    $scope.resultadosOpnList = utilities.formatearFecha(lista);
 			}, function myError(response) {
 			    console.log(response.statusText);
 			});
@@ -440,7 +440,7 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
                 	}
 			    }).then(function mySuccess(response) {
 			    	var lista = JSON.parse(response.data);
-			       	$scope.resultadosList = utilities.formatearFecha(lista);
+			       	$scope.resultadosOpnList = utilities.formatearFecha(lista);
 			    }, function myError(response) {
 			       	console.log(response.statusText);
 			   	});
@@ -460,7 +460,7 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
                 		}
 				    }).then(function mySuccess(response) {
 				   		var lista = JSON.parse(response.data);
-				       	$scope.resultadosList = utilities.formatearFecha(lista);
+				       	$scope.resultadosOpnList = utilities.formatearFecha(lista);
 				   	}, function myError(response) {
 				       	console.log(response.statusText);
 			    	});
@@ -475,8 +475,20 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 	};
 
 	$scope.verDetalles = (idFicha)=> {
-		var newUrl = "detalle.html?idFicha=" + idFicha;
-		$window.open(newUrl, "_blank");
+		switch($scope.tipo_busqueda_select) {
+			case  "exp":
+				var newUrl = "detalles/detalle_expediente.html?idFicha=" + idFicha;
+				$window.open(newUrl, "_blank");
+				break;
+			case  "opn":
+				var newUrl = "detalles/detalle_opinion.html?idFicha=" + idFicha;
+				$window.open(newUrl, "_blank");
+				break;
+			case  "ptt":
+				var newUrl = "detalles/detalle_patronato.html?idFicha=" + idFicha;
+				$window.open(newUrl, "_blank");
+				break;
+		}
 	};
 
 });

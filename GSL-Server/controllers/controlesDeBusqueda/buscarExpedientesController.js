@@ -203,8 +203,6 @@ buscarRegistroExpedienteController.parametros1ConFecha = (req, res, next)=>{
 		            console.log(err);
 		            return next(err);
 		        }
-		        console.log(query);
-		        console.log(campoBusqueda);
 		        var string=JSON.stringify(results);
 		        res.status(status.OK).json(string);
 		    });
