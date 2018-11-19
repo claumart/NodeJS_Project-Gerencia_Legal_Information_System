@@ -66,6 +66,33 @@ populateSelectsController.populateAsunto = (req, res, next) => {
       
     });
 }
+
+populateSelectsController.populateAsuntoPatronato = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+      
+        connection.query('SELECT idAsuntoPatronato, nombreAsuntoPatronato FROM AsuntoPatronato', [], (err, results) => {
+        if (err) return next(err);
+        var string=JSON.stringify(results);
+        res.json(string);
+      });
+      
+    });
+}
+
+populateSelectsController.populateMunicipio = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+      
+        connection.query('SELECT idMunicipio, nombreMunicipio, codigoMunicipio FROM Municipio', [], (err, results) => {
+        if (err) return next(err);
+        var string=JSON.stringify(results)
+        res.json(string);
+      });
+      
+    });
+}
+
 populateSelectsController.populateTipoComunidad = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
@@ -78,6 +105,7 @@ populateSelectsController.populateTipoComunidad = (req, res, next) => {
       
     });
 }
+
 populateSelectsController.populateCargoEmpleado = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);

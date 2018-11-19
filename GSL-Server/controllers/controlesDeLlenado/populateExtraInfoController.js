@@ -55,6 +55,25 @@ populateExtraInfoController.getNombrePatronatos = (req, res, next) => {
 }
 
 
+populateExtraInfoController.getComunidades = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        var matchComunidad = '%' + req.body.matchComunidad + '%';
+        var query = "SELECT nombreComunidad FROM Comunidad " +
+        "WHERE nombreComunidad LIKE ? AND idMunicipio = ? AND idTipoComunidad = ?";
+        connection.query(query, [matchComunidad, req.body.idMunicipio, req.body.idTipoComunidad], (err, results) => {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            var string=JSON.stringify(results);
+            res.json(string);
+        });
+      
+    });
+}
+
+
 populateExtraInfoController.existeDictamen = (req, res, next) => {
     req.getConnection((err, connection)=> {
         if (err) return next(err);

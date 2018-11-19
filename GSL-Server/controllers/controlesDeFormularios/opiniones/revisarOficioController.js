@@ -19,17 +19,15 @@ revisarOficioController.revisarOpinion = (req, res, next) => {
                         res.status(status.OK).json({ message: 'La carpeta ya existe' });
                         return next(err);
                     }
-                    console.log("Se creó la carpeta");
                     resolve(rows.insertId);     
                 });
                 
             });
         });
+        
         let DictamenId = await promise1;
         var dicImageLength = req.files.dicImageFiles.length;
         var aAImageLength =  req.files.aAImageFiles.length;
-        console.log(DictamenId);
-
 
         let promise2 = new Promise((resolve, reject) => {
             for(let i = 0; i< dicImageLength; i++){
@@ -42,7 +40,6 @@ revisarOficioController.revisarOpinion = (req, res, next) => {
                         console.log(err);
                         return res.status(500).send(err);
                     }
-                    console.log("Se movió la imagen con nombre " + urlPag);
                 });
 
                 connection.query('INSERT INTO PaginaDictamen(idDictamen, numeroPagina, urlPagina) VALUES(?, ?, ?)', [DictamenId, pagDictamen, urlPag], (err, rows) => {
@@ -51,8 +48,6 @@ revisarOficioController.revisarOpinion = (req, res, next) => {
                         res.status(500).send(err);
                         return next(err);
                     }
-                    console.log("Se guardo la página con nombre " + urlPag);
-
 
 
                     if(i == req.files.dicImageFiles.length - 1) {
@@ -68,7 +63,6 @@ revisarOficioController.revisarOpinion = (req, res, next) => {
             var temp = await promise2;
                 console.log("Pasé la condición");
             for(let j = 0; j< aAImageLength; j++){
-                console.log("Entre al ciclo, yeih!!! 8)");
                 let pagAA = j + 1;
                 let extensionArchivoAA = req.files.aAImageFiles[j].name.slice(req.files.aAImageFiles[j].name.length - 4, req.files.aAImageFiles[j].name.length);
                 let urlPagAA = '/' + DictamenId + '/' + 'dic' + DictamenId + '-archivo_adjunto-pag' + pagAA + extensionArchivoAA;
@@ -78,7 +72,6 @@ revisarOficioController.revisarOpinion = (req, res, next) => {
                         console.log(err);
                         return res.status(500).send(err);
                         }
-                    console.log("Se movió la imagen adjunta con nombre " + urlPagAA);
                 });
 
                 await connection.query('INSERT INTO PaginaArchivoAdjunto(idDictamen, numeroPagina, urlPagina) VALUES(?, ?, ?)', [DictamenId, pagAA, urlPagAA], (err, rows) => {
@@ -100,7 +93,6 @@ revisarOficioController.revisarOpinion = (req, res, next) => {
                 });
             }
         }else {
-            console.log("no pasé la condición");
             var query = "UPDATE FichaEntradaOpinion SET fechaRevision = STR_TO_DATE(?, \'%d-%m-%Y\'), " +
             "idDictamen = ?, idEstadoOpinion = ? WHERE idFichaEntradaOpinion = ?";
             await connection.query(query, [req.body.fecha, DictamenId, 4, req.body.idFicha], (err, rows) => {

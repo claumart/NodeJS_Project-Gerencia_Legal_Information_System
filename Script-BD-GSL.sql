@@ -190,7 +190,6 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaExpediente` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = cp1256;
 
 ALTER TABLE `FichaEntradaExpediente` ADD INDEX `FEE_iProcedencia_FK_idx` (`idProcedencia` ASC);
 
@@ -306,12 +305,11 @@ DROP TABLE IF EXISTS `FichaEntradaPatronato` ;
 
 CREATE TABLE IF NOT EXISTS `FichaEntradaPatronato` (
   `idFichaEntradaPatronato` INT NOT NULL AUTO_INCREMENT,
-  `idTipoComunidad` INT NOT NULL,
-  `nombreComunidad` VARCHAR(45) NOT NULL,
+  `idProcedencia` INT NOT NULL,
+  `interesado` VARCHAR(45) NOT NULL,
   `apoderadoLegal` VARCHAR(45) NULL,
   `idAsuntoPatronato` INT NOT NULL,
   `idEmpleadoReceptor` INT NOT NULL,
-  `folios` INT NOT NULL,
   `fechaEntrada` DATETIME NOT NULL,
   `idAbogadoAsignado` INT NULL,
   `fechaAsignacion` DATE NULL,
@@ -323,11 +321,6 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaPatronato` (
   `idEstadoPatronato` INT NOT NULL,
   `idDictamen` INT NULL,
   PRIMARY KEY (`idFichaEntradaPatronato`),
-  CONSTRAINT `FEP_idTipoComunidad_FK`
-    FOREIGN KEY (`idTipoComunidad`)
-    REFERENCES `TipoComunidad` (`idTipoComunidad`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `FEP_idEmpleadoReceptor_FK`
     FOREIGN KEY (`idEmpleadoReceptor`)
     REFERENCES `Empleado` (`numEmpleado`)
@@ -357,11 +350,13 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaPatronato` (
     FOREIGN KEY (`idDependenciaRemision`)
     REFERENCES `Dependencia` (`idDependencia`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FEP_idProcedencia_FK`
+    FOREIGN KEY (`idProcedencia`)
+    REFERENCES `Dependencia` (`idDependencia`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-
-ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idTipoComunidad_FK_idx` (`idTipoComunidad` ASC);
 
 ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idEmpleadoReceptor_FK_idx` (`idEmpleadoReceptor` ASC);
 
@@ -376,6 +371,8 @@ ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idEstadoPatronato_FK_idx` (`i
 ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idAsuntoPatronato_FK_idx` (`idAsuntoPatronato` ASC);
 
 ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idDependenciaRemision_FK_idx` (`idDependenciaRemision` ASC);
+
+ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idProcedencia_FK_idx` (`idProcedencia` ASC);
 
 
 -- -----------------------------------------------------
@@ -466,6 +463,93 @@ ALTER TABLE `FichaEntradaExpedienteXExpediente` ADD INDEX `FEEXE_idExpediente_id
 
 
 -- -----------------------------------------------------
+-- Table `Municipio`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Municipio` ;
+
+CREATE TABLE IF NOT EXISTS `Municipio` (
+  `idMunicipio` INT NOT NULL AUTO_INCREMENT,
+  `nombreMunicipio` VARCHAR(45) NOT NULL,
+  `codigoMunicipio` VARCHAR(5) NOT NULL,
+  PRIMARY KEY (`idMunicipio`))
+ENGINE = InnoDB;
+
+ALTER TABLE `Municipio` ADD UNIQUE `codigoMunicipio_UNIQUE` (`codigoMunicipio` ASC);
+
+-- -----------------------------------------------------
+-- Table `Comunidad`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Comunidad` ;
+
+CREATE TABLE IF NOT EXISTS `Comunidad` (
+  `idComunidad` INT NOT NULL AUTO_INCREMENT,
+  `nombreComunidad` VARCHAR(45) NOT NULL,
+  `idMunicipio` INT NOT NULL,
+  `idTipoComunidad` INT NOT NULL,
+  PRIMARY KEY (`idComunidad`),
+  CONSTRAINT `Comunidad_idMunicipio_FK`
+    FOREIGN KEY (`idMunicipio`)
+    REFERENCES `Municipio` (`idMunicipio`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Comunidad_idTipoComunidad_FK`
+    FOREIGN KEY (`idTipoComunidad`)
+    REFERENCES `TipoComunidad` (`idTipoComunidad`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+ALTER TABLE `Comunidad` ADD INDEX `Comunidad_idMunicipio_FK_idx` (`idMunicipio` ASC);
+
+ALTER TABLE `Comunidad` ADD INDEX `Comunidad_idTipoComunidad_FK_idx` (`idTipoComunidad` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `ExpedientePatronato`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ExpedientePatronato` ;
+
+CREATE TABLE IF NOT EXISTS `ExpedientePatronato` (
+  `idExpedientePatronato` INT NOT NULL AUTO_INCREMENT,
+  `idComunidadRelacionada` INT NOT NULL,
+  `numExpedientePatronato` VARCHAR(25) NOT NULL,
+  `folios` INT NOT NULL,
+  PRIMARY KEY (`idExpedientePatronato`),
+  CONSTRAINT `EP_idComunidadRelacionada_FK`
+    FOREIGN KEY (`idComunidadRelacionada`)
+    REFERENCES `Comunidad` (`idComunidad`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+ALTER TABLE `ExpedientePatronato` ADD INDEX `EP_idComunidadRelacionada_FK_idx` (`idComunidadRelacionada` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `FichaEntradaPatronatoXExpedientePatronato`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `FichaEntradaPatronatoXExpedientePatronato` ;
+
+CREATE TABLE IF NOT EXISTS `FichaEntradaPatronatoXExpedientePatronato` (
+  `idFichaEntradaPatronato` INT NOT NULL,
+  `idExpedientePatronato` INT NOT NULL,
+  PRIMARY KEY (`idFichaEntradaPatronato`, `idExpedientePatronato`),
+  CONSTRAINT `FEPXEP_idFichaEntradaPatronato_FK`
+    FOREIGN KEY (`idFichaEntradaPatronato`)
+    REFERENCES `FichaEntradaPatronato` (`idFichaEntradaPatronato`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `FEPXEP_idExpedientePatronato_FK`
+    FOREIGN KEY (`idExpedientePatronato`)
+    REFERENCES `ExpedientePatronato` (`idExpedientePatronato`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+ALTER TABLE `FichaEntradaPatronatoXExpedientePatronato` ADD INDEX `FEPXEP_idExpedientePatronato_FK_idx` (`idExpedientePatronato` ASC);
+
+
+-- -----------------------------------------------------
 -- Table `PaginaDictamen`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `PaginaDictamen` ;
@@ -547,15 +631,6 @@ ALTER TABLE `PrivilegioXUsuario` ADD INDEX `PrivilegioXUsuario_idUsuario_FK_idx`
 
 
 -- -----------------------------------------------------
--- Table `ExpedientePatronato`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `ExpedientePatronato` ;
-
-CREATE TABLE IF NOT EXISTS `ExpedientePatronato` (
-)
-ENGINE = InnoDB;
-
--- -----------------------------------------------------
 -- Table `PaginaArchivoAdjunto`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `PaginaArchivoAdjunto` ;
@@ -635,6 +710,10 @@ INSERT INTO Asunto(nombreAsunto) VALUES('Recurso de Apelación');
 INSERT INTO Asunto(nombreAsunto) VALUES('Recurso de Reposión');
 
 
+ INSERT INTO AsuntoPatronato(nombreAsuntoPatronato) VALUES('Inscripción de autoridades');
+ INSERT INTO AsuntoPatronato(nombreAsuntoPatronato) VALUES('Impugnación al proceso de elección');
+
+
 INSERT INTO TipoComunidad(nombreTipoComunidad) VALUES('Aldea');
 INSERT INTO TipoComunidad(nombreTipoComunidad) VALUES('Colonia');
 INSERT INTO TipoComunidad(nombreTipoComunidad) VALUES('Barrio');
@@ -662,6 +741,11 @@ INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimien
 INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(20061, 'Elsa López', true, 3, STR_TO_DATE('19-07-1958', '%d-%m-%Y') );
 INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(11643, 'Marielos Sanchez', true, 3, STR_TO_DATE('19-07-1965', '%d-%m-%Y') );
 INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(22760, 'Mirian Rivera', true, 2, STR_TO_DATE('30-11-1977', '%d-%m-%Y') );
+
+
+INSERT INTO Municipio(nombreMunicipio, codigoMunicipio) VALUES('Distrito Central', 'DC');
+
+
 
 /*ALTER TABLE `empleado` CHANGE `nombresEmpleado` `nombreEmpleado` VARCHAR(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `fichaentradaexpediente` CHANGE `fechaAsignación` `fechaAsignacion` DATETIME NULL DEFAULT NULL;*/
