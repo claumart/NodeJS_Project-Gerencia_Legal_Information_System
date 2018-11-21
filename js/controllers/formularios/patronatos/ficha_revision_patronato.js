@@ -2,7 +2,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
     $scope.mostrarDictamen = false;
     $scope.mostrarPaginas = false;
     $scope.urlParams = utilities.getAllUrlParams($window.location.href);
-    $scope.numExpedientes = "";
+    $scope.numPatronatos = "";
     $scope.numPaginas = 1;
     $scope.serverUrl = urlUtility.getServerUrl();
     $scope.num_dictamen = "";
@@ -10,15 +10,15 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
 
     $http({
             method : "POST",
-            url : $scope.serverUrl + "/populate/formularios/nombreExpedientes",
+            url : $scope.serverUrl + "/populate/formularios/nombrePatronatos",
             data : {idFicha : $scope.urlParams.idFicha}
         }).then(function mySuccess(response) {
             var lista = JSON.parse(response.data);
             for(i = 0; i< lista.length; i++) {
                 if(i == 0){
-                    $scope.numExpedientes += lista[i].numExpediente;  
+                    $scope.numPatronatos += lista[i].numPatronato;  
                 }else{
-                    $scope.numExpedientes += ', ' + lista[i].numExpediente;
+                    $scope.numPatronatos += ', ' + lista[i].numPatronato;
                 }
             }
         }, function myError(response) {
@@ -71,58 +71,56 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
         $scope.mostrarDictamen = false;
         $scope.mostrarPaginas = false;
         var dictamenExistente;
-        if($scope.num_dictamen.length < 26 && $scope.num_dictamen.trim().length > 0){
-            var numDictamenValidado = utilities.eliminateSpace($scope.num_dictamen.toUpperCase().trim());
-            $http({
-                method : "POST",
-                url : $scope.serverUrl + "/extraInfo/formularios/existeDictamen",
-                data : {numDictamen : numDictamenValidado}
-            }).then(function mySuccess(response) {
-                if(!response.data) {
-                    var fd = new FormData();
-                    const inputs = document.getElementsByClassName('files');
-                    const inputFiles = Array.from(inputs);
-                    console.log(inputFiles);
-                    console.log(inputFiles.length);
-                    //console.log(inputs);
-                    for(i = 0;  i < inputFiles.length; i++) {
-                        if(inputFiles[i].files[0] != null){
-                            fd.append('imageFiles[]', inputFiles[i].files[0]);
-                            if(i == inputFiles.length - 1){
-                                fd.append('numDictamen', numDictamenValidado);
-                                fd.append('idFicha', $scope.urlParams.idFicha);
-                                $http({
-                                    method : "POST",
-                                    url : "../../pruebaImagenes.php",
-                                    data : fd,
-                                    transformRequest: angular.identity,
-                                    headers: {'Content-Type': undefined}
-                                }).then(function mySuccess(response) {
-                                    $window.location.href = "../../seguimiento_expedientes.html#titulo_seguimiento";
-                                }, function myError(response) {
-                                    console.log(response.statusText);
-                                });      
+        if($scope.fecha_revision != null) {
+            var fechaValidada = utilities.validarFecha($scope.fecha_revision);
+            if($scope.num_dictamen.length < 26 && $scope.num_dictamen.trim().length > 0){
+                var numDictamenValidado = utilities.eliminateSpace($scope.num_dictamen.toUpperCase().trim());
+                $http({
+                    method : "POST",
+                    url : $scope.serverUrl + "/extraInfo/formularios/existeDictamen",
+                    data : {numDictamen : numDictamenValidado}
+                }).then(function mySuccess(response) {
+                    if(!response.data) {
+                        var fd = new FormData();
+                        const inputs = document.getElementsByClassName('files');
+                        const inputFiles = Array.from(inputs);
+                        for(i = 0;  i < inputFiles.length; i++) {
+                            if(inputFiles[i].files[0] != null){
+                                fd.append('imageFiles', inputFiles[i].files[0]);
+                                if(i == inputFiles.length - 1){
+                                    fd.append('fecha', fechaValidada);
+                                    fd.append('numDictamen', numDictamenValidado);
+                                    fd.append('idFicha', $scope.urlParams.idFicha);
+                                    $http({
+                                        method : "POST",
+                                        url : $scope.serverUrl + "/formularios/patronatos/revisar",
+                                        data : fd,
+                                        transformRequest: angular.identity,
+                                        headers: {'Content-Type': undefined}
+                                    }).then(function mySuccess(response) {
+                                        $window.location.href = "../../seguimiento/seguimiento_patronatos.html#titulo_seguimiento";
+                                    }, function myError(response) {
+                                        console.log(response.statusText);
+                                    });      
+                                }
+                            }else{
+                                $scope.mostrarPaginas = true;
+                                break;
                             }
-                        }else{
-                            $scope.mostrarPaginas = true;
-                            break;
                         }
+                    }else{
+                       $scope.mostrarDictamen = true; 
                     }
-                }else{
-                   $scope.mostrarDictamen = true; 
-                }
-            }, function myError(response) {
-                console.log(response.statusText);
-            });
+                }, function myError(response) {
+                    console.log(response.statusText);
+                });
 
+            }else {
+                window.alert("El campo Número de dictamen es muy largo o está vacío, por favor ingrese un valor valido y sin espacios");
+            }
         }else {
-            window.alert("El campo Número de dictamen es muy largo o está vacío, por favor ingrese un valor valido y sin espacios");
-        }
-        
-        
+            window.alert("Por favor seleccione la fecha de revisión del expediente");
+        }       
     };
 
-
-
 });
-

@@ -33,7 +33,7 @@
     color: #fefefe;
 }
 
-#asignar_btn:hover, #descargar_btn:hover, #remitir_btn:hover, #modificar_btn:hover {
+#asignar_btn:hover, #descargar_btn:hover, #revisar_btn:hover, #remitirCP_btn:hover, #reingresoCP_btn:hover, #remitir_btn:hover, #modificar_btn:hover {
 	background-color: #0059b3;
     color: #fefefe;
 }

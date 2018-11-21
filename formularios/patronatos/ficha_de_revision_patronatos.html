@@ -35,9 +35,9 @@
 			      	<li class="has-submenu">
 			        	<a href="#0">Crear ficha de entrada</a>
 					    <ul class="submenu menu vertical" data-submenu>
-						    <li><a href="../expedientes/nueva_ficha_expedientes.html#titulo_registro">De expedientes</a></li>
+						    <li><a href="nueva_ficha_expedientes.html#titulo_registro">De expedientes</a></li>
 						    <li><a href="../opiniones/nueva_ficha_opiniones.html#titulo_registro">De opiniones</a></li>
-						    <li><a href="nueva_ficha_patronatos.html#titulo_registro">De patronatos</a></li>
+						    <li><a href="../patronatos/nueva_ficha_patronatos.html#titulo_registro">De patronatos</a></li>
 					    </ul>
 					</li>
 					<li><a href="#0">Dar seguimiento</a>
@@ -57,16 +57,22 @@
 			<div class="grid-container grid-padding-x">
       			<div class="grid-x grid-padding-x">
         			<div class="large-12 cell">
-          				<h3 id="titulo_formulario">Revisión de Expedientes</h3>
+          				<h3 id="titulo_formulario">Revisión de Patronatos</h3>
         			</div>
       			</div>
 	      	</div>
       		<form class="grid-container grid-padding-x" ng-app="formApp" ng-controller="formCtrl" enctype="multipart/form-data">
       			<div class="grid-x grid-padding-x">
 	        		<div class="large-12 cell">
-	          			<h5>Expedientes a revisar: <h6>{{numExpedientes}}</h6></h5>
+	          			<h5>Expedientes de patronatos a revisar: <h6>{{numPatronatos}}</h6></h5>
 	        		</div>
 	      		</div>
+	      		<div class="grid-x grid-padding-x ultimo_parametro">	
+					<div class="medium-6 small-12 cell medium-offset-3">
+						<label>Fecha de Revisión:</label>
+						<input type="date" id="fecha_revision" name="fecha_revision" ng-model="fecha_revision">
+					</div>
+				</div>
 				<div class="grid-x grid-padding-x">  	
 		            <div class="medium-6 small-12 cell medium-offset-3">
 			           	<label>Número de Dictamen:</label>
@@ -76,6 +82,12 @@
 			           	<label class="alerta" ng-show="mostrarDictamen">Ya existe un dictamen con este número en la base de datos, por favor ingrese un número de dictamen diferente</label>
 			        </div>
 			    </div>
+
+			    <div class="grid-x grid-padding-x">
+        			<div class="large-12 cell">
+          				<label>Páginas del dictamen</label>
+        			</div>
+      			</div>
 	            <div id="paginas_dictamen_box">
 		            <div class="grid-x grid-padding-x" id="paginas_controllers">
 		              	<fieldset class="medium-2 small-12 cell">
@@ -130,7 +142,7 @@
 	   	<script src="../../js/applications/formApp.js" type="text/javascript"></script>
 	    <script src="../../js/services/formUtilities.js" type="text/javascript"></script>
 	    <script src="../../js/services/urlUtility.js" type="text/javascript"></script>
-	    <script src="../../js/controllers/formularios/expedientes/ficha_revision_expediente.js"></script>
+	    <script src="../../js/controllers/formularios/patronatos/ficha_revision_patronato.js"></script>
 	    <script type="text/javascript">
 
 	    	window.onload = function(){

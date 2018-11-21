@@ -5,7 +5,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
 
     $http({
             method : "POST",
-            url : $scope.serverUrl + "/populate/formularios/nombreExpedientes",
+            url : $scope.serverUrl + "/populate/formularios/nombrePatronatos",
             data : {idFicha : $scope.urlParams.idFicha}
         }).then(function mySuccess(response) {
             var lista = JSON.parse(response.data);
@@ -29,7 +29,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                 data : { fecha : fechaValidada, idFicha : $scope.urlParams.idFicha
                 }
             }).then(function mySuccess(response) {
-                $window.location.href = "../../seguimiento_patronatos.html#titulo_seguimiento";
+                $window.location.href = "../../seguimiento/seguimiento_patronatos.html#titulo_seguimiento";
             }, function myError(response) {
                 console.log(response.statusText);
             });

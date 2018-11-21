@@ -18,7 +18,7 @@ router.post('/formularios/patronatos/asignar', asignarPatronatoController.asigna
 router.post('/formularios/patronatos/descargar', descargarPatronatoController.descargarPatronato);
 
 /****************************************Revisión de Patronatos********************************************/
-//router.post('/formularios/patronatos/revisar', revisarPatronatoController.revisarPatronato);
+router.post('/formularios/patronatos/revisar', revisarPatronatoController.crearDictamen);
 
 /****************************************Remisión de Patronatos********************************************/
 router.post('/formularios/patronatos/remitir', remitirPatronatoController.remitirPatronato);

@@ -17,6 +17,7 @@ var formulariosOpinionesRouter = require('./routes/formularios/opiniones');
 var formulariosPatronatosRouter = require('./routes/formularios/patronatos');
 var seguimientoExpedientesRouter = require('./routes/seguimiento/seguimientoExpedientes');
 var seguimientoOpinionesRouter = require('./routes/seguimiento/seguimientoOpiniones');
+var seguimientoPatronatosRouter = require('./routes/seguimiento/seguimientoPatronatos');
 var busquedaRouter = require('./routes/buscar/buscar');
 var detalleRouter = require('./routes/detalle/detalle');
 
@@ -54,6 +55,7 @@ app.use('/', formulariosOpinionesRouter);
 app.use('/', formulariosPatronatosRouter);
 app.use('/', seguimientoExpedientesRouter);
 app.use('/', seguimientoOpinionesRouter);
+app.use('/', seguimientoPatronatosRouter);
 app.use('/', busquedaRouter);
 app.use('/', detalleRouter);
 

@@ -150,10 +150,7 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
             case "remitir":
                 var newUrl = "../formularios/opiniones/ficha_de_remision_opiniones.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
-                break;
-            default:
-                window.alert("Error del sistema en el registro de la opinion");
-            
+                break;  
         }
     };
 

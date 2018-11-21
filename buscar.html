@@ -84,6 +84,9 @@
 										<div class="small-12 cell search_param">
 											<input type="radio" name="parametro_busqueda" value="numExpediente" ng-model="parametro_busqueda"><label>Por número de expediente | oficio</label>
 										</div>
+										<div class="small-12 cell search_param" ng-show="tipo_busqueda_select=='ptt'">
+											<input type="radio" name="parametro_busqueda" value="comunidad" ng-model="parametro_busqueda"><label>Por nombre de la comunidad</label>
+										</div>
 										<div class="small-12 cell search_param" ng-show="tipo_busqueda_select=='exp'||tipo_busqueda_select=='ptt'">
 											<input type="radio" name="parametro_busqueda" value="interesado" ng-model="parametro_busqueda"><label>Por nombre del interesado</label>
 										</div>
@@ -101,6 +104,13 @@
 										<div class="small-12 cell search_param">
 											<input type="radio" name="parametro_busqueda" value="asunto" ng-change="copyAsuntoValue()" ng-model="parametro_busqueda"><label>Por asunto</label>
 					                		<select id="asunto_select" name="asunto_select" ng-model="asunto_select" ng-change="copyAsuntoValue()" ng-options="x.nombreAsunto for x in asuntoList" ng-show="tipo_busqueda_select=='exp'"></select>
+					                		<select id="asunto_patronato_select" name="asunto_patronato_select" ng-model="asunto_patronato_select" ng-options="x.nombreAsuntoPatronato for x in asuntoPatronatoList" ng-show="tipo_busqueda_select=='ptt'" ng-change="copyAsuntoValue()">
+			            					</select>
+										</div>
+										<div class="small-12 cell search_param" ng-show="tipo_busqueda_select=='ptt'">
+											<input type="radio" name="parametro_busqueda" value="tipoComunidad" ng-change="copyTipoComunidadValue()" ng-model="parametro_busqueda"><label>Por tipo de comunidad</label>
+					                		<select id="tipo_comunidad_select" name="tipo_comunidad_select" ng-model="tipo_comunidad_select" ng-change="copyTipoComunidadValue()" ng-options="x.nombreTipoComunidad for x in tipoComunidadList">
+			              					</select>
 										</div>
 										<div class="small-12 cell search_param">
 											<input type="radio" name="parametro_busqueda" value="abogadoAsignado" ng-change="copyAbogadoAsignadoValue()" ng-model="parametro_busqueda"><label>Por abogado asignado</label>
@@ -229,7 +239,7 @@
 									<thead>
 							    		<tr>
 								    		<th>Oficio</th>
-								      		<th>Procedencia</th>
+								      		<th>Comunidad</th>
 								      		<th>Asunto</th>
 								      		<th>Fecha de entrada</th>
 								      		<th>Abogado Asignado</th>
@@ -241,6 +251,28 @@
 								    		<td>{{x.numOficio}}</td>
 								    		<td>{{x.nombreProcedencia}}</td>
 								    		<td>{{x.asunto}}</td>
+								    		<td>{{x.fechaEntrada}}</td>
+								    		<td>{{x.nombreAbogadoAsignado}}</td>
+								    		<td><button type="button" class="button secondary" ng-click="verDetalles(x.idficha)">Ver Detalles</button></td>
+								    	</tr>
+								  	</tbody>
+								</table>
+								<table  id="tabla_patronatos" ng-show="tipo_busqueda_select=='ptt'">
+									<thead>
+							    		<tr>
+								    		<th>Expedientes</th>
+								      		<th>comunidad</th>
+								      		<th>Asunto</th>
+								      		<th>Fecha de entrada</th>
+								      		<th>Abogado Asignado</th>
+								      		<th>Especificaciones</th>
+								    	</tr>
+							  		</thead>
+								  	<tbody>
+								    	<tr ng-repeat="x in resultadosPttList track by $index">
+								    		<td>{{x.numExpediente}}</td>
+								    		<td>{{x.nombreProcedencia}}</td>
+								    		<td>{{x.nombreAsunto}}</td>
 								    		<td>{{x.fechaEntrada}}</td>
 								    		<td>{{x.nombreAbogadoAsignado}}</td>
 								    		<td><button type="button" class="button secondary" ng-click="verDetalles(x.idficha)">Ver Detalles</button></td>

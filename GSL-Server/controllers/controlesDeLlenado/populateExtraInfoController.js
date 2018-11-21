@@ -40,8 +40,9 @@ populateExtraInfoController.getNombreOpiniones = (req, res, next) => {
 populateExtraInfoController.getNombrePatronatos = (req, res, next) => {
     req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT numOficio FROM fichaEntradaOpinion as fichaOpinion " +
-        "WHERE fichaOpinion.idFichaEntradaOpinion =?";
+        var query = "SELECT ExpedientePatronato.numExpedientePatronato as numPatronato FROM FichaEntradaPatronatoXExpedientePatronato as fichaxpatronato " +
+        "RIGHT JOIN ExpedientePatronato ON ExpedientePatronato.idExpedientePatronato = fichaxpatronato.idExpedientePatronato " +
+        "WHERE fichaxpatronato.idFichaEntradaPatronato =?";
         connection.query(query, [req.body.idFicha], (err, results) => {
             if (err) {
                 console.log(err);

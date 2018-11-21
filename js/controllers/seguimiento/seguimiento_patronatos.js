@@ -24,7 +24,7 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
 
 		$http({
         	method : "POST",
-        	url : $scope.serverUrl + "/seguimiento/opiniones/mostrar/recibidas"
+        	url : $scope.serverUrl + "/seguimiento/patronatos/mostrar/recibidos"
     	}).then(function mySuccess(response) {
     		var lista = JSON.parse(response.data);
         	$scope.opinionesList = utilities.formatearFecha(lista);
@@ -40,7 +40,7 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
 
 		$http({
         	method : "POST",
-        	url : $scope.serverUrl + "/seguimiento/opiniones/mostrar/asignadas"
+        	url : $scope.serverUrl + "/seguimiento/patronatos/mostrar/asignados"
     	}).then(function mySuccess(response) {
     		var lista = JSON.parse(response.data);
         	$scope.opinionesList = utilities.formatearFecha(lista);
@@ -56,7 +56,7 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
 
 		$http({
         	method : "POST",
-        	url : $scope.serverUrl + "/seguimiento/opiniones/mostrar/descargadas"
+        	url : $scope.serverUrl + "/seguimiento/patronatos/mostrar/descargados"
     	}).then(function mySuccess(response) {
     		var lista = JSON.parse(response.data);
         	$scope.opinionesList = utilities.formatearFecha(lista);
@@ -71,7 +71,7 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
         $scope.textoBoton = "Remitir";
 		$http({
         	method : "POST",
-        	url : $scope.serverUrl + "/seguimiento/opiniones/mostrar/revisadas"
+        	url : $scope.serverUrl + "/seguimiento/patronatos/mostrar/revisados"
     	}).then(function mySuccess(response) {
     		var lista = JSON.parse(response.data);
         	$scope.opinionesList = utilities.formatearFecha(lista);
@@ -84,7 +84,7 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
 	$scope.mostrarPatronatosRemitidos = ()=> {
 		$http({
         	method : "POST",
-        	url : $scope.serverUrl + "/seguimiento/opiniones/mostrar/remitidas"
+        	url : $scope.serverUrl + "/seguimiento/patronatos/mostrar/remitidos"
     	}).then(function mySuccess(response) {
     		var lista = JSON.parse(response.data);
         	$scope.opinionesList = utilities.formatearFecha(lista);
@@ -95,11 +95,11 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
 	};
 
 	$scope.mostrarPatronato = ()=> {
-        var numOficioValidado = utilities.eliminateSpace($scope.num_oficio.toUpperCase().trim());
+        var numPatronatoValidado = utilities.eliminateSpace($scope.num_expediente.toUpperCase().trim());
 		$http({
         	method : "POST",
-        	url : $scope.serverUrl + "/seguimiento/opiniones/mostrar/oficioParticular",
-            data : {numOficio : numOficioValidado}
+        	url : $scope.serverUrl + "/seguimiento/patronatos/mostrar/patronatoParticular",
+            data : {numExpediente : numPatronatoValidado}
     	}).then(function mySuccess(response) {
     		var lista = JSON.parse(response.data);
             if(lista.length > 0){
@@ -133,27 +133,24 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
     	});
 	};
 
-    $scope.darSeguimientoOpinion = (idFicha)=>{
+    $scope.darSeguimientoPatronato = (idFicha)=>{
         switch ($scope.accion) {
             case "asignar":
-                var newUrl = "formularios/patronatos/ficha_de_asignacion_patronatos.html#titulo_formulario?idFicha=" + idFicha;
+                var newUrl = "../formularios/patronatos/ficha_de_asignacion_patronatos.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "descargar":
-               var newUrl = "formularios/patronatos/ficha_de_descargo_patronatos.html#titulo_formulario?idFicha=" + idFicha;
+               var newUrl = "../formularios/patronatos/ficha_de_descargo_patronatos.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "revisar":
-                var newUrl = "formularios/patronatos/ficha_de_revision_patronatos.html#titulo_formulario?idFicha=" + idFicha;
+                var newUrl = "../formularios/patronatos/ficha_de_revision_patronatos.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
                 break;
             case "remitir":
-                var newUrl = "formularios/patronatos/ficha_de_remision_patronatos.html#titulo_formulario?idFicha=" + idFicha;
+                var newUrl = "../formularios/patronatos/ficha_de_remision_patronatos.html#titulo_formulario?idFicha=" + idFicha;
                 $window.location.href = newUrl;
-                break;
-            default:
-                window.alert("Error del sistema en el registro de la opinion");
-            
+                break;    
         }
     };
 

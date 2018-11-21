@@ -1,13 +1,17 @@
 var express = require('express');
 var router = express.Router();
-var registrarExpController = require('../../controllers/controlesDeFormularios/expedientes/registrarExpRecibidoController');
+var seguimientoPatronatoController = require('../../controllers/controlesDeSeguimiento/seguimientoPatronatosController');
 
-router.post('/formularios/expedientes/registrar/noAcumuladoActual', registrarExpController.saveNoAcumuladoActual);
+router.post('/seguimiento/patronatos/mostrar/recibidos', seguimientoPatronatoController.mostrarPatronatosRecibidos);
 
-router.post('/formularios/expedientes/registrar/noAcumuladoPersonalizada', registrarExpController.saveNoAcumuladoPersonalizada);
+router.post('/seguimiento/patronatos/mostrar/asignados', seguimientoPatronatoController.mostrarPatronatosAsignados);
 
-router.post('/formularios/expedientes/registrar/acumuladoActual', registrarExpController.saveAcumuladoActual);
+router.post('/seguimiento/patronatos/mostrar/descargados', seguimientoPatronatoController.mostrarPatronatosDescargados);
 
-router.post('/formularios/expedientes/registrar/acumuladoPersonalizada', registrarExpController.saveAcumuladoPersonalizada);
+router.post('/seguimiento/patronatos/mostrar/revisados', seguimientoPatronatoController.mostrarPatronatosRevisados);
+
+router.post('/seguimiento/patronatos/mostrar/remitidos', seguimientoPatronatoController.mostrarPatronatosRemitidos);
+
+router.post('/seguimiento/patronatos/mostrar/patronatoParticular', seguimientoPatronatoController.mostrarPatronatoPorNumero);
 
 module.exports = router;

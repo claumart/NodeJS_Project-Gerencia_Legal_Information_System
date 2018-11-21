@@ -60,10 +60,10 @@
 	      		<form class="grid-container full">
 					<div class="grid-x grid-padding-x" id="buscador_principal">
 						<div class="small-6 medium-2 cell" id="buscar_por_label">
-							<label>Buscar por nombre de Patronato:</label>
+							<label>Buscar por número de expediente:</label>
 				      	</div>
 						<div class="small-6 medium-8 cell">
-							<fieldset><input type="search" placeholder="Escriba el nombre del patronato aquí" name="nombre_patronato" id="nombre_patronato" ng-model="nombre_patronato"></fieldset>
+							<fieldset><input type="search" placeholder="Escriba el número de expediente del patronato" name="num_expediente" id="num_expediente" ng-model="num_expediente"></fieldset>
 				      	</div>
 				      	<div class="small-12 medium-2 cell">
 				      		<fieldset><button type="button" class="button" id="search_btn" ng-click="mostrarPatronato()">Buscar</button></fieldset>
@@ -91,8 +91,8 @@
 		      				<table  id="tabla_principal">
 								<thead>
 							    	<tr>
-							    		<th>Oficio</th>
-							      		<th>Procedencia</th>
+							    		<th>Expediente</th>
+							      		<th>Comunidad</th>
 							      		<th>Asunto</th>
 							      		<th>Fecha de entrada</th>
 							      		<th>Abogado Asignado</th>
@@ -101,12 +101,12 @@
 							  	</thead>
 							  	<tbody>
 							    	<tr ng-repeat="x in opinionesList track by $index">
-							    		<td>{{x.numOficio}}</td>
-							    		<td>{{x.nombreProcedencia}}</td>
-							    		<td>{{x.asunto}}</td>
+							    		<td>{{x.numExpediente}}</td>
+							    		<td>{{x.comunidad}}</td>
+							    		<td>{{x.nombreAsunto}}</td>
 							    		<td>{{x.fechaEntrada}}</td>
 							    		<td>{{x.nombreAbogadoAsignado}}</td>
-							    		<td><button type="button" class="button secondary" ng-click="darSeguimientoOpinion(x.idficha)">{{textoBoton}}</button></td>
+							    		<td><button type="button" class="button secondary" ng-click="darSeguimientoPatronato(x.idficha)">{{textoBoton}}</button></td>
 							    	</tr>
 							  	</tbody>
 							</table>

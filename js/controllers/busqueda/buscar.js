@@ -29,6 +29,8 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 	$scope.procedencia_select = "";
 	$scope.empleado_receptor_select = "";
 	$scope.asunto_select = "";
+	$scope.asunto_patronato_select = "";
+	$scope.tipo_comunidad_select = "";
 	$scope.abogado_asignado_select = "";
 	$scope.dependencia_remision_select = "";
 	$scope.estado_expediente_select = "";
@@ -68,6 +70,26 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
     });
 
     $http({
+            method : "POST",
+            url : $scope.serverUrl + "/populate/select/asuntoPatronato"
+        }).then(function mySuccess(response) {
+            var lista = JSON.parse(response.data);
+            $scope.asuntoPatronatoList = lista;
+        }, function myError(response) {
+            console.log(response.statusText);
+    });
+
+    $http({
+            method : "POST",
+            url : $scope.serverUrl + "/populate/select/tipoComunidad"
+        }).then(function mySuccess(response) {
+            var lista = JSON.parse(response.data);
+            $scope.tipoComunidadList = lista;
+        }, function myError(response) {
+            console.log(response.statusText);
+    });
+
+    $http({
         	method : "POST",
         	url : $scope.serverUrl + "/populate/select/abogadoAsignado"
     	}).then(function mySuccess(response) {
@@ -101,10 +123,19 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 
 	};
 	$scope.copyAsuntoValue = ()=>{
-		if($scope.parametro_busqueda=="asunto" && $scope.tipo_busqueda_select==""){
+		if($scope.parametro_busqueda=="asunto" && $scope.tipo_busqueda_select=="exp"){
 			$scope.buscar_input = $scope.asunto_select.nombreAsunto;
+		}else if($scope.parametro_busqueda=="asunto" && $scope.tipo_busqueda_select=="ptt") {
+			$scope.buscar_input = $scope.asunto_patronato_select.nombreAsuntoPatronato;
 		}
 	};
+
+	$scope.copyTipoComunidadValue = ()=>{
+		if($scope.parametro_busqueda=="tipoComunidad"){
+			$scope.buscar_input = $scope.tipo_comunidad_select.nombreTipoComunidad;
+		}
+	};
+
 	$scope.copyAbogadoAsignadoValue = ()=>{
 		if($scope.parametro_busqueda=="abogadoAsignado"){
 			$scope.buscar_input = $scope.abogado_asignado_select.nombreAbogado;
@@ -125,6 +156,7 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 		$scope.parametro_busqueda = "";
 		$scope.resultadosExpList = null;
 		$scope.resultadosOpnList = null;
+		$scope.resultadosPttList = null;
 	}
 
 
@@ -137,7 +169,7 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				ValidarRegistroOpn();
 				break;
 			case  "ptt":
-				//ValidarRegistroPtt();
+				ValidarRegistroPtt();
 				break;
 		}
 	};
@@ -473,6 +505,190 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 			}
 		}
 	};
+
+
+	ValidarRegistroPtt = ()=> {
+		switch($scope.parametro_busqueda) {
+			case  "numExpediente":
+				if($scope.buscar_input.length != ""){
+					BuscarPttPorParametrosTipo1("numExpediente", $scope.buscar_input);
+				}
+				break;
+			case  "comunidad":
+				if($scope.buscar_input.length != ""){
+					BuscarPttPorParametrosTipo1("comunidad", $scope.buscar_input);
+				}
+				break;
+			case  "interesado":
+				if($scope.buscar_input.length != ""){
+					BuscarPttPorParametrosTipo1("interesado", $scope.buscar_input);
+				}
+				break;
+			case  "apoderadoLegal":
+				if($scope.buscar_input.length != ""){
+					BuscarPttPorParametrosTipo1("apoderadoLegal", $scope.buscar_input);
+				}
+				break;
+			case  "procedencia":
+				if($scope.procedencia_select != null){
+					BuscarPttPorParametrosTipo1("procedencia", $scope.procedencia_select.idDependencia);
+				}
+				break;
+			case  "empleadoReceptor":
+				if($scope.empleado_receptor_select != null){
+					BuscarPttPorParametrosTipo1("empleadoReceptor", $scope.empleado_receptor_select.numEmpleado);
+				}
+				break;
+			case  "asunto":
+				if($scope.asunto_patronato_select != null){
+					BuscarPttPorParametrosTipo1("asunto", $scope.asunto_patronato_select.idAsuntoPatronato);
+				}
+				break;
+			case  "tipoComunidad":
+				if($scope.tipo_comunidad_select != null){
+					BuscarPttPorParametrosTipo1("tipoComunidad", $scope.tipo_comunidad_select.idTipoComunidad);
+				}
+				break;
+			case  "abogadoAsignado":
+				if($scope.abogado_asignado_select != null){
+					BuscarPttPorParametrosTipo1("abogadoAsignado", $scope.abogado_asignado_select.numEmpleado);
+				}
+				break;
+			case  "dependenciaRemision":
+				if($scope.dependencia_remision_select != null){
+					BuscarPttPorParametrosTipo1("dependenciaRemision", $scope.dependencia_remision_select.idDependencia);
+				}
+				break;
+			case  "estadoExpediente":
+				if($scope.estado_expediente_select != null){
+					BuscarPttPorParametrosTipo1("estadoExpediente", $scope.estado_expediente_select.idEstadoExpediente );
+				}
+				break;
+			case  "fechaEntrada":
+				BuscarPttPorParametrosTipo2("fechaEntrada");
+				break;
+			case  "fechaAsignacion":
+				BuscarPttPorParametrosTipo2("fechaAsignacion");
+				break;
+			case  "fechaDescargo":
+				BuscarPttPorParametrosTipo2("fechaDescargo");
+				break;
+			case  "fechaRemision":
+				BuscarPttPorParametrosTipo2("fechaRemision");
+				break;
+			default:
+				window.alert("Por favor seleccione un parametro de busqueda");
+		}
+
+	};
+
+	BuscarPttPorParametrosTipo1 = (nombreParametro, valor)=>{
+		if($scope.usar_fechas) {
+			if($scope.tipo_fecha1 == "fecha_especifica") {
+				if($scope.fecha_dia1 != null) {
+					var fechaValidada = utilities.validarFecha($scope.fecha_dia1);
+					$http({
+			        	method : "POST",
+			        	url : $scope.serverUrl + "/buscar/patronatos/parametros1/conFecha",
+			        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+			        		fecha : fechaValidada
+                		}
+			    	}).then(function mySuccess(response) {
+			    		var lista = JSON.parse(response.data);
+			        	$scope.resultadosPttList = utilities.formatearFecha(lista);
+			    	}, function myError(response) {
+			        	console.log(response.statusText);
+			    	});
+				}else{
+					window.alert("Por favor seleccione la fecha para realizar la busqueda");
+				}
+
+			}else if($scope.tipo_fecha1 == "fecha_rango") {
+				if($scope.fecha_inicio1 != null) {
+					var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio1);
+					if($scope.fecha_fin1 != null) {
+						var fechaFinValidada = utilities.validarFecha($scope.fecha_fin1);
+						$http({
+				        	method : "POST",
+				        	url : $scope.serverUrl + "/buscar/patronatos/parametros1/conFecha",
+				        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+				        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada
+                			}
+				    	}).then(function mySuccess(response) {
+				    		var lista = JSON.parse(response.data);
+				        	$scope.resultadosPttList = utilities.formatearFecha(lista);
+				    	}, function myError(response) {
+				        	console.log(response.statusText);
+				    	});
+					}else{
+						window.alert("Por favor seleccione la fecha de finalización para realizar la busqueda");
+					}
+
+				}else{
+					window.alert("Por favor seleccione la fecha de inicio para realizar la busqueda");
+				}
+			}
+		}else {
+			$http({
+			    method : "POST",
+			   	url : $scope.serverUrl + "/buscar/patronatos/parametros1/sinFecha",
+			   	data : {parametroBusqueda : nombreParametro, valorParametro : valor
+                }
+			}).then(function mySuccess(response) {
+			    var lista = JSON.parse(response.data);
+			    $scope.resultadosPttList = utilities.formatearFecha(lista);
+			}, function myError(response) {
+			    console.log(response.statusText);
+			});
+		}
+	};
+
+	BuscarPttPorParametrosTipo2 = (nombreParametro)=>{
+		if($scope.tipo_fecha2 == "fecha_especifica") {
+			if($scope.fecha_dia2 != null) {
+				var fechaValidada = utilities.validarFecha($scope.fecha_dia2);
+				$http({
+			        method : "POST",
+			        url : $scope.serverUrl + "/buscar/patronatos/parametros2/conFecha",
+			        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada
+
+                	}
+			    }).then(function mySuccess(response) {
+			    	var lista = JSON.parse(response.data);
+			       	$scope.resultadosPttList = utilities.formatearFecha(lista);
+			    }, function myError(response) {
+			       	console.log(response.statusText);
+			   	});
+			}else{
+				window.alert("Por favor seleccione la fecha para realizar la busqueda");
+			}
+		}else if($scope.tipo_fecha2 == "fecha_rango") {
+			if($scope.fecha_inicio2 != null) {
+				var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio2);
+				if($scope.fecha_fin2 != null) {
+					var fechaFinValidada = utilities.validarFecha($scope.fecha_fin2);
+					$http({
+				        method : "POST",
+				       	url : $scope.serverUrl + "/buscar/patronatos/parametros2/conFecha",
+				       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
+				        	fechaFin : fechaFinValidada
+                		}
+				    }).then(function mySuccess(response) {
+				   		var lista = JSON.parse(response.data);
+				       	$scope.resultadosPttList = utilities.formatearFecha(lista);
+				   	}, function myError(response) {
+				       	console.log(response.statusText);
+			    	});
+				}else{
+					window.alert("Por favor seleccione la fecha de finalización para realizar la busqueda");
+				}
+
+			}else{
+				window.alert("Por favor seleccione la fecha de inicio para realizar la busqueda");
+			}
+		}
+	};
+
 
 	$scope.verDetalles = (idFicha)=> {
 		switch($scope.tipo_busqueda_select) {
