@@ -1,3 +1,4 @@
+/***********************Hecho por Shirley Claudette Martínez***********************/
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -18,6 +19,9 @@ var formulariosPatronatosRouter = require('./routes/formularios/patronatos');
 var seguimientoExpedientesRouter = require('./routes/seguimiento/seguimientoExpedientes');
 var seguimientoOpinionesRouter = require('./routes/seguimiento/seguimientoOpiniones');
 var seguimientoPatronatosRouter = require('./routes/seguimiento/seguimientoPatronatos');
+var modificacionExpedientesRouter = require('./routes/modificacion/modificacionExpedientes');
+var modificacionOpinionesRouter = require('./routes/modificacion/modificacionOpiniones');
+var modificacionPatronatosRouter = require('./routes/modificacion/modificacionPatronatos');
 var busquedaRouter = require('./routes/buscar/buscar');
 var detalleRouter = require('./routes/detalle/detalle');
 
@@ -56,12 +60,16 @@ app.use('/', formulariosPatronatosRouter);
 app.use('/', seguimientoExpedientesRouter);
 app.use('/', seguimientoOpinionesRouter);
 app.use('/', seguimientoPatronatosRouter);
+app.use('/', modificacionExpedientesRouter);
+app.use('/', modificacionOpinionesRouter);
+app.use('/', modificacionPatronatosRouter);
 app.use('/', busquedaRouter);
 app.use('/', detalleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
+  
 });
 
 // error handler

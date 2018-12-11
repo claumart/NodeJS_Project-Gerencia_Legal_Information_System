@@ -1,0 +1,41 @@
+#titulo_modificacion {
+	margin-top: 3%;
+	margin-right: 5%;
+	margin-left: 5%;
+	margin-bottom: 2%;
+	text-align: center;
+}
+
+#buscador_principal {
+	align-items: center;
+	margin-top: 2vh;
+}
+
+#buscar_por_label {
+	text-align: right;
+}
+
+.button.secondary {
+	background-color: #9e9e9e;
+    width: 84%;
+	margin-left: 8%;
+	margin-right: 8%;
+}
+
+/*.button.secondary {
+    background-color: #9e9e9e;
+    color: #fefefe;
+}*/
+
+
+#asignar_btn, #descargar_btn, #remitir_btn, #revisar_btn, #remitirCP_btn, #reingresoCP_btn {
+	font-weight: bold;
+	background-color: #4da6ff;
+    color: #fefefe;
+}
+
+#asignar_btn:hover, #descargar_btn:hover, #revisar_btn:hover, #remitirCP_btn:hover, #reingresoCP_btn:hover, #remitir_btn:hover, #modificar_btn:hover {
+	background-color: #0059b3;
+    color: #fefefe;
+}
+

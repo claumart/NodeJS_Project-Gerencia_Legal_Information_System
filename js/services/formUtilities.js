@@ -1,3 +1,4 @@
+/***********************Hecho por Shirley Claudette Martínez***********************/
 app.service('utilities', function() {
     this.trim = (str)=> {
         return str.replace(/^\s+|\s+$/g, "");
@@ -41,7 +42,31 @@ app.service('utilities', function() {
     	}else {
     		return "00-00-0000 00:00:00";
     	}
-    }
+    };
+
+    this.desformatearFecha = (fecha)=>{
+      var fechaTransformada = [];
+      var date = new Date(fecha);
+      var dateTime = date.toLocaleString('es-GB');
+      var datetimeArray = dateTime.split(' ');
+      fechaTransformada['fecha'] = date;
+      var onlyTime = datetimeArray[1].split(':');
+      if(onlyTime[0] == 0){
+        fechaTransformada['hora'] = 12;
+        fechaTransformada['tipoHora'] = "am";
+      }else if(onlyTime[0] < 12) {
+        fechaTransformada['hora'] = parseInt(onlyTime[0], 10);
+        fechaTransformada['tipoHora'] = "am";
+      }else if(onlyTime[0] == 12) {
+        fechaTransformada['hora'] = parseInt(onlyTime[0], 10);
+        fechaTransformada['tipoHora'] = "pm";
+      }else {
+        fechaTransformada['hora'] = parseInt(onlyTime[0], 10) - 12;
+        fechaTransformada['tipoHora'] = "pm";
+      }
+      fechaTransformada['minutos'] = parseInt(onlyTime[1], 10);
+      return fechaTransformada;
+    };
 
     this.getAllUrlParams = (url)=> {
   // get query string from url (optional) or window

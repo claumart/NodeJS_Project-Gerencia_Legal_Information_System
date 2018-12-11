@@ -1,3 +1,4 @@
+/***********************Hecho por Shirley Claudette Martínez***********************/
 app.service("utilities", function() {
 	this.formatearFecha = (lista)=> {
 		for(x in lista){

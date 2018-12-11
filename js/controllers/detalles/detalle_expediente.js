@@ -50,6 +50,7 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, urlUtil
     $scope.numeroImagenes = 0;
     $scope.imagenes;
 
+
     $scope.construirGaleria = ()=>{
         if($scope.imagenes.length != null && $scope.imagenes.length > 0){
             var imagesContainer = document.getElementById('imagesPreview');
@@ -82,6 +83,7 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, urlUtil
             }
         }
     };
+
 
     // Open the Modal
     $scope.openModal = (n)=> {

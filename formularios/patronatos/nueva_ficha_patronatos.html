@@ -2,6 +2,7 @@
 <html  lang="es">
 	<head>
 		<title>Gerencia Legal</title>
+		<meta name="author" content="Shirley Claudette Martínez">
 		<meta charset="utf-8">
 	    <meta http-equiv="x-ua-compatible" content="ie=edge">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,6 +64,11 @@
       		</div>
 
       		<form class="grid-container grid-padding-x" ng-app="formApp" ng-controller="formCtrl">
+      			<div class="grid-x grid-padding-x" ng-show="urlParams.mod==1">
+        			<div class="large-12 cell">
+          				<h6 id="titulo_mod">Formulario de Modificación</h6>
+        			</div>
+      			</div>
             	<div class="grid-x grid-padding-x">
             		<div class="medium-6 small-12 cell medium-offset-3">
                 		<label>Interesado(a): <input type="text" placeholder="Nombre del interesado" id="interesado" name="interesado" ng-model="interesado"/></label> 
@@ -131,6 +137,11 @@
 		              		<input type="number" ng-model="anio_proceso_ins" value="2000" min="1990" max="3999" id="anio_proceso" name="anio_proceso_ins">
 		              	</div>
 
+		              	<div class="medium-4 small-12 cell">
+		              		<label>Periodo de Validez:</label>
+		              		<input type="number" ng-model="periodo_validez_ins" value="0" min="0" max="10" id="periodo_validez_ins" name="periodo_validez_ins">
+		              	</div>
+
 		            	<div class="medium-4 small-12 cell">
 		              		<label>Folios:</label>
 		              		<input type="number" ng-model="folios_ins" value="2000" min="0" id="folios_ins" name="folios_ins">
@@ -183,6 +194,11 @@
 		            	<div class="medium-4 small-12 cell">
 		              		<label>año del Proceso Legal:</label>
 		              		<input type="number" ng-model="anio_proceso_imp" value="2000" min="1990" max="3999" id="anio_proceso_imp" name="anio_proceso_imp">
+		              	</div>
+
+		              	<div class="medium-4 small-12 cell">
+		              		<label>Periodo de Validez:</label>
+		              		<input type="number" ng-model="periodo_validez_imp" value="0" min="0" max="10" id="periodo_validez_imp" name="periodo_validez_imp">
 		              	</div>
 
 		            	<div class="medium-4 small-12 cell">

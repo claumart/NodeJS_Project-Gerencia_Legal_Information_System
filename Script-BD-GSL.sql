@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `Empleado` (
     FOREIGN KEY (`idCargo`)
     REFERENCES `CargoEmpleado` (`idCargoEmpleado`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 ALTER TABLE `Empleado` ADD INDEX `Empleado_idCargo_FK_idx` (`idCargo` ASC);
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `Dictamen` (
     FOREIGN KEY (`idTipoDictamen`)
     REFERENCES `TipoDictamen` (`idTipoDictamen`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 ALTER TABLE `Dictamen` ADD INDEX `Dictamen_idTipoDictamen_FK_idx` (`idTipoDictamen` ASC);
@@ -158,38 +158,38 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaExpediente` (
     FOREIGN KEY (`idProcedencia`)
     REFERENCES `Dependencia` (`idDependencia`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEE_idEmpleadoReceptor_FK`
     FOREIGN KEY (`idEmpleadoReceptor`)
     REFERENCES `Empleado` (`numEmpleado`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEE_idAbogadoAsignado_FK`
     FOREIGN KEY (`idAbogadoAsignado`)
     REFERENCES `Empleado` (`numEmpleado`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEE_idDependencia_FK`
     FOREIGN KEY (`idDependenciaRemision`)
     REFERENCES `Dependencia` (`idDependencia`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEE_idEstadoExpediente_FK`
     FOREIGN KEY (`idEstadoExpediente`)
     REFERENCES `EstadoExpediente` (`idEstadoExpediente`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEE_idDictamen_FK`
     FOREIGN KEY (`idDictamen`)
     REFERENCES `Dictamen` (`idDictamen`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEE_idAsunto_FK`
     FOREIGN KEY (`idAsunto`)
     REFERENCES `Asunto` (`idAsunto`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
 
 ALTER TABLE `FichaEntradaExpediente` ADD INDEX `FEE_iProcedencia_FK_idx` (`idProcedencia` ASC);
 
@@ -248,17 +248,17 @@ CREATE TABLE IF NOT EXISTS `PrevisionExpediente` (
     FOREIGN KEY (`idDependenciaRemision`)
     REFERENCES `Dependencia` (`idDependencia`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `PE_idDependenciaRetorno_FK`
     FOREIGN KEY (`idDependenciaRetorno`)
     REFERENCES `Dependencia` (`idDependencia`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `PE_idEmpleadoReceptor_FK`
     FOREIGN KEY (`idEmpleadoReceptor`)
     REFERENCES `Empleado` (`numEmpleado`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 ALTER TABLE `PrevisionExpediente` ADD INDEX `PE_idFichaEntradaExpediente_FK_idx` (`idFichaEntradaExpediente` ASC);
@@ -325,37 +325,37 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaPatronato` (
     FOREIGN KEY (`idEmpleadoReceptor`)
     REFERENCES `Empleado` (`numEmpleado`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEP_idAbogadoAsignado_FK`
     FOREIGN KEY (`idAbogadoAsignado`)
     REFERENCES `Empleado` (`numEmpleado`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEP_idDictamen_FK`
     FOREIGN KEY (`idDictamen`)
     REFERENCES `Dictamen` (`idDictamen`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEP_idEstadoPatronato_FK`
     FOREIGN KEY (`idEstadoPatronato`)
     REFERENCES `EstadoExpediente` (`idEstadoExpediente`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEP_idAsuntoPatronato_FK`
     FOREIGN KEY (`idAsuntoPatronato`)
     REFERENCES `AsuntoPatronato` (`idAsuntoPatronato`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEP_idDependenciaRemision_FK`
     FOREIGN KEY (`idDependenciaRemision`)
     REFERENCES `Dependencia` (`idDependencia`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEP_idProcedencia_FK`
     FOREIGN KEY (`idProcedencia`)
     REFERENCES `Dependencia` (`idDependencia`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 ALTER TABLE `FichaEntradaPatronato` ADD INDEX `FEP_idEmpleadoReceptor_FK_idx` (`idEmpleadoReceptor` ASC);
@@ -401,27 +401,27 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaOpinion` (
     FOREIGN KEY (`idProcedencia`)
     REFERENCES `Dependencia` (`idDependencia`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEO_idEmpleadoReceptor_FK`
     FOREIGN KEY (`idEmpleadoReceptor`)
     REFERENCES `Empleado` (`numEmpleado`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEO_idAbogadoAsignado_FK`
     FOREIGN KEY (`idAbogadoAsignado`)
     REFERENCES `Empleado` (`numEmpleado`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEO_idEstadoOpinion_FK`
     FOREIGN KEY (`idEstadoOpinion`)
     REFERENCES `EstadoExpediente` (`idEstadoExpediente`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `FEO_idDictamen_FK`
     FOREIGN KEY (`idDictamen`)
     REFERENCES `Dictamen` (`idDictamen`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -491,12 +491,12 @@ CREATE TABLE IF NOT EXISTS `Comunidad` (
     FOREIGN KEY (`idMunicipio`)
     REFERENCES `Municipio` (`idMunicipio`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `Comunidad_idTipoComunidad_FK`
     FOREIGN KEY (`idTipoComunidad`)
     REFERENCES `TipoComunidad` (`idTipoComunidad`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 ALTER TABLE `Comunidad` ADD INDEX `Comunidad_idMunicipio_FK_idx` (`idMunicipio` ASC);
@@ -513,16 +513,19 @@ CREATE TABLE IF NOT EXISTS `ExpedientePatronato` (
   `idExpedientePatronato` INT NOT NULL AUTO_INCREMENT,
   `idComunidadRelacionada` INT NOT NULL,
   `numExpedientePatronato` VARCHAR(25) NOT NULL,
+  `periodoDeValidez` INT NOT NULL,
   `folios` INT NOT NULL,
   PRIMARY KEY (`idExpedientePatronato`),
   CONSTRAINT `EP_idComunidadRelacionada_FK`
     FOREIGN KEY (`idComunidadRelacionada`)
     REFERENCES `Comunidad` (`idComunidad`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 ALTER TABLE `ExpedientePatronato` ADD INDEX `EP_idComunidadRelacionada_FK_idx` (`idComunidadRelacionada` ASC);
+
+ALTER TABLE `ExpedientePatronato` ADD UNIQUE `EP_numExpedientePatronato_UNIQUE` (`numExpedientePatronato` ASC);
 
 
 -- -----------------------------------------------------
@@ -600,7 +603,7 @@ CREATE TABLE IF NOT EXISTS `Usuario` (
     FOREIGN KEY (`numEmpleado`)
     REFERENCES `Empleado` (`numEmpleado`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 ALTER TABLE `Usuario` ADD UNIQUE `Usuario_UNIQUE` (`numEmpleado` ASC);
@@ -645,7 +648,7 @@ CREATE TABLE IF NOT EXISTS `PaginaArchivoAdjunto` (
     FOREIGN KEY (`idDictamen`)
     REFERENCES `Dictamen` (`idDictamen`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 ALTER TABLE `PaginaArchivoAdjunto` ADD UNIQUE `urlPaginaArchivo_UNIQUE` (`urlPagina` ASC);
@@ -719,6 +722,8 @@ INSERT INTO TipoComunidad(nombreTipoComunidad) VALUES('Colonia');
 INSERT INTO TipoComunidad(nombreTipoComunidad) VALUES('Barrio');
 INSERT INTO TipoComunidad(nombreTipoComunidad) VALUES('Caserío');
 
+INSERT INTO Municipio(nombreMunicipio, codigoMunicipio) VALUES('Distrito Central', 'DC');
+
 
 INSERT INTO Privilegio(nombrePrivilegio, descripcionPrivilegio) VALUES('Visualizar', 'Derecho a usar la opción de busqueda y visualizar los registros');
 INSERT INTO Privilegio(nombrePrivilegio, descripcionPrivilegio) VALUES('Crear', 'Permiso para crear las diferentes fichas de entreada y seguimiento');
@@ -734,18 +739,18 @@ INSERT INTO CargoEmpleado(nombreCargoEmpleado) VALUES('Gerente');
 INSERT INTO CargoEmpleado(nombreCargoEmpleado) VALUES('Sub-Gerente');
 
 
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(24359, 'Ada Puerto', true, 1, STR_TO_DATE('10-03-1956', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(31556, 'Carolina Arambu', true, 1, STR_TO_DATE('13-11-1971', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(13207, 'Alba Granados', true, 1, STR_TO_DATE('05-06-1958', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(15355, 'Karla Mairena', true, 1, STR_TO_DATE('27-08-1974', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(20061, 'Elsa López', true, 3, STR_TO_DATE('19-07-1958', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(11643, 'Marielos Sanchez', true, 3, STR_TO_DATE('19-07-1965', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(22760, 'Mirian Rivera', true, 2, STR_TO_DATE('30-11-1977', '%d-%m-%Y') );
-
-
-INSERT INTO Municipio(nombreMunicipio, codigoMunicipio) VALUES('Distrito Central', 'DC');
-
-
+INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(5419, 'Edgardo Bardales', true, 1, STR_TO_DATE('10-10-1959', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(3155, 'Carolina Arambu', true, 1, STR_TO_DATE('13-11-1971', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(4486, 'Alba Granados', true, 1, STR_TO_DATE('11-12-1956', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(7449, 'Karla Mairena', true, 1, STR_TO_DATE('21-09-1971', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(2061, 'Elsa López', true, 3, STR_TO_DATE('01-08-1958', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(8037, 'María de los Angeles Nuñez', true, 3, STR_TO_DATE('01-08-1962', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(5556, 'Denis Mejía', true, 1, STR_TO_DATE('16-03-1977', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(6968, 'Jorge Godoy', true, 4, STR_TO_DATE('12-12-1972', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(7974, 'Mirian Cruz', true, 1, STR_TO_DATE('03-07-1977', '%d-%m-%Y') );
+INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(8377, 'Eduardo Andino', true, 1, STR_TO_DATE('26-08-1978', '%d-%m-%Y'));
+INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(8379, 'Olman Lezama', true, 1, STR_TO_DATE('09-01-1961', '%d-%m-%Y'));
+INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(8381, 'Wilmer Nuñez', true, 1, STR_TO_DATE('31-01-1978', '%d-%m-%Y'));
 
 /*ALTER TABLE `empleado` CHANGE `nombresEmpleado` `nombreEmpleado` VARCHAR(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `fichaentradaexpediente` CHANGE `fechaAsignación` `fechaAsignacion` DATETIME NULL DEFAULT NULL;*/

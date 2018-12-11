@@ -1,3 +1,4 @@
+/***********************Hecho por Shirley Claudette Martínez***********************/
 var status = require('http-status');
 var registrarPatronatoController = {};
 
@@ -54,7 +55,7 @@ registrarPatronatoController.saveNoAcumulado = (req, res, next) => {
 
         var fichaEntradaId = await promise1;
         var idComunidad = await promise2;
-        var numExpGenerado = req.body.codigoMunicipio + "-" + req.body.idTipoComunidad + "-" + idComunidad + "-" + req.body.anioProceso;
+        var numExpGenerado = "GPM-" + req.body.codigoMunicipio + "-" + req.body.idTipoComunidad + "-" + idComunidad + "-" + req.body.anioProceso;
         connection.query('SELECT idExpedientePatronato FROM ExpedientePatronato WHERE numExpedientePatronato = ?', [numExpGenerado], (err, results) => {
             if (err) {
                 console.log(err);
@@ -63,7 +64,8 @@ registrarPatronatoController.saveNoAcumulado = (req, res, next) => {
 
             if(results.length > 0) {
                 expedienteId = results[0].idExpedientePatronato;
-                connection.query('UPDATE ExpedientePatronato SET folios = ? WHERE idExpedientePatronato = ?', [req.body.foliosIns, expedienteId], (err, rows) => {
+                connection.query('UPDATE ExpedientePatronato SET folios = ?, periodoDeValidez = ? WHERE idExpedientePatronato = ?', 
+                [req.body.foliosIns, req.body.periodoValidez, expedienteId], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -78,7 +80,8 @@ registrarPatronatoController.saveNoAcumulado = (req, res, next) => {
                     });
                 });  
             }else{
-                connection.query('INSERT INTO ExpedientePatronato(idComunidadRelacionada, numExpedientePatronato, folios) VALUES(?, ?, ?)', [idComunidad, numExpGenerado, req.body.foliosIns], (err, rows) => {
+                connection.query('INSERT INTO ExpedientePatronato(idComunidadRelacionada, numExpedientePatronato, periodoDeValidez, folios) VALUES(?, ?, ?, ?)', 
+                [idComunidad, numExpGenerado, req.body.periodoValidez, req.body.foliosIns], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -157,7 +160,7 @@ registrarPatronatoController.saveAcumulado = (req, res, next) => {
 
         var fichaEntradaId = await promise1;
         var idComunidad = await promise2;
-        var numExpGenerado = req.body.codigoMunicipio + "-" + req.body.idTipoComunidad + "-" + idComunidad + "-" + req.body.anioProceso;
+        var numExpGenerado = "GPM-" + req.body.codigoMunicipio + "-" + req.body.idTipoComunidad + "-" + idComunidad + "-" + req.body.anioProceso;
 
 
        connection.query('SELECT idExpedientePatronato FROM ExpedientePatronato WHERE numExpedientePatronato = ?', [numExpGenerado], (err, results) => {
@@ -168,7 +171,8 @@ registrarPatronatoController.saveAcumulado = (req, res, next) => {
 
             if(results.length > 0) {
                 var expedienteInsId = results[0].idExpedientePatronato;
-                connection.query('UPDATE ExpedientePatronato SET folios = ? WHERE idExpedientePatronato = ?', [req.body.foliosIns, expedienteInsId], (err, rows) => {
+                connection.query('UPDATE ExpedientePatronato SET folios = ?, periodoDeValidez = ? WHERE idExpedientePatronato = ?', 
+                [req.body.foliosIns, req.body.periodoValidez, expedienteInsId], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -182,7 +186,8 @@ registrarPatronatoController.saveAcumulado = (req, res, next) => {
                     });
                 });  
             }else{
-                connection.query('INSERT INTO ExpedientePatronato(idComunidadRelacionada, numExpedientePatronato, folios) VALUES(?, ?, ?)', [idComunidad, numExpGenerado, req.body.foliosIns], (err, rows) => {
+                connection.query('INSERT INTO ExpedientePatronato(idComunidadRelacionada, numExpedientePatronato, periodoDeValidez, folios) VALUES(?, ?, ?, ?)', 
+                [idComunidad, numExpGenerado, req.body.periodoValidez, req.body.foliosIns], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -204,8 +209,8 @@ registrarPatronatoController.saveAcumulado = (req, res, next) => {
 
 
         for(let i = 0; i< req.body.cantidadExpedientes; i++){
-            let numExpediente = req.body.numExpedientes[i];
-            let folios = req.body.folios[i];
+            let numExpediente = req.body.expedientes[i].numExpediente;
+            let folios = req.body.expedientes[i].folios;
             connection.query('SELECT idExpedientePatronato FROM ExpedientePatronato WHERE numExpedientePatronato = ?', [numExpediente], (err, results) => {
                 if (err) {
                     console.log(err);
@@ -214,7 +219,8 @@ registrarPatronatoController.saveAcumulado = (req, res, next) => {
 
                 if(results.length > 0) {
                     expedienteId = results[0].idExpedientePatronato;
-                    connection.query('UPDATE ExpedientePatronato SET folios = ? WHERE idExpedientePatronato = ?', [folios, expedienteId], (err, rows) => {
+                    connection.query('UPDATE ExpedientePatronato SET folios = ?, periodoDeValidez = ? WHERE idExpedientePatronato = ?', 
+                    [folios, req.body.periodoValidez, expedienteId], (err, rows) => {
                         if (err) {
                             console.log(err);
                             return next(err);
@@ -232,7 +238,8 @@ registrarPatronatoController.saveAcumulado = (req, res, next) => {
                     });  
 
                 }else{
-                    connection.query('INSERT INTO ExpedientePatronato(idComunidadRelacionada, numExpedientePatronato, folios) VALUES(?, ?, ?)', [idComunidad, numExpediente, folios], (err, rows) => {
+                    connection.query('INSERT INTO ExpedientePatronato(idComunidadRelacionada, numExpedientePatronato, periodoDeValidez, folios) VALUES(?, ?, ?, ?)', 
+                    [idComunidad, numExpediente, req.body.periodoValidez, folios], (err, rows) => {
                         if (err) {
                             console.log(err);
                             return next(err);

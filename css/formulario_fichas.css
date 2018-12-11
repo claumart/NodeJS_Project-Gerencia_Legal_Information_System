@@ -3,6 +3,10 @@
 	text-align: center;
 }
 
+#titulo_mod {
+	text-align: center;
+} 
+
 #no_acumulados_box, #si_acumulados_box, #fecha_personalizada_box, #paginas_dictamen_box, 
 #archivo_adjunto_box, #inscripcion_box, #impugnacion_box {
 	background-color: #e6e6e6;
