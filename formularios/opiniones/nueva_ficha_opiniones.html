@@ -48,6 +48,7 @@
 					    </ul>
 					</li>
 					<li><a href="../../buscar.html">Buscar</a></li>
+					<li><a href="../../modificacion/modificacion.html">Modificar Fichas</a></li>
 					<li><a href="../../modulo_administrador.html">Opciones de Administrador</a></li>
 			    </ul>
 			</div>	
@@ -63,6 +64,11 @@
       		</div>
 
       		<form class="grid-container grid-padding-x" ng-app="formApp" ng-controller="formCtrl">
+      			<div class="grid-x grid-padding-x" ng-show="urlParams.mod==1">
+        			<div class="large-12 cell">
+          				<h6 id="titulo_mod">Formulario de Modificación</h6>
+        			</div>
+      			</div>
               	<div class="grid-x grid-padding-x">
             		<div class="medium-6 small-12 cell medium-offset-3">
                 		<label>Apoderado(a) Legal (opcional): <input type="text" placeholder="Nombre del abogado que lleva el caso" id="apoderado" name="apoderado" ng-model="apoderado"/></label> 

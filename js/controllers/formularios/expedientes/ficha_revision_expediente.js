@@ -6,7 +6,10 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
     $scope.numPaginas = 1;
     $scope.serverUrl = urlUtility.getServerUrl();
     $scope.num_dictamen = "";
+    var file = new File(["pruebas"], "C:/Users/Claudette/Documents/Scanned Documents/pruebas.jpg");
 
+    document.getElementById('image_pagina1').files[0] = files;
+    console.log(document.getElementById('image_pagina1').files);
 
     $http({
             method : "POST",
@@ -65,7 +68,6 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
             $scope.numPaginas = --numeroPaginas;
         }
     };
-
 
     $scope.validarFormulario = ()=> {
         $scope.mostrarDictamen = false;

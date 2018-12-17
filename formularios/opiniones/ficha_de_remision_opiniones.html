@@ -48,6 +48,7 @@
 					    </ul>
 					</li>
 					<li><a href="../../buscar.html">Buscar</a></li>
+					<li><a href="../../modificacion/modificacion.html">Modificar Fichas</a></li>
 					<li><a href="../../modulo_administrador.html">Opciones de Administrador</a></li>
 			    </ul>
 			</div>	
@@ -69,13 +70,11 @@
           				<h5>Opiniones a remitir: <h6>{{numOficios}}</h6></h5>
         			</div>
       			</div>
-            	<!--<div class="grid-x grid-padding-x">
-              		<div class="medium-6 small-12 cell medium-offset-3">
-                		<label>Dependencia a Remitir:</label>
-                		<select id="dependencia_a_remitir_select" name="dependencia_a_remitir_select" ng-model="dependencia_a_remitir_select" ng-options="x.nombreDependencia for x in dependenciaList"></select>
-              		</div>
-            	</div>-->
-
+      			<div class="grid-x grid-padding-x" ng-show="urlParams.mod==1">
+        			<div class="large-12 cell">
+          				<h6 id="titulo_mod">Formulario de Modificación</h6>
+        			</div>
+      			</div>
             	<div class="grid-x grid-padding-x">
             		<div class="medium-6 small-12 cell medium-offset-3">
                 		<label>Recibido Por: <input type="text" placeholder="Nombre de la persona que recibió el expediente" id="nombre_recibio" name="nombre_recibio" ng-model="nombre_recibio"/></label> 

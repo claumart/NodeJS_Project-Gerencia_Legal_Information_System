@@ -48,6 +48,7 @@
 					    </ul>
 					</li>
 					<li><a href="../../buscar.html">Buscar</a></li>
+					<li><a href="../../modificacion/modificacion.html">Modificar Fichas</a></li>
 					<li><a href="../../modulo_administrador.html">Opciones de Administrador</a></li>
 			    </ul>
 			</div>	
@@ -67,6 +68,11 @@
       			<div class="grid-x grid-padding-x">
         			<div class="large-12 cell">
           				<h5>Patronatos a remitir: <h6>{{numPatronatos}}</h6></h5>
+        			</div>
+      			</div>
+      			<div class="grid-x grid-padding-x" ng-show="urlParams.mod==1">
+        			<div class="large-12 cell">
+          				<h6 id="titulo_mod">Formulario de Modificación</h6>
         			</div>
       			</div>
             	<div class="grid-x grid-padding-x">

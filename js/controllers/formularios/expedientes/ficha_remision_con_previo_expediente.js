@@ -33,6 +33,41 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
     });
 
 
+    /*****************************************Verificar y completar formulario de modificacion*****************************************/
+    /**********************************************************************************************************************************/
+    ComprobarModoModificacion = ()=> {
+        if($scope.urlParams.mod == 1) {
+            LlenarCampos();
+        }
+    };
+
+    LlenarCampos = ()=>{
+       $http({
+            method : "POST",
+            url : $scope.serverUrl + "/modificacion/expedientes/obtener/formularioRemisionPrevio",
+            data : {idPrevio : $scope.urlParams.idPrevio}
+        }).then(async function mySuccess(response) {
+            var lista =  await JSON.parse(response.data);
+            for(let i = 0; i<$scope.dependenciaList.length; i++){
+                if(lista[0].idDependenciaRemision == $scope.dependenciaList[i].idDependencia){
+                    $scope.dependencia_a_remitir_select = $scope.dependenciaList[i];
+                    break;
+                }
+            }
+            if(lista[0].motivoRemision != null) $scope.motivo_textarea = lista[0].motivoRemision;
+            $scope.nombre_recibio = lista[0].recibidoPor;
+            $scope.fecha_remision = new Date(lista[0].fechaRemision);
+            
+        }, function myError(response) {
+            console.log(response.statusText);
+        }); 
+    };
+
+    ComprobarModoModificacion();
+
+    /**********************************************************************************************************************************/
+    /**********************************************************************************************************************************/
+
     $scope.validarFormulario = ()=> {
         if($scope.dependencia_a_remitir_select != null){
             if($scope.motivo_textarea.length < 80){
@@ -41,17 +76,31 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                     var recibioValidado = $scope.nombre_recibio.trim();
                     if($scope.fecha_remision != null) {
                         var fechaValidada = utilities.validarFecha($scope.fecha_remision);
-                        $http({
-                            method : "POST",
-                            url : $scope.serverUrl + "/formularios/expedientes/remitirConPrevio",
-                            data : {dependenciaRemisionPrevio : $scope.dependencia_a_remitir_select.idDependencia, motivo : motivoValidado,
-                                recibidoPor : recibioValidado, fecha : fechaValidada, idFicha : $scope.urlParams.idFicha
-                            }
-                        }).then(function mySuccess(response) {
-                            $window.location.href = "../../seguimiento/seguimiento_expedientes.html#titulo_seguimiento";
-                        }, function myError(response) {
-                                console.log(response.statusText);
-                        });
+                        if($scope.urlParams.mod == 1){
+                            $http({
+                                method : "POST",
+                                url : $scope.serverUrl + "/modificacion/expedientes/actualizar/formularioRemisionPrevio",
+                                data : {dependenciaRemisionPrevio : $scope.dependencia_a_remitir_select.idDependencia, motivo : motivoValidado,
+                                    recibidoPor : recibioValidado, fecha : fechaValidada, idPrevio : $scope.urlParams.idPrevio
+                                }
+                            }).then(function mySuccess(response) {
+                                $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
+                            }, function myError(response) {
+                                    console.log(response.statusText);
+                            });
+                        }else{
+                            $http({
+                                method : "POST",
+                                url : $scope.serverUrl + "/formularios/expedientes/remitirConPrevio",
+                                data : {dependenciaRemisionPrevio : $scope.dependencia_a_remitir_select.idDependencia, motivo : motivoValidado,
+                                    recibidoPor : recibioValidado, fecha : fechaValidada, idFicha : $scope.urlParams.idFicha
+                                }
+                            }).then(function mySuccess(response) {
+                                $window.location.href = "../../seguimiento/seguimiento_expedientes.html#titulo_seguimiento";
+                            }, function myError(response) {
+                                    console.log(response.statusText);
+                            });
+                        }
                     }else{
                         window.alert("Por favor seleccione la fecha de remisión del expediente");
                     }  

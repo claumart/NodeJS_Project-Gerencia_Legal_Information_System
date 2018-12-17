@@ -46,6 +46,7 @@
 					    </ul>
 					</li>
 					<li><a href="../buscar.html">Buscar</a></li>
+					<li><a href="../modificacion/modificacion.html">Modificar Fichas</a></li>
 					<li><a href="../modulo_administrador.html">Opciones de Administrador</a></li>
 			    </ul>
 			</div>	
@@ -240,7 +241,7 @@
 							    		<td>{{x.dependenciaRemision}}</td>
 							    		<td>{{x.motivoRemision}}</td>
 							    		<td>{{x.fechaRemision}}</td>
-							    		<td><button type="button" class="button secondary" ng-click="ModificarFormularioPrevio(x.idficha, idPrevio, 'remision')">Modificar</button></td>
+							    		<td><button type="button" class="button secondary" ng-click="ModificarFormularioPrevio(x.idficha, x.idPrevio, 'remision')">Modificar</button></td>
 							    	</tr>
 							  	</tbody>
 							</table>
@@ -268,7 +269,7 @@
 							    		<td>{{x.dependenciaRemision}}</td>
 							    		<td>{{x.motivoRemision}}</td>
 							    		<td>{{x.fechaRemision}}</td>
-							    		<td><button type="button" class="button secondary" ng-click="ModificarFormularioPrevio(x.idficha, idPrevio, 'reingreso')">Modificar</button></td>
+							    		<td><button type="button" class="button secondary" ng-click="ModificarFormularioPrevio(x.idficha, x.idPrevio, 'reingreso')">Modificar</button></td>
 							    	</tr>
 							  	</tbody>
 							</table>

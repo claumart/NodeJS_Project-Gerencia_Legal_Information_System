@@ -335,11 +335,13 @@ app.controller("modCtrl", function($scope, $http, $window, utilities, urlUtility
     $scope.ModificarFormularioPrevio = (idFicha, idPrevio, tipoFormulario)=> {
         switch(tipoFormulario) {
             case "remision":
-                var newUrl = "../formularios/expedientes/ficha_de_remision_con_previo_expedientes.html#titulo_formulario?mod=1&" +"idFicha=" + idFicha;
+                var newUrl = "../formularios/expedientes/ficha_de_remision_con_previo_expedientes.html#titulo_formulario?mod=1&" +
+                "idFicha=" + idFicha + "&idPrevio=" + idPrevio;
                 $window.location.href = newUrl;
             break;
             case "reingreso":
-                var newUrl = "../formularios/expedientes/ficha_de_reingreso_con_previo_expedientes.html#titulo_formulario?mod=1&" +"idFicha=" + idFicha;
+                var newUrl = "../formularios/expedientes/ficha_de_reingreso_con_previo_expedientes.html#titulo_formulario?mod=1&" +
+                "idFicha=" + idFicha  + "&idPrevio=" + idPrevio;
                 $window.location.href = newUrl;
             break;
         }

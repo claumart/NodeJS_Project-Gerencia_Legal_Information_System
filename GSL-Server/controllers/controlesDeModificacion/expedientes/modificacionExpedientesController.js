@@ -21,7 +21,6 @@ modificacionExpController.getFichas = (req, res, next) => {
                 return next(err);
             }
             var string=JSON.stringify(results);
-            console.log(string);
             res.json(string);
         });
     });
@@ -51,7 +50,6 @@ modificacionExpController.getFichasDePrevision = (req, res, next) => {
                 return next(err);
             }
             var string=JSON.stringify(results);
-            console.log(string);
             res.json(string);
         });
     });

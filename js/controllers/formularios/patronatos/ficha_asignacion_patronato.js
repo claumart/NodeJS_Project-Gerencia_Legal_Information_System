@@ -30,22 +30,69 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
         	console.log(response.statusText);
     });
 
+    /*****************************************Verificar y completar formulario de modificacion*****************************************/
+    /**********************************************************************************************************************************/
+    ComprobarModoModificacion = ()=> {
+        if($scope.urlParams.mod == 1) {
+            LlenarCampos();
+        }
+    };
+
+    LlenarCampos = ()=>{
+       $http({
+            method : "POST",
+            url : $scope.serverUrl + "/modificacion/patronatos/obtener/formularioAsignacion",
+            data : {idFicha : $scope.urlParams.idFicha}
+        }).then(async function mySuccess(response) {
+            var lista =  await JSON.parse(response.data);
+            for(let i = 0; i<$scope.abogadoAsignadoList.length; i++){
+                if(lista[0].idAbogadoAsignado == $scope.abogadoAsignadoList[i].numEmpleado){
+                    $scope.abogado_asignado_select = $scope.abogadoAsignadoList[i];
+                    break;
+                }
+            }
+
+            $scope.fecha_asignacion = new Date(lista[0].fechaAsignacion);
+            
+        }, function myError(response) {
+            console.log(response.statusText);
+        }); 
+    };
+
+    ComprobarModoModificacion();
+
+    /**********************************************************************************************************************************/
+    /**********************************************************************************************************************************/
 
     $scope.validarFormulario = ()=> {
         if($scope.abogado_asignado_select != null){
             if($scope.fecha_asignacion != null) {
                 var fechaValidada = utilities.validarFecha($scope.fecha_asignacion);
-                $http({
-                    method : "POST",
-                    url : $scope.serverUrl + "/formularios/patronatos/asignar",
-                    data : {numAbogadoAsignado : $scope.abogado_asignado_select.numEmpleado, fecha : fechaValidada, 
-                        idFicha : $scope.urlParams.idFicha
-                    }
-                }).then(function mySuccess(response) {
-                    $window.location.href = "../../seguimiento/seguimiento_patronatos.html#titulo_seguimiento";
-                }, function myError(response) {
-                        console.log(response.statusText);
-                });
+                if($scope.urlParams.mod == 1){
+                    $http({
+                        method : "POST",
+                        url : $scope.serverUrl + "/modificacion/patronatos/actualizar/formularioAsignacion",
+                        data : {numAbogadoAsignado : $scope.abogado_asignado_select.numEmpleado, fecha : fechaValidada, 
+                            idFicha : $scope.urlParams.idFicha
+                        }
+                    }).then(function mySuccess(response) {
+                        $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
+                    }, function myError(response) {
+                            console.log(response.statusText);
+                    });
+                }else{
+                    $http({
+                        method : "POST",
+                        url : $scope.serverUrl + "/formularios/patronatos/asignar",
+                        data : {numAbogadoAsignado : $scope.abogado_asignado_select.numEmpleado, fecha : fechaValidada, 
+                            idFicha : $scope.urlParams.idFicha
+                        }
+                    }).then(function mySuccess(response) {
+                        $window.location.href = "../../seguimiento/seguimiento_patronatos.html#titulo_seguimiento";
+                    }, function myError(response) {
+                            console.log(response.statusText);
+                    });
+                }
             }else{
                 window.alert("Por favor seleccione la fecha de asignación del expediente de patronato");
             }  
