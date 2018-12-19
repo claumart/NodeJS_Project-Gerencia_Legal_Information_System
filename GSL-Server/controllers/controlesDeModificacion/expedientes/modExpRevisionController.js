@@ -1,67 +1,184 @@
 var status = require('http-status');
 var fs = require('fs');
-var revisarExpController = {};
-var path = require('../dictamenPath');
+var modExpRevisionController = {};
+var path = require('../../controlesDeFormularios/dictamenPath');
 
-revisarExpController.crearDictamen = (req, res, next) => {
+
+modExpRevisionController.getFichaRevision = (req, res, next) => {
+    req.getConnection(async function(err, connection) {
+        var query = "SELECT fichaexp.fechaRevision, Dictamen.idDictamen, Dictamen.numDictamen, PdfDictamen.urlPdf, WordDictamen.urlWord " +
+        "FROM fichaEntradaExpediente as fichaexp " +
+        "LEFT JOIN Dictamen " +
+            "ON fichaexp.idDictamen = Dictamen.idDictamen " +
+        "LEFT JOIN PdfDictamen " +
+            "ON Dictamen.idDictamen = PdfDictamen.idDictamen " +
+        "LEFT JOIN WordDictamen " +
+            "ON Dictamen.idDictamen = WordDictamen.idDictamen " +
+        "WHERE fichaexp.idFichaEntradaExpediente = ? " +
+        "UNION " +
+        "SELECT fichaexp.fechaRevision, Dictamen.idDictamen, Dictamen.numDictamen, PdfDictamen.urlPdf, WordDictamen.urlWord " +
+        "FROM fichaEntradaExpediente as fichaexp " +
+        "RIGHT JOIN Dictamen " +
+            "ON fichaexp.idDictamen = Dictamen.idDictamen " +
+        "RIGHT JOIN PdfDictamen " +
+            "ON Dictamen.idDictamen = PdfDictamen.idDictamen " +
+        "RIGHT JOIN WordDictamen " +
+            "ON Dictamen.idDictamen = WordDictamen.idDictamen " +
+        "WHERE fichaexp.idFichaEntradaExpediente = ?";
+
+        connection.query(query, [req.body.idFicha, req.body.idFicha], (err, results) => {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            var string=JSON.stringify(results);
+            res.json(string);
+        });
+
+    });
+};
+
+modExpRevisionController.updateRevision = (req, res, next) => {
 	req.getConnection(async function(err, connection){
         if (err) return next(err);
         let promise = new Promise((resolve, reject) => {
-            connection.query('INSERT INTO Dictamen(numDictamen, idTipoDictamen) VALUES(?, ?)', [req.body.numDictamen, 1], (err, rows) => {
+            connection.query('UPDATE Dictamen SET numDictamen = ? WHERE idDictamen = ?', [req.body.numDictamen, req.body.idDictamen], (err, rows) => {
                 if (err) {
                     console.log(err);
                     return next(err);
                 }
-                fs.mkdir(path + '/' + rows.insertId, err => { 
-                    if (err && err.code != 'EEXIST') throw 'up';
-                    if (err && err.code == 'EEXIST') {
-                        res.status(status.OK).json({ message: 'La carpeta ya existe' });
-                        return next(err);
-                    }
-                    resolve(rows.insertId);
-                });
+                resolve("");
             });
         });
 
-        let DictamenId = await promise;
-        console.log(DictamenId);
-
-
-        for(let i = 0; i< req.files.imageFiles.length; i++){
-            let pagDictamen = i + 1;
-            let extensionArchivo = req.files.imageFiles[i].name.slice(req.files.imageFiles[i].name.length - 4, req.files.imageFiles[i].name.length);
-            let urlPag = '/' + DictamenId + '/' + 'dic' + DictamenId + '-pag' + pagDictamen + extensionArchivo; 
-
-            await req.files.imageFiles[i].mv(path + urlPag, async function(err) {
-                if (err) {
-                    console.log(err);
-                    res.status(500).send(err);
-                    return next(err);
+        promise.then((result)=>{
+            return new Promise((resolve, reject) => {
+                if(req.files != null && req.files.pdfInput != null){
+                    var arrayExtensionPdf = req.files.pdfInput.name.split(".");
+                    var extensionPdf = arrayExtensionPdf[arrayExtensionPdf.length -1];
+                    var urlPdf = '/' + req.body.idDictamen + '/' + 'dictamen' + req.body.idDictamen + "." + extensionPdf;
+                    if(req.body.existePdf == "true"){
+                        fs.unlink(path + req.body.urlPdf, (err) => {
+                            if (err){
+                                console.log(err);
+                                res.status(500).send(err);
+                                return next(err);
+                            }
+                            req.files.pdfInput.mv(path + urlPdf, async function(err) {
+                                if (err) {
+                                    console.log(err);
+                                    res.status(500).send(err);
+                                    return next(err);
+                                }
+                                await connection.query('UPDATE PdfDictamen SET urlPdf = ? WHERE idDictamen = ?', [urlPdf, req.body.idDictamen], (err, rows) => {
+                                    if (err) {
+                                        console.log(err);
+                                        return next(err);
+                                    } 
+                                    resolve("");  
+                                });      
+                            });
+                        });
+                    }else{
+                        req.files.pdfInput.mv(path + urlPdf, async function(err) {
+                            if (err) {
+                                console.log(err);
+                                res.status(500).send(err);
+                                return next(err);
+                            }
+                            await connection.query('INSERT INTO PdfDictamen(idDictamen, urlPdf) VALUES(?, ?)', [req.body.idDictamen, urlPdf], (err, rows) => {
+                                if (err) {
+                                    console.log(err);
+                                    return next(err);
+                                } 
+                                resolve("");  
+                            });        
+                        });
+                    }
+                }else{
+                    resolve("");
                 }
-                await connection.query('INSERT INTO PaginaDictamen(idDictamen, numeroPagina, urlPagina) VALUES(?, ?, ?)', [DictamenId, pagDictamen, urlPag], (err, rows) => {
+            });
+        }, (err)=>{
+            console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
+            return new Promise((resolve, reject) => {
+                if(req.files != null && req.files.wordInput != null){
+                    var arrayExtensionWord = req.files.wordInput.name.split(".");
+                    var extensionWord = arrayExtensionWord[arrayExtensionWord.length -1];
+                    var urlWord = '/' + req.body.idDictamen + '/' + 'dictamen' + req.body.idDictamen + "." + extensionWord;
+                    if(req.body.existeWord == "true"){
+                        fs.unlink(path + req.body.urlWord, (err) => {
+                            if (err){
+                                console.log(err);
+                                res.status(500).send(err);
+                                return next(err);
+                            }
+                            req.files.wordInput.mv(path + urlWord, async function(err) {
+                                if (err) {
+                                    console.log(err);
+                                    res.status(500).send(err);
+                                    return next(err);
+                                }
+
+                                await connection.query('UPDATE WordDictamen SET urlWord = ? WHERE idDictamen = ?', [urlWord, req.body.idDictamen], (err, rows) => {
+                                    if (err) {
+                                        console.log(err);
+                                        return next(err);
+                                    } 
+                                    resolve("");
+                                });          
+                            });
+                        });    
+                    }else{
+                        req.files.wordInput.mv(path + urlWord, async function(err) {
+                            if (err) {
+                                console.log(err);
+                                res.status(500).send(err);
+                                return next(err);
+                            }
+
+                            await connection.query('INSERT INTO WordDictamen(idDictamen, urlWord) VALUES(?, ?)', [req.body.idDictamen, urlWord], (err, rows) => {
+                                if (err) {
+                                    console.log(err);
+                                    return next(err);
+                                } 
+                                resolve("");
+                            });          
+                        });
+                    }
+                }else{
+                    resolve("");
+                }
+            });
+        }, (err)=>{
+            console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
+            return new Promise((resolve, reject) => {
+                var query = "UPDATE FichaEntradaExpediente SET fechaRevision = STR_TO_DATE(?, \'%d-%m-%Y\') " +
+                "WHERE idFichaEntradaExpediente = ?";
+                connection.query(query, [req.body.fecha, req.body.idFicha], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
-                    } 
-                    if(i == req.files.imageFiles.length - 1) {
-                        var query = "UPDATE FichaEntradaExpediente SET fechaRevision = STR_TO_DATE(?, \'%d-%m-%Y\'), " +
-                        "idDictamen = ?, idEstadoExpediente = ? WHERE idFichaEntradaExpediente = ?";
-                        connection.query(query, [req.body.fecha, DictamenId, 4, req.body.idFicha], (err, rows) => {
-                            if (err) {
-                                console.log(err);
-                                return next(err);
-                            }
-                            res.status(status.OK).json({ message: 'Dictamen revisado correctamente' });
-                        });
-                    }       
-                });        
+                    }
+                    res.status(status.OK).json({ message: 'formulario actualizado correctamente' });
+                });
             });
-        }
+        }, (err)=>{
+            console.log(err);
+                res.status(500).send(err);
+                return next(err);
+        });
     });
 }
 
 
-module.exports = revisarExpController;
+module.exports = modExpRevisionController;
 
 
 /*

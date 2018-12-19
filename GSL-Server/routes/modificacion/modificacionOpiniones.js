@@ -5,6 +5,7 @@ var modificacionOpnController = require('../../controllers/controlesDeModificaci
 var modOpnEntradaController = require('../../controllers/controlesDeModificacion/opiniones/modOpnEntradaController');
 var modOpnAsignacionController = require('../../controllers/controlesDeModificacion/opiniones/modOpnAsignacionController');
 var modOpnDescargoController = require('../../controllers/controlesDeModificacion/opiniones/modOpnDescargoController');
+var modOpnRevisionController = require('../../controllers/controlesDeModificacion/opiniones/modOpnRevisionController');
 var modOpnRemisionController = require('../../controllers/controlesDeModificacion/opiniones/modOpnRemisionController');
 
 router.post('/modificacion/opiniones/mostrar/fichas', modificacionOpnController.getFichas);
@@ -20,6 +21,10 @@ router.post('/modificacion/opiniones/actualizar/formularioAsignacion', modOpnAsi
 router.post('/modificacion/opiniones/obtener/formularioDescargo', modOpnDescargoController.getFichaDescargo);
 
 router.post('/modificacion/opiniones/actualizar/formularioDescargo', modOpnDescargoController.updateDescargo);
+
+router.post('/modificacion/opiniones/obtener/formularioRevision', modOpnRevisionController.getFichaRevision);
+
+router.post('/modificacion/opiniones/actualizar/formularioRevision', modOpnRevisionController.updateRevision);
 
 router.post('/modificacion/opiniones/obtener/formularioRemision', modOpnRemisionController.getFichaRemision);
 

@@ -5,6 +5,7 @@ var modificacionPttController = require('../../controllers/controlesDeModificaci
 var modPttEntradaController = require('../../controllers/controlesDeModificacion/patronatos/modPttEntradaController');
 var modPttAsignacionController = require('../../controllers/controlesDeModificacion/patronatos/modPttAsignacionController');
 var modPttDescargoController = require('../../controllers/controlesDeModificacion/patronatos/modPttDescargoController');
+var modPttRevisionController = require('../../controllers/controlesDeModificacion/patronatos/modPttRevisionController');
 var modPttRemisionController = require('../../controllers/controlesDeModificacion/patronatos/modPttRemisionController');
 
 router.post('/modificacion/patronatos/mostrar/fichas', modificacionPttController.getFichas);
@@ -26,6 +27,10 @@ router.post('/modificacion/patronatos/actualizar/formularioAsignacion', modPttAs
 router.post('/modificacion/patronatos/obtener/formularioDescargo', modPttDescargoController.getFichaDescargo);
 
 router.post('/modificacion/patronatos/actualizar/formularioDescargo', modPttDescargoController.updateDescargo);
+
+router.post('/modificacion/patronatos/obtener/formularioRevision', modPttRevisionController.getFichaRevision);
+
+router.post('/modificacion/patronatos/actualizar/formularioRevision', modPttRevisionController.updateRevision);
 
 router.post('/modificacion/patronatos/obtener/formularioRemision', modPttRemisionController.getFichaRemision);
 

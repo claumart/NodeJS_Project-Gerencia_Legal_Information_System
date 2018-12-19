@@ -553,26 +553,47 @@ ALTER TABLE `FichaEntradaPatronatoXExpedientePatronato` ADD INDEX `FEPXEP_idExpe
 
 
 -- -----------------------------------------------------
--- Table `PaginaDictamen`
+-- Table `PdfDictamen`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `PaginaDictamen` ;
+DROP TABLE IF EXISTS `PdfDictamen` ;
 
-CREATE TABLE IF NOT EXISTS `PaginaDictamen` (
-  `idPaginaDictamen` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `PdfDictamen` (
+  `idPdfDictamen` INT NOT NULL AUTO_INCREMENT,
   `idDictamen` INT NOT NULL,
-  `numeroPagina` INT NOT NULL,
-  `urlPagina` VARCHAR(90) NOT NULL,
-  PRIMARY KEY (`idPaginaDictamen`),
-  CONSTRAINT `PaginaDictamen_idDictamen_FK`
+  `urlPdf` VARCHAR(90) NOT NULL,
+  PRIMARY KEY (`idPdfDictamen`),
+  CONSTRAINT `PdfDictamen_idDictamen_FK`
     FOREIGN KEY (`idDictamen`)
     REFERENCES `Dictamen` (`idDictamen`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-ALTER TABLE `PaginaDictamen` ADD INDEX `PaginaDictamen_idDictamen_FK_idx` (`idDictamen` ASC);
+ALTER TABLE `PdfDictamen` ADD INDEX `PdfDictamen_idDictamen_FK_idx` (`idDictamen` ASC);
 
-ALTER TABLE `PaginaDictamen` ADD UNIQUE `urlPaginaDictamen_UNIQUE` (`urlPagina` ASC);
+ALTER TABLE `PdfDictamen` ADD UNIQUE `urlPdfDictamen_UNIQUE` (`urlPdf` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `WordDictamen`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `WordDictamen` ;
+
+CREATE TABLE IF NOT EXISTS `WordDictamen` (
+  `idWordDictamen` INT NOT NULL AUTO_INCREMENT,
+  `idDictamen` INT NOT NULL,
+  `urlWord` VARCHAR(90) NOT NULL,
+  PRIMARY KEY (`idWordDictamen`),
+  CONSTRAINT `WordDictamen_idDictamen_FK`
+    FOREIGN KEY (`idDictamen`)
+    REFERENCES `Dictamen` (`idDictamen`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+ALTER TABLE `WordDictamen` ADD INDEX `WordDictamen_idDictamen_FK_idx` (`idDictamen` ASC);
+
+ALTER TABLE `WordDictamen` ADD UNIQUE `urlWord_UNIQUE` (`urlWord` ASC);
 
 
 -- -----------------------------------------------------
@@ -634,26 +655,25 @@ ALTER TABLE `PrivilegioXUsuario` ADD INDEX `PrivilegioXUsuario_idUsuario_FK_idx`
 
 
 -- -----------------------------------------------------
--- Table `PaginaArchivoAdjunto`
+-- Table `ArchivoAdjunto`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `PaginaArchivoAdjunto` ;
+DROP TABLE IF EXISTS `ArchivoAdjunto` ;
 
-CREATE TABLE IF NOT EXISTS `PaginaArchivoAdjunto` (
-  `idPaginaArchivoAdjunto` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `ArchivoAdjunto` (
+  `idArchivoAdjunto` INT NOT NULL AUTO_INCREMENT,
   `idDictamen` INT NOT NULL,
-  `numeroPagina` INT NOT NULL,
-  `urlPagina` VARCHAR(90) NOT NULL,
-  PRIMARY KEY (`idPaginaArchivoAdjunto`),
-  CONSTRAINT `PAA_idDictamen_FK`
+  `urlArchivoAdjunto` VARCHAR(90) NOT NULL,
+  PRIMARY KEY (`idArchivoAdjunto`),
+  CONSTRAINT `AA_idDictamen_FK`
     FOREIGN KEY (`idDictamen`)
     REFERENCES `Dictamen` (`idDictamen`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-ALTER TABLE `PaginaArchivoAdjunto` ADD UNIQUE `urlPaginaArchivo_UNIQUE` (`urlPagina` ASC);
+ALTER TABLE `ArchivoAdjunto` ADD UNIQUE `urlArchivoAdjunto_UNIQUE` (`urlArchivoAdjunto` ASC);
 
-ALTER TABLE `PaginaArchivoAdjunto` ADD INDEX `PAA_idDictamen_FK_idx` (`idDictamen` ASC);
+ALTER TABLE `ArchivoAdjunto` ADD INDEX `AA_idDictamen_FK_idx` (`idDictamen` ASC);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

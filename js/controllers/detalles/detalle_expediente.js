@@ -130,6 +130,7 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, urlUtil
         imageText.setAttribute('class', 'numbertext');
         imageText. innerHTML = imageNumber + '/' + $scope.imagenes.length;
         img.setAttribute('src', $scope.serverUrl + $scope.imagenes[n].urlPagina);
+        img.setAttribute('onclick', "window.print()");
         //img.setAttribute('style', 'width:100%');
         mySlideContainer.appendChild(imageText);
         mySlideContainer.appendChild(img);

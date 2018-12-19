@@ -5,6 +5,7 @@ var modificacionExpController = require('../../controllers/controlesDeModificaci
 var modExpEntradaController = require('../../controllers/controlesDeModificacion/expedientes/modExpEntradaController');
 var modExpAsignacionController = require('../../controllers/controlesDeModificacion/expedientes/modExpAsignacionController');
 var modExpDescargoController = require('../../controllers/controlesDeModificacion/expedientes/modExpDescargoController');
+var modExpRevisionController = require('../../controllers/controlesDeModificacion/expedientes/modExpRevisionController');
 var modExpRemisionController = require('../../controllers/controlesDeModificacion/expedientes/modExpRemisionController');
 var modExpProvidenciaController = require('../../controllers/controlesDeModificacion/expedientes/modExpProvidenciaController');
 
@@ -27,6 +28,10 @@ router.post('/modificacion/expedientes/actualizar/formularioAsignacion', modExpA
 router.post('/modificacion/expedientes/obtener/formularioDescargo', modExpDescargoController.getFichaDescargo);
 
 router.post('/modificacion/expedientes/actualizar/formularioDescargo', modExpDescargoController.updateDescargo);
+
+router.post('/modificacion/expedientes/obtener/formularioRevision', modExpRevisionController.getFichaRevision);
+
+router.post('/modificacion/expedientes/actualizar/formularioRevision', modExpRevisionController.updateRevision);
 
 router.post('/modificacion/expedientes/obtener/formularioRemision', modExpRemisionController.getFichaRemision);
 
