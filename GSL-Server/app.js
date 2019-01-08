@@ -24,6 +24,7 @@ var modificacionOpinionesRouter = require('./routes/modificacion/modificacionOpi
 var modificacionPatronatosRouter = require('./routes/modificacion/modificacionPatronatos');
 var busquedaRouter = require('./routes/buscar/buscar');
 var detalleRouter = require('./routes/detalle/detalle');
+var administradorRouter = require('./routes/administrador/administrador');
 
 var app = express();
 
@@ -65,6 +66,7 @@ app.use('/', modificacionOpinionesRouter);
 app.use('/', modificacionPatronatosRouter);
 app.use('/', busquedaRouter);
 app.use('/', detalleRouter);
+app.use('/', administradorRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

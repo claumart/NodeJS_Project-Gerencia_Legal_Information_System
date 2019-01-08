@@ -7,7 +7,6 @@ populateSelectsController.populateDependencia = (req, res, next) => {
     	connection.query('SELECT idDependencia, nombreDependencia FROM Dependencia', [], (err, results) => {
         	if (err) return next(err);
         	var string=JSON.stringify(results);
-
         	res.json(string);
       	});
       
@@ -21,9 +20,21 @@ populateSelectsController.populateEmpleadoReceptor = (req, res, next) => {
     	connection.query('SELECT numEmpleado, nombreEmpleado FROM Empleado WHERE activo=?', [true], (err, results) => {
         	if (err) return next(err);
         	var string=JSON.stringify(results);
-        	
         	res.json(string);
       	});
+      
+    });
+}
+
+populateSelectsController.populateEmpleado = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+      
+        connection.query('SELECT numEmpleado, nombreEmpleado FROM Empleado', [], (err, results) => {
+            if (err) return next(err);
+            var string=JSON.stringify(results);
+            res.json(string);
+        });
       
     });
 }
@@ -86,7 +97,7 @@ populateSelectsController.populateMunicipio = (req, res, next) => {
       
         connection.query('SELECT idMunicipio, nombreMunicipio, codigoMunicipio FROM Municipio', [], (err, results) => {
         if (err) return next(err);
-        var string=JSON.stringify(results)
+        var string=JSON.stringify(results);
         res.json(string);
       });
       
@@ -99,7 +110,7 @@ populateSelectsController.populateTipoComunidad = (req, res, next) => {
       
     	connection.query('SELECT idTipoComunidad, nombreTipoComunidad FROM TipoComunidad', [], (err, results) => {
         if (err) return next(err);
-        var string=JSON.stringify(results)
+        var string=JSON.stringify(results);
         res.json(string);
       });
       
@@ -110,10 +121,28 @@ populateSelectsController.populateCargoEmpleado = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
       
-    	connection.query('SELECT idCargoEmpleado, nombreCargoEmpleado FROM CargoEmpleado', [], (err, results) => {
+    	connection.query('SELECT idCargoEmpleado, nombreCargoEmpleado FROM CargoEmpleado WHERE idCargoEmpleado > 1', [], (err, results) => {
         if (err) return next(err);
-        var string=JSON.stringify(results)
-        console.log(string);
+        var string=JSON.stringify(results);
+        res.json(string);
+      });
+      
+    });
+}
+
+populateSelectsController.populateComunidad = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        var query = "SELECT Comunidad.idComunidad, " +
+        "CONCAT(TipoComunidad.nombreTipoComunidad, \' \' , Comunidad.nombreComunidad, \' - \', Municipio.codigoMunicipio) AS comunidad, " +
+        "Comunidad.idMunicipio, Comunidad.idTipoComunidad " +
+        "FROM Comunidad INNER JOIN Municipio " +
+            "ON Comunidad.idMunicipio = Municipio.idMunicipio " +
+        "INNER JOIN TipoComunidad " +
+            "ON Comunidad.idTipoComunidad = TipoComunidad.idTipoComunidad";
+        connection.query(query, [], (err, results) => {
+        if (err) return next(err);
+        var string=JSON.stringify(results);
         res.json(string);
       });
       
@@ -126,8 +155,7 @@ populateSelectsController.populateCargoEmpleadoSinAbogado = (req, res, next) => 
       
         connection.query('SELECT idCargoEmpleado, nombreCargoEmpleado FROM CargoEmpleado WHERE NOT idCargoEmpleado=?', [1], (err, results) => {
         if (err) return next(err);
-        var string=JSON.stringify(results)
-        console.log(string);
+        var string=JSON.stringify(results);
         res.json(string);
       });
       

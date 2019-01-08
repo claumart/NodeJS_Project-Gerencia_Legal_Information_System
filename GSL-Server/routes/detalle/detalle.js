@@ -6,7 +6,9 @@ var detallePatronatoController = require('../../controllers/controlesDeDetalle/d
 
 router.post('/detalle/expediente/obtenerfichaCompleta', detalleExpedienteController.obtenerfichaCompleta);
 
-router.post('/detalle/expediente/obtenerImagenesDictamen', detalleExpedienteController.obtenerImagenesDictamen);
+router.post('/detalle/expediente/obtenerPdf', detalleExpedienteController.obtenerPdf);
+
+router.post('/detalle/expediente/obtenerWord', detalleExpedienteController.obtenerWord);
 
 router.post('/detalle/expediente/obtenerHistorialPrevision', detalleExpedienteController.obtenerHistorialPrevision);
 

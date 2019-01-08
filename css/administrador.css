@@ -1,0 +1,103 @@
+#buscador_principal {
+	margin-top: 2vh;
+}
+
+
+#search_btn {
+	width: 96%;
+	margin-left: 2%;
+	margin-right: 2%;
+}
+
+#menu_lateral {
+	background: linear-gradient(90deg, #e6e6e6, #f2f2f2);
+}
+
+#titulo_menu_lateral {
+	text-align: center;
+	font-size: 1.5em;
+	padding: 4%;
+}
+
+.accordion-content {
+	background: linear-gradient(90deg, #e6e6e6, #f2f2f2);
+}
+
+
+.button.secondary {
+	background-color: #a6a6a6;
+	color: #fefefe;
+	margin-left: 8%;
+	margin-right: 8%;
+}
+
+#textModal, #textFeedback {
+	text-align: center;
+}
+.ver_btn {
+	width: 84%;
+	margin-left: 8%;
+	margin-right: 8%;
+
+}
+
+.center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.administration_param {
+	padding-bottom: 4%;
+}
+
+#menu_fichas, #menu_comunidad {
+	padding-top: 30px;
+}
+
+#tabla_fichas {
+	margin-top: 20px;
+}
+
+.modal {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: rgba(255, 255, 255, 1);
+  margin-bottom: 60px;
+  min-width: 280px;
+  max-width: 600px;
+  padding: 30px;
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #999;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* #bfbfbf, *7

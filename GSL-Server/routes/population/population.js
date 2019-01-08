@@ -7,6 +7,8 @@ router.post('/populate/select/dependencia', populateSelectsController.populateDe
 
 router.post('/populate/select/empleadoReceptor', populateSelectsController.populateEmpleadoReceptor);
 
+router.post('/populate/select/empleado', populateSelectsController.populateEmpleado);
+
 router.post('/populate/select/abogadoAsignado', populateSelectsController.populateAbogadoAsignado);
 
 router.post('/populate/select/asunto', populateSelectsController.populateAsunto);
@@ -19,7 +21,10 @@ router.post('/populate/select/tipoComunidad', populateSelectsController.populate
 
 router.post('/populate/select/estadoExpediente', populateSelectsController.populateEstadoExpediente);
 
-/*router.post('/populate/select/cargoEmpleado', populateSelectsController);*/
+router.post('/populate/select/cargoEmpleado', populateSelectsController.populateCargoEmpleado);
+
+router.post('/populate/select/comunidad', populateSelectsController.populateComunidad);
+
 
 /*************************Informacion extra******************************/
 router.post('/populate/formularios/nombreExpedientes', populateExtraInfoController.getNombreExpedientes);

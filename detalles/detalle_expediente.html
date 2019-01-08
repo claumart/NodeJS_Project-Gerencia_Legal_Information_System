@@ -174,26 +174,52 @@
 		      	</div>
 	      	</section>
 
-	      	<section id="gallery_section" ng-show="numeroImagenes>0">
+	      	<section class="grid-container" ng-show="numPdf>0||numWord>0">
+	      		<div class="grid-x grid-padding-x">
+					<div class="small-12 cell">
+		      			<h4 class="titulo">Documentos Relacionados</h4>
+		      		</div>
+				</div>
+				<div class="grid-x grid-padding-x">
+					<div class="small-12 medium-6 docs cell" ng-show="numPdf>0">
+		      			<label>
+		      				Dictamen en PDF
+		      			</label>
+		      			<div class="link">
+		      				<a href="{{urlPdf}}" target="_blank"><img src="../images/pdf-icon.png" width="100px"></a>
+		      			</div>
+		      		</div>
+		      		<div class="small-12 medium-6 docs cell" ng-show="numWord>0">
+		      			<label>
+		      				Dictamen en Word
+		      			</label>
+		      			<div class="link">
+		      				<a href="{{urlWord}}"><img src="../images/word-icon.png" width="100px"></a>
+		      			</div>
+		      		</div>
+				</div>
+	      	</section>
+
+	      	<!--<section id="gallery_section" ng-show="numeroImagenes>0">
 	      		<div class="grid-x grid-padding-x">
 					<div class="small-12 cell">
 		      			<h4 class="titulo">Galería de Imagenes</h4>
 		      		</div>
-				</div>
+				</div>-->
 	      		<!-- Images used to open the lightbox -->
-				<div class="row" id="imagesPreview">
-				</div>
+				<!--<div class="row" id="imagesPreview">
+				</div>-->
 
 				<!-- The Modal/Lightbox -->
-				<div id="myModal" class="modal">
+				<!--<div id="myModal" class="modal">
 				  <span class="close cursor" ng-click="closeModal()">&times;</span>
 				  <div id="myContent" class="modal-content">
 
 				    <div id="actualSlide" class="mySlides">
-				    </div>
+				    </div>-->
 				    <!-- Next/previous controls -->
-				    <a class="prev" ng-click="minusSlides()">&#10094;</a>
-				    <a class="next" ng-click="plusSlides()">&#10095;</a>
+				    <!--<a class="prev" ng-click="minusSlides()">&#10094;</a>
+				    <a class="next" ng-click="plusSlides()">&#10095;</a>-->
 
 				    <!-- Caption text -->
 				  </div>

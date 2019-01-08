@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html  lang="es">
+	<head>
+		<title>Gerencia Legal</title>
+		<meta charset="utf-8">
+	    <meta http-equiv="x-ua-compatible" content="ie=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <link rel="icon" type="image/png" href="../images/logo_amdc.png">
+	    <link rel="stylesheet" href="../css/foundation.css">
+	    <link rel="stylesheet" href="../css/app.css">
+	    <link rel="stylesheet" href="../css/header.css">
+	    <link rel="stylesheet" href="../css/footer.css">
+	    <link rel="stylesheet" href="../css/administrador.css">
+	    <link rel='stylesheet' href='../loading-bar/loading-bar.min.css' type='text/css' media='all' />
+	    <script src="../js/angular.min.js"></script>
+  </head>
+
+	<body ng-app="administratorApp">
+		<header >
+		</header>
+
+		<div class="title-bar" data-responsive-toggle="gsl-menu" data-hide-for="medium">
+			<button class="menu-icon" type="button" data-toggle></button>
+			<div class="title-bar-title">Menu</div>
+		</div>
+
+		<div class="top-bar" id="gsl-menu">
+			<div class="top-bar-left">
+			    <ul class="dropdown menu" data-dropdown-menu>
+			      	<li style="flex-basis: 60px" title="inicio">
+			      		<a href="index.html"><span><img src="../images/blue-home-icon.png" width="100%"></span></a>
+			      	</li>
+			      	<li class="has-submenu">
+			        	<a href="#0">Crear ficha de entrada</a>
+					    <ul class="submenu menu vertical" data-submenu>
+						    <li><a href="../formularios/expedientes/nueva_ficha_expedientes.html#titulo_registro">De expedientes</a></li>
+						    <li><a href="../formularios/opiniones/nueva_ficha_opiniones.html#titulo_registro">De opiniones</a></li>
+						    <li><a href="../formularios/patronatos/nueva_ficha_patronatos.html#titulo_registro">De patronatos</a></li>
+					    </ul>
+					</li>
+					<li><a href="#0">Dar seguimiento</a>
+					    <ul class="submenu menu vertical" data-submenu>
+						    <li><a href="../seguimiento/seguimiento_expedientes.html#titulo_seguimiento">A expedientes</a></li>
+						    <li><a href="../seguimiento/seguimiento_opiniones.html#titulo_seguimiento">A opiniones</a></li>
+						    <li><a href="../seguimiento/seguimiento_patronatos.html#titulo_seguimiento">A patronatos</a></li>
+					    </ul>
+					</li>
+					<li><a href="../buscar.html">Buscar</a></li>
+					<li><a href="../modificacion/modificacion.html">Modificar Fichas</a></li>
+					<li><a href="../modulo_administrador.html">Opciones de Administrador</a></li>
+			    </ul>
+			</div>
+			
+		</div>
+
+		<!-----------------------------Fin del top Bar------------------------------->
+		<form class="grid-container full" ng-controller="administratorCtrl">
+	      	<div class="grid-x">
+	      		<div class="medium-3 small-12 cell" id="menu_lateral">
+	      			<div class="grid-x grid-padding-x">
+						<div class="small-12 cell">
+							<h3 id="titulo_menu_lateral">Opciones de Administración</h3>
+						</div>
+					</div>
+	      			<div class="accordion" data-accordion>
+	      				<div class="accordion-item is-active" data-accordion-item>
+	      					<a href="#" class="accordion-title"><h5>Opciones a Gestionar</h5></a>
+	      					<div class="accordion-content" data-tab-content >
+	      						<div class="grid-x grid-padding-x">
+									<div class="small-12 cell administration_param">
+										<input type="radio" name="parametro_admin" value="fichas" ng-model="parametro_admin"><label>Fichas</label>
+									</div>
+									<div class="small-12 cell administration_param">
+										<input type="radio" name="parametro_admin" value="dependencia" ng-model="parametro_admin"><label>Dependencias</label>
+									</div>
+									<div class="small-12 cell administration_param">
+										<input type="radio" name="parametro_admin" value="asunto" ng-model="parametro_admin"><label>Asuntos</label>
+									</div>
+									<div class="small-12 cell administration_param">
+										<input type="radio" name="parametro_admin" value="empleado" ng-model="parametro_admin"><label>Empleados</label>
+									</div>
+									<div class="small-12 cell administration_param">
+										<input type="radio" name="parametro_admin" value="cargoEmpleado" ng-model="parametro_admin"><label>Cargo de empleados</label>
+									</div>
+									<div class="small-12 cell administration_param">
+										<input type="radio" name="parametro_admin" value="comunidad" ng-model="parametro_admin"><label>Comunidades</label> 
+									</div>
+									<div class="small-12 cell administration_param">
+										<input type="radio" name="parametro_admin" value="usuario"  ng-model="parametro_admin"><label>Cuentas de Usuario</label>
+									</div>
+								</div>
+    						</div>
+	      				</div>
+	      			</div>
+				</div>
+			      	
+			    <div class="medium-9 small-12 cell">
+					<section id="menu_fichas" ng-show="parametro_admin=='fichas'">
+						<div class="grid-x grid-padding-x">					
+							<div class="medium-1 small-3 cell">
+								<label>Eliminar ficha de:</label>
+				      		</div>
+				      		<div class="medium-3 small-9 cell">
+		                		<select id="tipo_ficha_select" name="tipo_ficha_select" ng-model="tipo_ficha_select" ng-change="LimpiarTablasDeFichas()">
+				                	<option value="exp" checked>Expedientes</option>
+				                	<option value="opn">Opiniones</option>
+				                	<option value="ptt">Patronatos</option>
+		                		</select>
+		              		</div>
+							<div class="medium-6 small-12 cell">
+								<fieldset><input type="search" placeholder="Buscar" id="buscar_ficha_input" name="buscar_ficha_input" ng-model="buscar_ficha_input"></fieldset>
+				      		</div>
+				      		<div class="medium-2 small-12 cell">
+				      			<fieldset><button type="button" class="button" id="search_btn" ng-click="ValidarBusqueda()">Buscar</button></fieldset>
+				      		</div>
+			      		</div>
+			      		<div class="grid-x grid-padding-x">
+							<div class="small-12 cell">
+								<table  id="tabla_expedientes" ng-show="tipo_ficha_select=='exp'">
+									<thead>
+							    		<tr>
+								    		<th>Expedientes</th>
+								      		<th>Procedencia</th>
+								      		<th>Asunto</th>
+								      		<th>Fecha de entrada</th>
+								      		<th>Abogado Asignado</th>
+								      		<th>Acción</th>
+								    	</tr>
+							  		</thead>
+								  	<tbody>
+								    	<tr ng-repeat="x in resultadosExpList track by $index">
+								    		<td>{{x.numExpediente}}</td>
+								    		<td>{{x.nombreProcedencia}}</td>
+								    		<td>{{x.nombreAsunto}}</td>
+								    		<td>{{x.fechaEntrada}}</td>
+								    		<td>{{x.nombreAbogadoAsignado}}</td>
+								    		<td><button type="button" class="button secondary" ng-click="AbrirModalEliminarFicha(x.idficha)">Eliminar</button></td>
+								    	</tr>
+								  	</tbody>
+								</table>
+								<table  id="tabla_opiniones" ng-show="tipo_ficha_select=='opn'">
+									<thead>
+							    		<tr>
+								    		<th>Oficio</th>
+								      		<th>Procedencia</th>
+								      		<th>Asunto</th>
+								      		<th>Fecha de entrada</th>
+								      		<th>Abogado Asignado</th>
+								      		<th>Acción</th>
+								    	</tr>
+							  		</thead>
+								  	<tbody>
+								    	<tr ng-repeat="x in resultadosOpnList track by $index">
+								    		<td>{{x.numOficio}}</td>
+								    		<td>{{x.nombreProcedencia}}</td>
+								    		<td>{{x.asunto}}</td>
+								    		<td>{{x.fechaEntrada}}</td>
+								    		<td>{{x.nombreAbogadoAsignado}}</td>
+								    		<td><button type="button" class="button secondary" ng-click="AbrirModalEliminarFicha(x.idficha)">Eliminar</button></td>
+								    	</tr>
+								  	</tbody>
+								</table>
+								<table  id="tabla_patronatos" ng-show="tipo_ficha_select=='ptt'">
+									<thead>
+							    		<tr>
+								    		<th>Expedientes</th>
+								      		<th>Comunidad</th>
+								      		<th>Asunto</th>
+								      		<th>Fecha de entrada</th>
+								      		<th>Abogado Asignado</th>
+								      		<th>Acción</th>
+								    	</tr>
+							  		</thead>
+								  	<tbody>
+								    	<tr ng-repeat="x in resultadosPttList track by $index">
+								    		<td>{{x.numExpediente}}</td>
+								    		<td>{{x.comunidad}}</td>
+								    		<td>{{x.nombreAsunto}}</td>
+								    		<td>{{x.fechaEntrada}}</td>
+								    		<td>{{x.nombreAbogadoAsignado}}</td>
+								    		<td><button type="button" class="button secondary" ng-click="AbrirModalEliminarFicha(x.idficha)">Eliminar</button></td>
+								    	</tr>
+								  	</tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+
+					<section id="menu_Dependencia" ng-show="parametro_admin=='dependencia'">
+						<ul class="tabs" data-tabs id="example-tabs">
+							<li class="tabs-title is-active"><a href="#nuevaDependencia" aria-selected="true">Nueva Dependencia</a></li>
+							<li class="tabs-title"><a href="#gestionDependencias">Gestionar Dependencia</a></li>
+						</ul>
+
+						<div class="tabs-content" data-tabs-content="example-tabs">
+						  	<div class="tabs-panel is-active" id="nuevaDependencia">
+						    	<div class="grid-x grid-padding-x">
+              						<div class="medium-6 small-8 cell medium-offset-3">
+              							<label>Nombre de la Dependencia:</label>
+              							<input type="text" placeholder="Nombre de la dependencia" id="nueva_dependencia_input" name="nueva_dependencia_input" ng-model="nueva_dependencia_input"/>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+						        	<fieldset class="medium-4 small-12 cell medium-offset-4">
+						        		<div class="center">
+						        			<button class="button" type="submit" ng-click="RegistrarDependencia()">Registrar</button>	
+						        		</div>
+					   				</fieldset>
+				   				</div>
+						  	</div>
+						  	<div class="tabs-panel" id="gestionDependencias">
+						    	<div class="grid-x grid-padding-x">
+            						<div class="medium-6 small-12 cell medium-offset-3">
+                						<label>Dependencia a Gestionar:</label>
+                						<select id="procedencia_select" name="procedencia_select" ng-model="procedencia_select" ng-options="x.nombreDependencia for x in dependenciaList"></select>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+              						<div class="medium-6 small-12 cell medium-offset-3">
+              							<label>Nombre de la Dependencia:</label>
+              							<input type="text" placeholder="Nombre de la dependencia" id="dependencia" name="dependencia" ng-model="dependencia"/>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+						        	<fieldset class="medium-4 small-6 cell medium-offset-2">
+						        		<div class="center">
+						        			<button class="button" type="submit" ng-click="AbrirModalEliminarDependencia()">Eliminar</button>	
+						        		</div>
+					   				</fieldset>
+					   				<fieldset class="medium-4 small-6 cell">
+						        		<div class="center">
+						        			<button class="button" type="submit" ng-click="AbrirModalModificarDependencia()">Modificar</button>	
+						        		</div>
+					   				</fieldset>
+				   				</div>
+						  	</div>
+						</div>
+					</section>
+
+					<section id="menu_Asunto" ng-show="parametro_admin=='asunto'">
+						<ul class="tabs" data-tabs id="example-tabs">
+							<li class="tabs-title is-active"><a href="#nuevoAsunto" aria-selected="true">Nuevo Asunto</a></li>
+							<li class="tabs-title"><a href="#gestionAsuntos">Gestionar Asunto</a></li>
+						</ul>
+
+						<div class="tabs-content" data-tabs-content="example-tabs">
+						  	<div class="tabs-panel is-active" id="nuevoAsunto">
+						    	<div class="grid-x grid-padding-x">
+              						<div class="medium-6 small-12 cell medium-offset-3">
+              							<label>Nombre del Asunto:</label>
+              							<input type="text" placeholder="Nombre del asunto" id="nuevo_asunto_input" name="nuevo_asunto_input" ng-model="nuevo_asunto_input"/>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+						        	<fieldset class="medium-4 small-12 cell medium-offset-4">
+						        		<div class="center">
+						        			<button class="button" type="submit" ng-click="RegistrarAsunto()">Registrar</button>	
+						        		</div>
+					   				</fieldset>
+				   				</div>
+						  	</div>
+						  	<div class="tabs-panel" id="gestionAsuntos">
+						    	<div class="grid-x grid-padding-x">
+            						<div class="medium-6 small-12 cell medium-offset-3">
+                						<label>Asunto a Gestionar:</label>
+                						<select id="asunto_select" name="asunto_select" ng-model="asunto_select" ng-options="x.nombreAsunto for x in asuntoList">
+                						</select>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+              						<div class="medium-6 small-12 cell medium-offset-3">
+              							<label>Nombre del Asunto:</label>
+              							<input type="text" placeholder="Nombre del asunto" id="asunto_input" name="asunto_input" ng-model="asunto_input"/>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+						        	<fieldset class="medium-4 small-6 cell medium-offset-2">
+						        		<div class="center">
+						        			<button class="button" type="submit" ng-click="AbrirModalEliminarAsunto()">Eliminar</button>	
+						        		</div>
+					   				</fieldset>
+					   				<fieldset class="medium-4 small-6 cell">
+						        		<div class="center">
+						        			<button class="button" type="submit" ng-click="AbrirModalModificarAsunto()">Modificar</button>	
+						        		</div>
+					   				</fieldset>
+				   				</div>
+						  	</div>
+						</div>
+					</section>
+
+					<section id="menu_empleado" ng-show="parametro_admin=='empleado'">
+						<ul class="tabs" data-tabs id="example-tabs">
+							<li class="tabs-title is-active"><a href="#nuevoEmpleado" aria-selected="true">Nuevo Empleado</a></li>
+							<li class="tabs-title"><a href="#gestionEmpleados">Gestionar Empleados</a></li>
+						</ul>
+
+						<div class="tabs-content" data-tabs-content="example-tabs">
+						  	<div class="tabs-panel is-active" id="nuevoEmpleado">
+						    	<div class="grid-x grid-padding-x">
+              						<div class="medium-6 small-12 cell medium-offset-3">
+              							<label>Nombre del Empleado:</label>
+              							<input type="text" placeholder="Nombre Completo del Empleado" id="nuevo_empleado_input" name="nuevo_empleado_input" ng-model="nuevo_empleado_input"/>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+              						<div class="medium-6 small-12 cell medium-offset-3">
+              							<label>Puesto:</label>
+              							<select id="nuevo_cargo_empleado_select" name="nuevo_cargo_empleado_select" ng-model="nuevo_cargo_empleado_select" ng-options="x.nombreCargoEmpleado for x in cargoEmpleadoList">
+              							</select>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+              						<div class="medium-6 small-12 cell medium-offset-3">
+              							<label>¿Está Activo?</label>
+              							<input type="radio" name="activo1" value="Si" id="activo_si" ng-model="activo1" checked><label>Si</label>
+	                					<input type="radio" name="activo1" value="No" id="activo_no" ng-model="activo1"><label>No</label>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+						        	<fieldset class="medium-4 small-12 cell medium-offset-4">
+						        		<div class="center">
+						        			<button class="button" type="submit" ng-click="RegistrarEmpleado()">Registrar</button>	
+						        		</div>
+					   				</fieldset>
+				   				</div>
+						  	</div>
+						  	<div class="tabs-panel" id="gestionEmpleados">
+						    	<div class="grid-x grid-padding-x">
+            						<div class="medium-6 small-12 cell medium-offset-3">
+                						<label>Empleado a Gestionar:</label>
+                						<select id="empleado_select" name="empleado_select" ng-model="empleado_select" ng-options="x.nombreEmpleado for x in empleadoList"></select>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+              						<div class="medium-6 small-12 cell medium-offset-3">
+              							<label>Nombre del Empleado:</label>
+              							<input type="text" placeholder="Nombre Completo del Empleado" id="empleado_input" name="empleado_input" ng-model="empleado_input"/>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+              						<div class="medium-6 small-12 cell medium-offset-3">
+              							<label>Puesto:</label>
+              							<select id="actual_cargo_empleado_select" name="actual_cargo_empleado_select" ng-model="actual_cargo_empleado_select" ng-options="x.nombreCargoEmpleado for x in cargoEmpleadoList">
+              							</select>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+              						<div class="medium-6 small-12 cell medium-offset-3">
+              							<label>¿Está Activo?</label>
+              							<input type="radio" name="activo2" value="Si" id="activo_si" ng-model="activo2" checked><label>Si</label>
+	                					<input type="radio" name="activo2" value="No" id="activo_no" ng-model="activo2"><label>No</label>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+						        	<fieldset class="medium-4 small-6 cell medium-offset-2">
+						        		<div class="center">
+						        			<button class="button" type="submit" ng-click="AbrirModalEliminarEmpleado()">Eliminar</button>	
+						        		</div>
+					   				</fieldset>
+					   				<fieldset class="medium-4 small-6 cell">
+						        		<div class="center">
+						        			<button class="button" type="submit" ng-click="AbrirModalModificarEmpleado()">Modificar</button>	
+						        		</div>
+					   				</fieldset>
+				   				</div>
+						  	</div>
+						</div>
+					</section>
+
+					<section id="menu_cargo_empleado" ng-show="parametro_admin=='cargoEmpleado'">
+						<ul class="tabs" data-tabs id="example-tabs">
+							<li class="tabs-title is-active"><a href="#nuevoCargoEmpleado" aria-selected="true">Nuevo Cargo</a></li>
+							<li class="tabs-title"><a href="#gestionCargosEmpleado">Gestionar Cargo</a></li>
+						</ul>
+
+						<div class="tabs-content" data-tabs-content="example-tabs">
+						  	<div class="tabs-panel is-active" id="nuevoCargoEmpleado">
+						    	<div class="grid-x grid-padding-x">
+              						<div class="medium-6 small-12 cell medium-offset-3">
+              							<label>Nombre del Puesto:</label>
+              							<input type="text" placeholder="Nombre del puesto" id="nuevo_cargo_input" name="nuevo_cargo_input" ng-model="nuevo_cargo_input"/>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+						        	<fieldset class="medium-4 small-12 cell medium-offset-4">
+						        		<div class="center">
+						        			<button class="button" type="submit" ng-click="RegistrarCargoEmpleado()">Registrar</button>	
+						        		</div>
+					   				</fieldset>
+				   				</div>
+						  	</div>
+						  	<div class="tabs-panel" id="gestionCargosEmpleado">
+						    	<div class="grid-x grid-padding-x">
+            						<div class="medium-6 small-12 cell medium-offset-3">
+                						<label>Cargo a Gestionar:</label>
+                						<select id="cargo_empleado_select" name="cargo_empleado_select" ng-model="cargo_empleado_select" ng-options="x.nombreCargoEmpleado for x in cargoEmpleadoList">
+                						</select>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+              						<div class="medium-6 small-12 cell medium-offset-3">
+              							<label>Nombre del Puesto:</label>
+              							<input type="text" placeholder="Nombre del asunto" id="cargo_input" name="cargo_input" ng-model="cargo_input"/>
+              						</div>
+              					</div>
+              					<div class="grid-x grid-padding-x">
+						        	<fieldset class="medium-4 small-6 cell medium-offset-2">
+						        		<div class="center">
+						        			<button class="button" type="submit" ng-click="AbrirModalEliminarCargoEmpleado()">Eliminar</button>	
+						        		</div>
+					   				</fieldset>
+					   				<fieldset class="medium-4 small-6 cell">
+						        		<div class="center">
+						        			<button class="button" type="submit" ng-click="AbrirModalModificarCargoEmpleado()">Modificar</button>	
+						        		</div>
+					   				</fieldset>
+				   				</div>
+						  	</div>
+						</div>
+					</section>
+
+					<section id="menu_comunidad" ng-show="parametro_admin=='comunidad'">
+						<div class="grid-x grid-padding-x">
+            				<div class="medium-6 small-12 cell medium-offset-3">
+                				<label>Comunidad a Gestionar:</label>
+                				<select id="comunidad_select" name="comunidad_select" ng-model="comunidad_select" ng-options="x.comunidad for x in comunidadList"></select>
+              				</div>
+              			</div>
+              			<div class="grid-x grid-padding-x">
+              				<div class="medium-6 small-12 cell medium-offset-3">
+              					<label>Nombre de la comunidad:</label>
+              					<input type="text" placeholder="Nombre de la Comunidad" id="nombre_comunidad_input" name="nombre_comunidad_input" ng-model="nombre_comunidad_input"/>
+              				</div>
+              			</div>
+              			<div class="grid-x grid-padding-x">
+              				<div class="medium-6 small-12 cell medium-offset-3">
+              					<label>Municipio:</label>
+              					<select id="municipio_select" name="municipio_select" ng-model="municipio_select" ng-options="x.nombreMunicipio for x in municipioList">
+				        		</select>
+              				</div>
+              			</div>
+              			<div class="grid-x grid-padding-x">
+              				<div class="medium-6 small-12 cell medium-offset-3">
+              					<label>Tipo de Comunidad:</label>
+              					<select id="tipo_comunidad_select" name="tipo_comunidad_select" ng-model="tipo_comunidad_select" ng-options="x.nombreTipoComunidad for x in tipoComunidadList">
+				        		</select>
+              				</div>
+              			</div>
+              			<div class="grid-x grid-padding-x">
+						    <fieldset class="medium-4 small-6 cell medium-offset-2">
+						        <div class="center">
+						        	<button class="button" type="submit" ng-click="AbrirModalEliminarComunidad()">Eliminar</button>	
+						        </div>
+					   		</fieldset>
+					   		<fieldset class="medium-4 small-6 cell">
+						        <div class="center">
+						        	<button class="button" type="submit" ng-click="AbrirModalModificarComunidad()">Modificar</button>	
+						        </div>
+					   		</fieldset>
+				   		</div>	
+					</section>
+				</div>
+			</div>
+			<!-- The Modal/Lightbox -->
+			<div id="myModal" class="modal">
+				<div id="myContent" class="modal-content">
+					<p id="textModal">{{modalMessage}}</p>
+				    <div class="grid-x grid-padding-x">
+						    <fieldset class="medium-5 small-6 cell medium-offset-1">
+						        <div class="center">
+						        	<button class="button secondary" type="submit" ng-click="closeModal()">Declinar</button>	
+						        </div>
+					   		</fieldset>
+					   		<fieldset class="medium-5 small-6 cell">
+						        <div class="center">
+						        	<button class="button secondary" id="aceptButton" type="submit">Aceptar</button>	
+						        </div>
+					   		</fieldset>
+				   		</div>
+				</div>
+			</div>
+			<div id="myFeedbackModal" class="modal">
+				<div id="myFeedbackContent" class="modal-content">
+					<p id="textFeedback">{{modalFeedback}}</p>
+				    <div class="grid-x grid-padding-x">
+					   		<fieldset class="small-12 cell">
+						        <div class="center">
+						        	<button class="button secondary" type="submit" value="Submit" ng-click="closeFeedbackModal()">Aceptar</button>	
+						        </div>
+					   		</fieldset>
+				   		</div>
+				</div>
+			</div> 
+		</form>
+		<footer>
+			
+		</footer>
+		<script src="../js/vendor/jquery.js"></script>
+	    <script src="../js/vendor/what-input.js"></script>
+	    <script src="../js/vendor/foundation.js"></script>
+	    <script src="../js/app.js"></script>
+	    <script src="../js/header.js"></script>
+	    <script src="../js/footer.js"></script>
+	    <script src="../js/barraMenu.js" type="text/javascript"></script>
+	    <script src='../loading-bar/loading-bar.min.js' type='text/javascript'></script>
+	    <script src="../js/applications/administratorApp.js" type="text/javascript"></script>
+	    <script src="../js/services/urlUtility.js" type="text/javascript"></script>
+	    <script src="../js/controllers/administrator/administrator.js" type="text/javascript"></script>
+	    <script type="text/javascript">
+
+	    	window.onload = function(){
+	    		loadHeader();
+	    		loadFooter();
+
+	    	}
+	    </script>
+
+	</body>
+</html>

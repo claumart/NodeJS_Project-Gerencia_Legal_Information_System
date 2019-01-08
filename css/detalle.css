@@ -47,7 +47,16 @@ h6 {
 
 }
 
-
+.docs label{
+  text-align: center;
+}
+.link {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3vh;
+}
 
 /*************************LightBox*************************/
 .row {

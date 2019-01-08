@@ -198,7 +198,11 @@ modPttEntradaController.updateNoAcumulado = (req, res, next) => {
                                         res.status(status.OK).json({ message: 'formulario actualizado correctamente' });
                                     }   
                                 });
-                            }      
+                            }else{
+                               if(i == req.body.expedientesAntiguos.length -1){
+                                    res.status(status.OK).json({ message: 'formulario actualizado correctamente' });
+                                }  
+                            }        
                         });
                     });
                 }else{

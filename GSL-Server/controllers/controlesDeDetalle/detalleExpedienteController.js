@@ -66,12 +66,29 @@ detalleExpedienteController.obtenerfichaCompleta = (req, res, next) => {
     });
 }
 
-detalleExpedienteController.obtenerImagenesDictamen = (req, res, next) => {
+detalleExpedienteController.obtenerPdf = (req, res, next) => {
     req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT PaginaDictamen.idDictamen, PaginaDictamen.numeroPagina, PaginaDictamen.urlPagina " + 
-        "FROM fichaentradaexpediente as fichaexp INNER JOIN PaginaDictamen ON fichaexp.idDictamen = PaginaDictamen.idDictamen " + 
-        "WHERE fichaexp.idFichaEntradaExpediente = ? ORDER BY PaginaDictamen.numeroPagina ASC";
+        var query = "SELECT PdfDictamen.urlPdf " + 
+        "FROM fichaentradaexpediente as fichaexp INNER JOIN PdfDictamen ON fichaexp.idDictamen = PdfDictamen.idDictamen " + 
+        "WHERE fichaexp.idFichaEntradaExpediente = ?";
+        connection.query(query, [req.body.idFicha], (err, results) => {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            var string=JSON.stringify(results);
+            res.status(status.OK).json(string);
+        });
+    });
+}
+
+detalleExpedienteController.obtenerWord = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        var query = "SELECT WordDictamen.urlWord " + 
+        "FROM fichaentradaexpediente as fichaexp INNER JOIN WordDictamen ON fichaexp.idDictamen = WordDictamen.idDictamen " + 
+        "WHERE fichaexp.idFichaEntradaExpediente = ?";
         connection.query(query, [req.body.idFicha], (err, results) => {
             if (err) {
                 console.log(err);

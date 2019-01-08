@@ -50,11 +50,10 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Empleado` ;
 
 CREATE TABLE IF NOT EXISTS `Empleado` (
-  `numEmpleado` INT NOT NULL,
+  `numEmpleado` INT NULL AUTO_INCREMENT,
   `nombreEmpleado` VARCHAR(60) NOT NULL,
   `activo` TINYINT NOT NULL,
   `idCargo` INT NOT NULL,
-  `fechaNacimiento` DATE NOT NULL,
   PRIMARY KEY (`numEmpleado`),
   CONSTRAINT `Empleado_idCargo_FK`
     FOREIGN KEY (`idCargo`)
@@ -667,7 +666,7 @@ CREATE TABLE IF NOT EXISTS `ArchivoAdjunto` (
   CONSTRAINT `AA_idDictamen_FK`
     FOREIGN KEY (`idDictamen`)
     REFERENCES `Dictamen` (`idDictamen`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
