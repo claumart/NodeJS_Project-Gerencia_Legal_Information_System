@@ -6,15 +6,15 @@ router.post('/administrar/buscar/ficha/expediente', administradorController.most
 
 router.post('/administrar/eliminar/ficha/expediente', administradorController.eliminarExpediente);
 
-/*router.post('/administrar/buscar/ficha/opinion', administradorController.mostrarOpinionPorOficio);
+router.post('/administrar/buscar/ficha/opinion', administradorController.mostrarOpinionPorOficio);
 
-router.post('/administrar/eliminar/ficha/opinion', administradorController.parametros1SinFecha);
+router.post('/administrar/eliminar/ficha/opinion', administradorController.eliminarOpinion);
 
 router.post('/administrar/buscar/ficha/patronato', administradorController.mostrarPatronatoPorNumero);
 
-router.post('/administrar/eliminar/ficha/patronato', administradorController.parametros1SinFecha);
+router.post('/administrar/eliminar/ficha/patronato', administradorController.eliminarPatronato);
 
-router.post('/buscar/expedientes/parametros1/conFecha', administradorController.parametros1ConFecha);
+/*router.post('/buscar/expedientes/parametros1/conFecha', administradorController.parametros1ConFecha);
 
 router.post('/buscar/expedientes/parametros2/conFecha', administradorController.parametros2ConFecha);
 

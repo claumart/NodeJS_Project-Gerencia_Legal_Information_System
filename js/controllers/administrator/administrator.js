@@ -54,16 +54,6 @@ app.controller("administratorCtrl", function($scope, $http, utilities, urlUtilit
         	console.log(response.statusText);
     });
 
-    $http({
-            method : "POST",
-            url : $scope.serverUrl + "/populate/select/tipoComunidad"
-        }).then(function mySuccess(response) {
-            var lista = JSON.parse(response.data);
-            $scope.tipoComunidadList = lista;
-        }, function myError(response) {
-            console.log(response.statusText);
-    });
-
 
     $http({
             method : "POST",
@@ -71,6 +61,17 @@ app.controller("administratorCtrl", function($scope, $http, utilities, urlUtilit
         }).then(function mySuccess(response) {
             var lista = JSON.parse(response.data);
             $scope.comunidadList = lista;
+        }, function myError(response) {
+            console.log(response.statusText);
+    });
+
+        
+     $http({
+            method : "POST",
+            url : $scope.serverUrl + "/populate/select/municipio"
+        }).then(function mySuccess(response) {
+            var lista = JSON.parse(response.data);
+            $scope.municipioList = lista;
         }, function myError(response) {
             console.log(response.statusText);
     });
@@ -281,7 +282,7 @@ app.controller("administratorCtrl", function($scope, $http, utilities, urlUtilit
             var numExpValidado = utilities.eliminateSpace($scope.buscar_ficha_input.toUpperCase().trim());
         	$http({
 		        method : "POST",
-		        url : $scope.serverUrl + "/populate/select/tipoComunidad",
+		        url : $scope.serverUrl + "/administrar/buscar/ficha/patronato",
 		        data : {numExpediente : numExpValidado}
 		    }).then(function mySuccess(response) {
 		        var lista = JSON.parse(response.data);
@@ -318,7 +319,7 @@ app.controller("administratorCtrl", function($scope, $http, utilities, urlUtilit
 		    url : $scope.serverUrl + "/administrar/eliminar/ficha/expediente",
 		    data : {idFicha : idFicha}
 		}).then(function mySuccess(response) {
-		    var lista = JSON.parse(response.data);
+			$scope.buscar_ficha_input = "";
 		    $scope.resultadosExpList = null;
 		}, function myError(response) {
 		    $scope.modalFeedback = response.statusText + ": La acción no se pudo completar debido a un fallo en el sistema";
@@ -330,12 +331,11 @@ app.controller("administratorCtrl", function($scope, $http, utilities, urlUtilit
     	document.getElementById('myModal').style.display = "none";
     	$http({
 		    method : "POST",
-		    url : $scope.serverUrl + "/administrar/buscar/ficha/opinion",
+		    url : $scope.serverUrl + "/administrar/eliminar/ficha/opinion",
 		    data : {idFicha : idFicha}
 		}).then(function mySuccess(response) {
-		    var lista = JSON.parse(response.data);
 		    $scope.buscar_ficha_input = "";
-		    $scope.resultadosOpnList = lista;
+		    $scope.resultadosOpnList = null;
 		}, function myError(response) {
 		    $scope.modalFeedback = response.statusText + ": La acción no se pudo completar debido a un fallo en el sistema";
     		document.getElementById('myFeedbackModal').style.display = "flex";
@@ -346,11 +346,11 @@ app.controller("administratorCtrl", function($scope, $http, utilities, urlUtilit
     	document.getElementById('myModal').style.display = "none";
     	$http({
 		    method : "POST",
-		    url : $scope.serverUrl + "/populate/select/tipoComunidad",
+		    url : $scope.serverUrl + "/administrar/eliminar/ficha/patronato",
 		    data : {idFicha : idFicha}
 		}).then(function mySuccess(response) {
-		    var lista = JSON.parse(response.data);
-		    $scope.resultadosPttList = lista;
+		    $scope.buscar_ficha_input = "";
+		    $scope.resultadosPttList = null;
 		}, function myError(response) {
 		    console.log(response.statusText);
 		    $scope.modalFeedback = response.statusText + ": La acción no se pudo completar debido a un fallo en el sistema";

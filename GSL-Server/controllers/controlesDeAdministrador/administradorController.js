@@ -1,6 +1,6 @@
 var administradorController = {};
 var status = require('http-status');
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('../controlesDeFormularios/dictamenPath');
 
 administradorController.mostrarExpedientePorNumero = (req, res, next) => {
@@ -147,7 +147,6 @@ administradorController.eliminarExpediente = (req, res, next) => {
                     idDictamen = results[0].idDictamen;
                 }
                 resolve("");
-                console.log(results[0].idDictamen);
             });
         });
 
@@ -161,28 +160,15 @@ administradorController.eliminarExpediente = (req, res, next) => {
                     if(results.length > 0) {
                         expedientes = results;
                     }
-                    var pathHola = path + "/hola";
-                    const afs = fs.promises;
-                    console.log(fs);
-                    if (fs.existsSync(pathHola)) {
-                        for (let entry of await afs.readdir(pathHola)) {
-                            const curPath = pathHola + "/" + entry;
-                            if ((await afs.lstat(curPath)).isDirectory())
-                                await deleteFolderRecursive(curPath);
-                            else await afs.unlink(curPath);
-                        }
-                        await afs.rmdir(pathHola);
-                    }
+                    
                     resolve("");
-                    console.log(results);
-                    res.status(status.OK).json({ message: 'Registro eliminado correctamente' });
                 });
             });
         }, (err)=>{
             console.log(err);
             res.status(500).send(err);
             return next(err);
-        });/*.then((result)=>{
+        }).then((result)=>{
             return new Promise((resolve, reject)=>{
                 connection.query("DELETE FROM FichaEntradaExpediente WHERE idFichaEntradaExpediente = ?", [req.body.idFicha], (err, rows) => {
                     if (err) {
@@ -200,16 +186,13 @@ administradorController.eliminarExpediente = (req, res, next) => {
             return new Promise(async (resolve, reject)=>{
                 if(idDictamen != null){
                     var dictamenPath = path + "/" + idDictamen;
-                    const afs = fs.promises;
-                    if (fs.existsSync(dictamenPath)) {
-                        for (let entry of await afs.readdir(dictamenPath)) {
-                            const curPath = dictamenPath + "/" + entry;
-                            if ((await afs.lstat(curPath)).isDirectory())
-                                await deleteFolderRecursive(curPath);
-                            else await afs.unlink(curPath);
+                    fs.remove(dictamenPath, err => {
+                        if (err) {
+                            console.log(err);
+                            res.status(500).send(err);
+                            return next(err);
                         }
-                        await afs.rmdir(dictamenPath);
-                    }
+                    });
                     connection.query("DELETE FROM Dictamen WHERE idDictamen = ?", [idDictamen], (err, rows) => {
                         if (err) {
                             console.log(err);
@@ -219,8 +202,7 @@ administradorController.eliminarExpediente = (req, res, next) => {
                     });
                 }else{
                     resolve("");
-                }
-                
+                }  
             });
         }, (err)=>{
             console.log(err);
@@ -241,12 +223,12 @@ administradorController.eliminarExpediente = (req, res, next) => {
                                     console.log(err);
                                     return next(err);
                                 }
-                                if(i == req.body.expedientesAntiguos.length -1){
+                                if(i == expedientes.length -1){
                                     res.status(status.OK).json({ message: 'Registro eliminado correctamente' });
                                 }     
                             });
                         }else{
-                            if(i == req.body.expedientesAntiguos.length -1){
+                            if(i == expedientes.length -1){
                                 res.status(status.OK).json({ message: 'Registro eliminado correctamente' });
                             }  
                         }      
@@ -257,8 +239,182 @@ administradorController.eliminarExpediente = (req, res, next) => {
             console.log(err);
             res.status(500).send(err);
             return next(err);
-        });*/
+        });
     });
 }
 
+
+administradorController.eliminarOpinion = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        var idDictamen;
+        var expedientes = [];
+        var promise = new Promise((resolve, reject)=>{
+            connection.query("SELECT idDictamen FROM FichaEntradaOpinion WHERE idFichaEntradaOpinion = ?", [req.body.idFicha], (err, results) => {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+                if(results.length > 0) {
+                    idDictamen = results[0].idDictamen;
+                }
+                resolve("");
+            });
+        });
+
+        promise.then((result)=>{
+            return new Promise((resolve, reject)=>{
+                connection.query("DELETE FROM FichaEntradaOpinion WHERE idFichaEntradaOpinion = ?", [req.body.idFicha], (err, rows) => {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+                    resolve("");
+                });
+            });
+        }, (err)=>{
+            console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
+            return new Promise(async (resolve, reject)=>{
+                if(idDictamen != null){
+                    var dictamenPath = path + "/" + idDictamen;
+                    fs.remove(dictamenPath, err => {
+                        if (err) {
+                            console.log(err);
+                            res.status(500).send(err);
+                            return next(err);
+                        }
+                    });
+                    connection.query("DELETE FROM Dictamen WHERE idDictamen = ?", [idDictamen], (err, rows) => {
+                        if (err) {
+                            console.log(err);
+                            return next(err);
+                        }
+                        res.status(status.OK).json({ message: 'Registro eliminado correctamente' });
+                    });
+                }else{
+                    res.status(status.OK).json({ message: 'Registro eliminado correctamente' });
+                }  
+            });
+        }, (err)=>{
+            console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        });
+    });
+}
+
+administradorController.eliminarPatronato = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        var idDictamen;
+        var expedientes = [];
+        var promise = new Promise((resolve, reject)=>{
+            connection.query("SELECT idDictamen FROM FichaEntradaPatronato WHERE idFichaEntradaPatronato = ?", [req.body.idFicha], (err, results) => {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+                if(results.length > 0) {
+                    idDictamen = results[0].idDictamen;
+                }
+                resolve("");
+            });
+        });
+
+        promise.then((result)=>{
+            return new Promise((resolve, reject)=>{
+                connection.query("SELECT idExpedientePatronato FROM FichaEntradaPatronatoXExpedientePatronato WHERE idFichaEntradaPatronato = ?", 
+                [req.body.idFicha], async(err, results) => {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+                    if(results.length > 0) {
+                        expedientes = results;
+                    }
+                    
+                    resolve("");
+                });
+            });
+        }, (err)=>{
+            console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
+            return new Promise((resolve, reject)=>{
+                connection.query("DELETE FROM FichaEntradaPatronato WHERE idFichaEntradaPatronato = ?", [req.body.idFicha], (err, rows) => {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+                    resolve("");
+                });
+            });
+        }, (err)=>{
+            console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
+            return new Promise(async (resolve, reject)=>{
+                if(idDictamen != null){
+                    var dictamenPath = path + "/" + idDictamen;
+                    fs.remove(dictamenPath, err => {
+                        if (err) {
+                            console.log(err);
+                            res.status(500).send(err);
+                            return next(err);
+                        }
+                    });
+                    connection.query("DELETE FROM Dictamen WHERE idDictamen = ?", [idDictamen], (err, rows) => {
+                        if (err) {
+                            console.log(err);
+                            return next(err);
+                        }
+                        resolve("");
+                    });
+                }else{
+                    resolve("");
+                }  
+            });
+        }, (err)=>{
+            console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
+            return new Promise((resolve, reject)=>{
+                for(let i = 0; i< expedientes.length; i++){
+                    connection.query('SELECT COUNT(idFichaEntradaPatronato) as numeroRegistros FROM FichaEntradaPatronatoXExpedientePatronato WHERE idExpedientePatronato = ?', 
+                    [expedientes[i].idExpedientePatronato], (err, results) => {
+                        if (err) {
+                            console.log(err);
+                            return next(err);
+                        }
+                        if(results[0].numeroRegistros ==0){
+                            connection.query('DELETE FROM ExpedientePatronato WHERE idExpedientePatronato = ?', [expedientes[i].idExpedientePatronato], (err, results) => {
+                                if (err) {
+                                    console.log(err);
+                                    return next(err);
+                                }
+                                if(i == expedientes.length -1){
+                                    res.status(status.OK).json({ message: 'Registro eliminado correctamente' });
+                                }     
+                            });
+                        }else{
+                            if(i == expedientes.length -1){
+                                res.status(status.OK).json({ message: 'Registro eliminado correctamente' });
+                            }  
+                        }      
+                    });
+                }
+            });
+        }, (err)=>{
+            console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        });
+    });
+}
 module.exports = administradorController;
