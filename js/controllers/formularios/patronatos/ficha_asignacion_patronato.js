@@ -3,6 +3,10 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
     $scope.numPatronatos = "";
     $scope.serverUrl = urlUtility.getServerUrl();
 
+    $scope.closeModal = ()=> {
+        document.getElementById('myModal').style.display = "none";
+    };
+
     $http({
             method : "POST",
             url : $scope.serverUrl + "/populate/formularios/nombrePatronatos",
@@ -51,11 +55,10 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                     break;
                 }
             }
-
-            $scope.fecha_asignacion = new Date(lista[0].fechaAsignacion);
-            
+            $scope.fecha_asignacion = new Date(lista[0].fechaAsignacion);   
         }, function myError(response) {
-            console.log(response.statusText);
+            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
         }); 
     };
 
@@ -78,7 +81,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                     }).then(function mySuccess(response) {
                         $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                     }, function myError(response) {
-                            console.log(response.statusText);
+                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                        document.getElementById('myModal').style.display = "flex";
                     });
                 }else{
                     $http({
@@ -90,14 +94,17 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                     }).then(function mySuccess(response) {
                         $window.location.href = "../../seguimiento/seguimiento_patronatos.html#titulo_seguimiento";
                     }, function myError(response) {
-                            console.log(response.statusText);
+                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                        document.getElementById('myModal').style.display = "flex";
                     });
                 }
             }else{
-                window.alert("Por favor seleccione la fecha de asignación del expediente de patronato");
+                $scope.modalMessage = "Por favor seleccione la fecha de asignación del expediente de patronato";
+                document.getElementById('myModal').style.display = "flex";
             }  
         }else{
-            window.alert("Por favor seleccione el abogado al cual se le asignará el expediente de patronato");
+            $scope.modalMessage = "Por favor seleccione el abogado al cual se le asignará el expediente de patronato";
+            document.getElementById('myModal').style.display = "flex";
         }  
     };
 

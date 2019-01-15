@@ -10,6 +10,7 @@
 	    <link rel="stylesheet" href="../css/app.css">
 	    <link rel="stylesheet" href="../css/header.css">
 	    <link rel="stylesheet" href="../css/footer.css">
+	    <link rel="stylesheet" href="../css/modal.css">
 	    <link rel="stylesheet" href="../css/administrador.css">
 	    <link rel='stylesheet' href='../loading-bar/loading-bar.min.css' type='text/css' media='all' />
 	    <script src="../js/angular.min.js"></script>
@@ -212,13 +213,13 @@
 						    	<div class="grid-x grid-padding-x">
             						<div class="medium-6 small-12 cell medium-offset-3">
                 						<label>Dependencia a Gestionar:</label>
-                						<select id="procedencia_select" name="procedencia_select" ng-model="procedencia_select" ng-options="x.nombreDependencia for x in dependenciaList"></select>
+                						<select id="dependencia_select" name="dependencia_select" ng-model="dependencia_select" ng-options="x.nombreDependencia for x in dependenciaList" ng-change="LlenarDatosDependencia()"></select>
               						</div>
               					</div>
               					<div class="grid-x grid-padding-x">
               						<div class="medium-6 small-12 cell medium-offset-3">
               							<label>Nombre de la Dependencia:</label>
-              							<input type="text" placeholder="Nombre de la dependencia" id="dependencia" name="dependencia" ng-model="dependencia"/>
+              							<input type="text" placeholder="Nombre de la dependencia" id="dependencia_input" name="dependencia_input" ng-model="dependencia_input"/>
               						</div>
               					</div>
               					<div class="grid-x grid-padding-x">
@@ -263,7 +264,7 @@
 						    	<div class="grid-x grid-padding-x">
             						<div class="medium-6 small-12 cell medium-offset-3">
                 						<label>Asunto a Gestionar:</label>
-                						<select id="asunto_select" name="asunto_select" ng-model="asunto_select" ng-options="x.nombreAsunto for x in asuntoList">
+                						<select id="asunto_select" name="asunto_select" ng-model="asunto_select" ng-options="x.nombreAsunto for x in asuntoList" ng-change="LlenarDatosAsunto()">
                 						</select>
               						</div>
               					</div>
@@ -313,8 +314,8 @@
               					<div class="grid-x grid-padding-x">
               						<div class="medium-6 small-12 cell medium-offset-3">
               							<label>¿Está Activo?</label>
-              							<input type="radio" name="activo1" value="Si" id="activo_si" ng-model="activo1" checked><label>Si</label>
-	                					<input type="radio" name="activo1" value="No" id="activo_no" ng-model="activo1"><label>No</label>
+              							<input type="radio" name="activo1" value="1" id="activo_si" ng-model="activo1" checked><label>Si</label>
+	                					<input type="radio" name="activo1" value="0" id="activo_no" ng-model="activo1"><label>No</label>
               						</div>
               					</div>
               					<div class="grid-x grid-padding-x">
@@ -329,7 +330,7 @@
 						    	<div class="grid-x grid-padding-x">
             						<div class="medium-6 small-12 cell medium-offset-3">
                 						<label>Empleado a Gestionar:</label>
-                						<select id="empleado_select" name="empleado_select" ng-model="empleado_select" ng-options="x.nombreEmpleado for x in empleadoList"></select>
+                						<select id="empleado_select" name="empleado_select" ng-model="empleado_select" ng-options="x.nombreEmpleado for x in empleadoList" ng-change="LlenarDatosEmpleado()"></select>
               						</div>
               					</div>
               					<div class="grid-x grid-padding-x">
@@ -348,8 +349,8 @@
               					<div class="grid-x grid-padding-x">
               						<div class="medium-6 small-12 cell medium-offset-3">
               							<label>¿Está Activo?</label>
-              							<input type="radio" name="activo2" value="Si" id="activo_si" ng-model="activo2" checked><label>Si</label>
-	                					<input type="radio" name="activo2" value="No" id="activo_no" ng-model="activo2"><label>No</label>
+              							<input type="radio" name="activo2" value="1" id="activo_si" ng-model="activo2" checked><label>Si</label>
+	                					<input type="radio" name="activo2" value="0" id="activo_no" ng-model="activo2"><label>No</label>
               						</div>
               					</div>
               					<div class="grid-x grid-padding-x">
@@ -394,7 +395,7 @@
 						    	<div class="grid-x grid-padding-x">
             						<div class="medium-6 small-12 cell medium-offset-3">
                 						<label>Cargo a Gestionar:</label>
-                						<select id="cargo_empleado_select" name="cargo_empleado_select" ng-model="cargo_empleado_select" ng-options="x.nombreCargoEmpleado for x in cargoEmpleadoList">
+                						<select id="cargo_empleado_select" name="cargo_empleado_select" ng-model="cargo_empleado_select" ng-options="x.nombreCargoEmpleado for x in cargoEmpleadoSinAbogadoList" ng-change="LlenarDatosCargoEmpleado()">
                 						</select>
               						</div>
               					</div>
@@ -424,12 +425,12 @@
 						<div class="grid-x grid-padding-x">
             				<div class="medium-6 small-12 cell medium-offset-3">
                 				<label>Comunidad a Gestionar:</label>
-                				<select id="comunidad_select" name="comunidad_select" ng-model="comunidad_select" ng-options="x.comunidad for x in comunidadList"></select>
+                				<select id="comunidad_select" name="comunidad_select" ng-model="comunidad_select" ng-options="x.comunidad for x in comunidadList" ng-change="LlenarDatosComunidad()"></select>
               				</div>
               			</div>
               			<div class="grid-x grid-padding-x">
               				<div class="medium-6 small-12 cell medium-offset-3">
-              					<label>Nombre de la comunidad:</label>
+              					<label>Nombre de la Comunidad:</label>
               					<input type="text" placeholder="Nombre de la Comunidad" id="nombre_comunidad_input" name="nombre_comunidad_input" ng-model="nombre_comunidad_input"/>
               				</div>
               			</div>
@@ -467,29 +468,29 @@
 				<div id="myContent" class="modal-content">
 					<p id="textModal">{{modalMessage}}</p>
 				    <div class="grid-x grid-padding-x">
-						    <fieldset class="medium-5 small-6 cell medium-offset-1">
-						        <div class="center">
-						        	<button class="button secondary" type="submit" ng-click="closeModal()">Declinar</button>	
-						        </div>
-					   		</fieldset>
-					   		<fieldset class="medium-5 small-6 cell">
-						        <div class="center">
-						        	<button class="button secondary" id="aceptButton" type="submit">Aceptar</button>	
-						        </div>
-					   		</fieldset>
-				   		</div>
+						<fieldset class="medium-5 small-6 cell medium-offset-1">
+						    <div class="center">
+						       	<button class="button secondary" type="submit" ng-click="closeModal()">Declinar</button>	
+						    </div>
+					   	</fieldset>
+					   	<fieldset class="medium-5 small-6 cell">
+						    <div class="center">
+						        <button class="button secondary" id="aceptButton" type="submit">Aceptar</button>	
+						    </div>
+					   	</fieldset>
+				   	</div>
 				</div>
 			</div>
 			<div id="myFeedbackModal" class="modal">
 				<div id="myFeedbackContent" class="modal-content">
 					<p id="textFeedback">{{modalFeedback}}</p>
 				    <div class="grid-x grid-padding-x">
-					   		<fieldset class="small-12 cell">
-						        <div class="center">
-						        	<button class="button secondary" type="submit" value="Submit" ng-click="closeFeedbackModal()">Aceptar</button>	
-						        </div>
-					   		</fieldset>
-				   		</div>
+					   	<fieldset class="small-12 cell">
+						    <div class="center">
+						        <button class="button secondary" type="submit" value="Submit" ng-click="closeFeedbackModal()">Aceptar</button>	
+						    </div>
+					   	</fieldset>
+				   	</div>
 				</div>
 			</div> 
 		</form>

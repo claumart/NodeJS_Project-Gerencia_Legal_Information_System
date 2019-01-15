@@ -9,6 +9,9 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
     $scope.wordFileName = "Ninguno";
     $scope.archivoAdjuntoFileName = "Ninguno";
 
+    $scope.closeModal = ()=> {
+        document.getElementById('myModal').style.display = "none";
+    };
 
     $http({
             method : "POST",
@@ -66,7 +69,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
             }
             $scope.idDictamen = lista[0].idDictamen;
         }, function myError(response) {
-            console.log(response.statusText);
+            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
         }); 
     };
 
@@ -130,7 +134,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                     }).then(function mySuccess(response) {
                         $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                     }, function myError(response) {
-                        console.log(response.statusText);
+                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                        document.getElementById('myModal').style.display = "flex";
                     });      
                 }else{
                     $http({
@@ -149,20 +154,24 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                             }).then(function mySuccess(response) {
                                 $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                             }, function myError(response) {
-                                console.log(response.statusText);
+                                $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                document.getElementById('myModal').style.display = "flex";
                             });
                         }else{
                             $scope.mostrarDictamen = true; 
                         }
                     }, function myError(response) {
-                        console.log(response.statusText);
+                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                        document.getElementById('myModal').style.display = "flex";
                     });
                 }
             }else{
-                window.alert("El campo Número de dictamen es muy largo o está vacío, por favor ingrese un valor valido y sin espacios");
+                $scope.modalMessage = "El campo Número de dictamen es muy largo o está vacío, por favor ingrese un valor valido y sin espacios";
+                document.getElementById('myModal').style.display = "flex";
             }
         }else {
-            window.alert("Por favor seleccione la fecha de revisión del expediente");
+            $scope.modalMessage = "Por favor seleccione la fecha de revisión del expediente";
+            document.getElementById('myModal').style.display = "flex";
         }       
     };
 
@@ -205,7 +214,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                             }).then(function mySuccess(response) {
                                 $window.location.href = "../../seguimiento/seguimiento_opiniones.html#titulo_seguimiento";
                             }, function myError(response) {
-                                console.log(response.statusText);
+                                $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                document.getElementById('myModal').style.display = "flex";
                             });      
                             
                         }else{
@@ -215,14 +225,17 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                        $scope.mostrarDictamen = true; 
                     }
                 }, function myError(response) {
-                    console.log(response.statusText);
+                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                    document.getElementById('myModal').style.display = "flex";
                 });
 
             }else {
-                window.alert("El campo Número de dictamen es muy largo o está vacío, por favor ingrese un valor valido y sin espacios");
+                $scope.modalMessage = "El campo Número de dictamen es muy largo o está vacío, por favor ingrese un valor valido y sin espacios";
+                document.getElementById('myModal').style.display = "flex";
             }
         }else {
-            window.alert("Por favor seleccione la fecha de revisión del expediente");
+            $scope.modalMessage = "Por favor seleccione la fecha de revisión del expediente";
+            document.getElementById('myModal').style.display = "flex";
         }       
     };
 

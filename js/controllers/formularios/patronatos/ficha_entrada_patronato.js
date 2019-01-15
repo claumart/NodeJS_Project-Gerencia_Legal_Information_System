@@ -62,6 +62,10 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
     $scope.serverUrl = urlUtility.getServerUrl();
     $scope.urlParams = utilities.getAllUrlParams($window.location.href);
 
+    $scope.closeModal = ()=> {
+        document.getElementById('myModal').style.display = "none";
+    };
+
     $http({
         method : "POST",
         url : $scope.serverUrl + "/populate/select/dependencia"
@@ -125,15 +129,18 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                     var lista = JSON.parse(response.data);
                     $scope.comunidadesList = lista;
                 }, function myError(response) {
-                    console.log(response.statusText);
+                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                    document.getElementById('myModal').style.display = "flex";
                 });
             }else{
-               $scope.comunidad1 = "";
-               window.alert("Por favor seleccione un tipo de comunidad"); 
+                $scope.comunidad1 = "";
+                $scope.modalMessage = "Por favor seleccione un tipo de comunidad";
+                document.getElementById('myModal').style.display = "flex"; 
             }
         }else{
             $scope.comunidad1 = "";
-               window.alert("Por favor seleccione un municipio");
+            $scope.modalMessage = "Por favor seleccione un municipio";
+            document.getElementById('myModal').style.display = "flex";
         }
     };
 
@@ -150,15 +157,18 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                     var lista = JSON.parse(response.data);
                     $scope.comunidadesList = lista;
                 }, function myError(response) {
-                    console.log(response.statusText);
+                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                    document.getElementById('myModal').style.display = "flex";
                 });
             }else{
-               $scope.comunidad2 = "";
-               window.alert("Por favor seleccione un tipo de comunidad"); 
+                $scope.comunidad2 = "";
+                $scope.modalMessage = "Por favor seleccione un tipo de comunidad";
+                document.getElementById('myModal').style.display = "flex"; 
             }
         }else{
             $scope.comunidad2 = "";
-               window.alert("Por favor seleccione un municipio");
+            $scope.modalMessage = "Por favor seleccione un municipio";
+            document.getElementById('myModal').style.display = "flex";
         }
     };
 
@@ -256,7 +266,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
             $scope.ampm = parametrosFecha['tipoHora'];
             
         }, function myError(response) {
-            console.log(response.statusText);
+            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
         }); 
     };
 
@@ -317,11 +328,13 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                     MostrarExpedientes();
                 }
             }, function myError(response) {
-                console.log(response.statusText);
+                $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                document.getElementById('myModal').style.display = "flex";
             });
 
         }, function myError(response) {
-            console.log(response.statusText);
+            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
         });
     };
 
@@ -352,14 +365,14 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
 
     $scope.validarFormulario = ()=> {
         if($scope.interesado.length < 46 && $scope.interesado.trim().length > 0){
-            var interesadoValidado = $scope.interesado.trim();
+            var interesadoValidado = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.interesado).trim());
             if($scope.apoderado.length < 46){
-                var apoderadoLegal = $scope.apoderado.trim();
+                var apoderadoLegal = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.apoderado).trim());
                 if($scope.procedencia_select != null){
                     if($scope.empleado_receptor_select != null){
                         if($scope.asunto_patronato_select != null && $scope.asunto_patronato_select.idAsuntoPatronato == 1){
                             if($scope.comunidad1.length < 46 && $scope.comunidad1.trim().length > 0){
-                                var comunidadValidada = utilities.eliminateMultipleSpaces($scope.comunidad1).trim();
+                                var comunidadValidada = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.comunidad1).trim());
                                 if(!isNaN($scope.anio_proceso_ins) && $scope.anio_proceso_ins > 0){
                                     if(!isNaN($scope.periodo_validez_ins) && $scope.periodo_validez_ins > 0){
                                         if(!isNaN($scope.folios_ins) && $scope.folios_ins > 0){
@@ -385,7 +398,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                     }).then(function mySuccess(response) {
                                                         $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                                                     }, function myError(response) {
-                                                        console.log(response.statusText);
+                                                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                        document.getElementById('myModal').style.display = "flex";
                                                     });
                                                 }else{
                                                     $http({
@@ -404,7 +418,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                     }).then(function mySuccess(response) {
                                                         limpieza.limpiarRegistrarPatronatoForm($scope);
                                                     }, function myError(response) {
-                                                        console.log(response.statusText);
+                                                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                        document.getElementById('myModal').style.display = "flex";
                                                     });
                                                 }
                                             }else if($scope.tipo_fecha == "personalizada"){
@@ -431,7 +446,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                                 }).then(function mySuccess(response) {
                                                                     $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                                                                 }, function myError(response) {
-                                                                    console.log(response.statusText);
+                                                                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                    document.getElementById('myModal').style.display = "flex";
                                                                 });
                                                             }else{
                                                                $http({
@@ -450,34 +466,42 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                                 }).then(function mySuccess(response) {
                                                                     limpieza.limpiarRegistrarPatronatoForm($scope);
                                                                 }, function myError(response) {
-                                                                    console.log(response.statusText);
+                                                                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                    document.getElementById('myModal').style.display = "flex";
                                                                 }); 
                                                             }
                                                         }else {
-                                                        window.alert("Por favor seleccione un rango de minutos valido entre 0 a 59");
+                                                            $scope.modalMessage = "Por favor seleccione un rango de minutos valido entre 0 a 59";
+                                                            document.getElementById('myModal').style.display = "flex";
                                                         }
                                                     }else {
-                                                        window.alert("Por favor seleccione una hora valida entre 1 a 12");
+                                                        $scope.modalMessage = "Por favor seleccione una hora valida entre 1 a 12";
+                                                        document.getElementById('myModal').style.display = "flex";
                                                     }
                                                 }else {
-                                                    window.alert("Por favor seleccione la fecha de entrada del expediente");
+                                                    $scope.modalMessage = "Por favor seleccione la fecha de entrada del expediente";
+                                                    document.getElementById('myModal').style.display = "flex";
                                                 }
                                             }
                                         }else{
-                                            window.alert("Por favor seleccione un numero de folios de expediente valido y mayor a cero");
+                                            $scope.modalMessage = "Por favor seleccione un numero de folios de expediente valido y mayor a cero";
+                                            document.getElementById('myModal').style.display = "flex";
                                         }
                                     }else{
-                                        window.alert("Por favor seleccione un periodo de validez del patronato valido y mayor a cero");
+                                        $scope.modalMessage = "Por favor seleccione un periodo de validez del patronato valido y mayor a cero";
+                                        document.getElementById('myModal').style.display = "flex";
                                     }
                                 }else{
-                                    window.alert("Por favor seleccione un año valido y mayor a cero");
+                                    $scope.modalMessage = "Por favor seleccione un año valido y mayor a cero";
+                                    document.getElementById('myModal').style.display = "flex";
                                 }
                             }else {
-                                window.alert("El campo nombre de la comunidad es muy largo o está vacio");
+                                $scope.modalMessage = "El campo nombre de la comunidad es muy largo o está vacio";
+                                document.getElementById('myModal').style.display = "flex";
                             }
                         }else if($scope.asunto_patronato_select != null && $scope.asunto_patronato_select.idAsuntoPatronato == 2){
                             if($scope.comunidad2.length < 46 && $scope.comunidad2.trim().length > 0){
-                                var comunidadValidada = utilities.eliminateMultipleSpaces($scope.comunidad2).trim();
+                                var comunidadValidada = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.comunidad2).trim());
                                 if(!isNaN($scope.anio_proceso_imp) && $scope.anio_proceso_imp > 0){
                                     if(!isNaN($scope.periodo_validez_imp) && $scope.periodo_validez_imp > 0){
                                         if(!isNaN($scope.folios_imp) && $scope.folios_imp > 0){
@@ -516,7 +540,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                                     }).then(function mySuccess(response) {
                                                                         $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                                                                     }, function myError(response) {
-                                                                        console.log(response.statusText);
+                                                                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                        document.getElementById('myModal').style.display = "flex";
                                                                     });
                                                                 }else{
                                                                     $http({
@@ -536,7 +561,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                                     }).then(function mySuccess(response) {
                                                                         limpieza.limpiarRegistrarPatronatoForm($scope);
                                                                     }, function myError(response) {
-                                                                        console.log(response.statusText);
+                                                                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                        document.getElementById('myModal').style.display = "flex";
                                                                     });
                                                                 }
                                                             }else if($scope.tipo_fecha == "personalizada"){
@@ -564,7 +590,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                                                 }).then(function mySuccess(response) {
                                                                                     $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                                                                                 }, function myError(response) {
-                                                                                    console.log(response.statusText);
+                                                                                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                                    document.getElementById('myModal').style.display = "flex";
                                                                                 });
                                                                             }else{
                                                                                 $http({
@@ -584,56 +611,71 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                                                 }).then(function mySuccess(response) {
                                                                                     limpieza.limpiarRegistrarPatronatoForm($scope);
                                                                                 }, function myError(response) {
-                                                                                    console.log(response.statusText);
+                                                                                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                                    document.getElementById('myModal').style.display = "flex";
                                                                                 });
                                                                             }
                                                                         }else {
-                                                                        window.alert("Por favor seleccione una cantidad de minutos valida entre 0 a 59");
+                                                                            $scope.modalMessage = "Por favor seleccione una cantidad de minutos valida entre 0 a 59";
+                                                                            document.getElementById('myModal').style.display = "flex";
                                                                         }
                                                                     }else {
-                                                                        window.alert("Por favor seleccione una hora valida entre 1 a 12");
+                                                                        $scope.modalMessage = "Por favor seleccione una hora valida entre 1 a 12";
+                                                                        document.getElementById('myModal').style.display = "flex";
                                                                     }
                                                                 }else {
-                                                                    window.alert("Por favor seleccione la fecha de entrada del expediente");
+                                                                    $scope.modalMessage = "Por favor seleccione la fecha de entrada del expediente";
+                                                                    document.getElementById('myModal').style.display = "flex";
                                                                 }
                                                             }
                                                         }
                                                     }else{
-                                                        window.alert("Por favor seleccione un numero de folios de expediente valido y mayor a cero");
+                                                        $scope.modalMessage = "Por favor seleccione un numero de folios de expediente valido y mayor a cero";
+                                                        document.getElementById('myModal').style.display = "flex";
                                                         break;
                                                     }
 
                                                 }else{
-                                                    window.alert("El campo Número de expediente es muy largo o está vacío, por favor ingrese un valor valido y sin espacios");
+                                                    $scope.modalMessage = "El campo Número de expediente es muy largo o está vacío, por favor ingrese un valor valido y sin espacios";
+                                                    document.getElementById('myModal').style.display = "flex";
                                                     break;
                                                 }
                                             }
                                         }else{
-                                            window.alert("Por favor seleccione un numero de folios de expediente valido y mayor a cero");
+                                            $scope.modalMessage = "Por favor seleccione un numero de folios de expediente valido y mayor a cero";
+                                            document.getElementById('myModal').style.display = "flex";
                                         }
                                     }else{
-                                        window.alert("Por favor seleccione un periodo de validez del patronato valido y mayor a cero");
+                                        $scope.modalMessage = "Por favor seleccione un periodo de validez del patronato valido y mayor a cero";
+                                        document.getElementById('myModal').style.display = "flex";
                                     }
                                 }else{
-                                    window.alert("Por favor seleccione un año valido y mayor a cero");
+                                    $scope.modalMessage = "Por favor seleccione un año valido y mayor a cero";
+                                    document.getElementById('myModal').style.display = "flex";
                                 }
                             }else{
-                                window.alert("El campo nombre de la comunidad es muy largo o está vacio");
+                                $scope.modalMessage = "El campo nombre de la comunidad es muy largo o está vacio";
+                                document.getElementById('myModal').style.display = "flex";
                             }
                         }else{
-                            window.alert("Por favor seleccione un asunto");
+                            $scope.modalMessage = "Por favor seleccione un asunto";
+                            document.getElementById('myModal').style.display = "flex";
                         }
                     }else{
-                        window.alert("Por favor seleccione el empleado que recibe los expedientes");
+                        $scope.modalMessage = "Por favor seleccione el empleado que recibe los expedientes";
+                        document.getElementById('myModal').style.display = "flex";
                     }
                 }else{
-                    window.alert("Por favor seleccione una dependencia de procedencia");
+                    $scope.modalMessage = "Por favor seleccione una dependencia de procedencia";
+                    document.getElementById('myModal').style.display = "flex";
                 }
             }else{
-                window.alert("El campo apoderado legal es muy largo");
+                $scope.modalMessage = "El campo apoderado legal es muy largo";
+                document.getElementById('myModal').style.display = "flex";
             }
         }else {
-            window.alert("El campo Interesado es muy largo o está vacío, por favor ingrese un valor valido");
+            $scope.modalMessage = "El campo Interesado es muy largo o está vacío, por favor ingrese un valor valido";
+            document.getElementById('myModal').style.display = "flex";
         }
     };
 

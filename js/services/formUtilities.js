@@ -12,6 +12,19 @@ app.service('utilities', function() {
       return str.replace(/\s{2,}/g, " ");
     };
 
+    this.firstWordLetterToUpperCase = (str)=> {
+      var arr = str.split(" ");
+        var finalString = "";
+        for(let i = 0; i<arr.length;i++){
+          if(i==0){
+            finalString += arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+          }else{
+            finalString += " " + arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+          }
+        }
+        return finalString;
+    };
+
     this.validarFecha = (fecha)=> {
         var date = new Date(fecha);
         var dateTime = date.toLocaleString('es-GB');

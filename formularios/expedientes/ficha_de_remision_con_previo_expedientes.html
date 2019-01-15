@@ -10,6 +10,7 @@
 	    <link rel="stylesheet" href="../../css/app.css">
 	    <link rel="stylesheet" href="../../css/header.css">
 	    <link rel="stylesheet" href="../../css/footer.css">
+	    <link rel="stylesheet" href="../../css/modal.css">
 	    <link rel="stylesheet" href="../../css/formulario_fichas.css">
 	    <link rel='stylesheet' href='../../loading-bar/loading-bar.min.css' type='text/css' media='all' />
 	    <script src="../../js/angular.min.js"></script>
@@ -49,7 +50,7 @@
 					</li>
 					<li><a href="../../buscar.html">Buscar</a></li>
 					<li><a href="../../archivar.html">Archivar</a></li>
-					<li><a href="../../modulo_administrador.html">Opciones de Administrador</a></li>
+					<li><a href="../../administrador/modulo_administrador.html">Opciones de Administrador</a></li>
 			    </ul>
 			</div>	
 		</div>
@@ -110,6 +111,18 @@
 	      				<button class="button" type="submit" value="Submit" id="remitir_btn" ng-click="validarFormulario()">Remitir Con Previo</button>
 	   				</fieldset>
    				</div>
+   				<div id="myModal" class="modal">
+					<div id="myContent" class="modal-content">
+						<p id="textModal">{{modalMessage}}</p>
+					    <div class="grid-x grid-padding-x">
+						   	<fieldset class="small-12 cell">
+							    <div class="center">
+							        <button class="button secondary" type="submit" value="Submit" ng-click="closeModal()">Aceptar</button>	
+							    </div>
+						   	</fieldset>
+					   	</div>
+					</div>
+				</div>
           	</form>
 
 		<footer></footer>

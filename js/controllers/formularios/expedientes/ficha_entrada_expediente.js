@@ -42,6 +42,10 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
     $scope.serverUrl = urlUtility.getServerUrl();
     $scope.urlParams = utilities.getAllUrlParams($window.location.href);
 
+    $scope.closeModal = ()=> {
+        document.getElementById('myModal').style.display = "none";
+    };
+
 	$scope.agregarExpediente = ()=> {
 		var acumuladosBox = document.getElementById('si_acumulados_box');
 		var numeroExpedientes = parseInt($scope.numAcumulados, 10);
@@ -169,7 +173,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
             $scope.ampm = parametrosFecha['tipoHora'];
             
         }, function myError(response) {
-            console.log(response.statusText);
+            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
         }); 
     };
 
@@ -200,7 +205,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                 $scope.num_folios_NA = $scope.antiguosExp[0].folios;
             }
         }, function myError(response) {
-            console.log(response.statusText);
+            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
         }); 
     };
 
@@ -211,9 +217,9 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
 
     $scope.validarFormulario = ()=> {
     	if($scope.interesado.length < 46 && $scope.interesado.trim().length > 0){
-            var interesadoValidado = $scope.interesado.trim();
+            var interesadoValidado = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.interesado).trim());
     		if($scope.apoderado.length < 46){
-                var apoderadoLegal = $scope.apoderado.trim();
+                var apoderadoLegal = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.apoderado).trim());
                 if($scope.procedencia_select != null){
                     if($scope.empleado_receptor_select != null){
                         if($scope.acumulados == "No"){
@@ -237,7 +243,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                 }).then(function mySuccess(response) {
                                                     $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                                                 }, function myError(response) {
-                                                    console.log(response.statusText);
+                                                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                    document.getElementById('myModal').style.display = "flex";
                                                 });
 
                                             }else{
@@ -252,7 +259,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                 }).then(function mySuccess(response) {
                                                     limpieza.limpiarRegistrarExpForm($scope);
                                                 }, function myError(response) {
-                                                    console.log(response.statusText);
+                                                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                    document.getElementById('myModal').style.display = "flex";
                                                 });
                                             }
 
@@ -273,7 +281,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                             }).then(function mySuccess(response) {
                                                                 $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                                                             }, function myError(response) {
-                                                                console.log(response.statusText);
+                                                                $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                document.getElementById('myModal').style.display = "flex";
                                                             });  
                                                         }else{
                                                             $http({
@@ -287,27 +296,35 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                             }).then(function mySuccess(response) {
                                                                 limpieza.limpiarRegistrarExpForm($scope);
                                                             }, function myError(response) {
-                                                                console.log(response.statusText);
+                                                                $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                document.getElementById('myModal').style.display = "flex";
                                                             });  
                                                         }
                                                     }else {
-                                                    window.alert("Por favor seleccione una cantidad de minutos valida entre 0 a 59");
+                                                        $scope.modalMessage = "Por favor seleccione una cantidad de minutos valida entre 0 a 59";
+                                                        document.getElementById('myModal').style.display = "flex";
                                                     }
                                                 }else {
-                                                    window.alert("Por favor seleccione una hora valida entre 1 a 12");
+                                                    $scope.modalMessage = "Por favor seleccione una hora valida entre 1 a 12";
+                                                    document.getElementById('myModal').style.display = "flex";
                                                 }
                                             }else {
-                                                window.alert("Por favor seleccione la fecha de entrada del expediente");
+                                                $scope.modalMessage = "Por favor seleccione la fecha de entrada del expediente";
+                                                document.getElementById('myModal').style.display = "flex";
                                             }
                                         }
                                     }else{
-                                        window.alert("Por favor seleccione el asunto del expediente");
+                                        $scope.modalMessage = "Por favor seleccione el asunto del expediente";
+                                        document.getElementById('myModal').style.display = "flex";
+
                                     }
                                 }else{
-                                    window.alert("Por favor seleccione un numero de folios de expediente valido y mayor a cero");
+                                    $scope.modalMessage = "Por favor seleccione un numero de folios de expediente valido y mayor a cero";
+                                    document.getElementById('myModal').style.display = "flex";
                                 }
                             }else {
-                                window.alert("El campo Número de expediente es muy largo o está vacío, por favor ingrese un valor valido y sin espacios");
+                                $scope.modalMessage = "El campo Número de expediente es muy largo o está vacío, por favor ingrese un valor valido y sin espacios";
+                                document.getElementById('myModal').style.display = "flex";
                             }
                         }else if($scope.acumulados == "Si"){
                             if($scope.asunto_A_select != null){
@@ -340,8 +357,9 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                                 }
                                                             }).then(function mySuccess(response) {
                                                                 $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
-                                                                }, function myError(response) {
-                                                                    console.log(response.statusText);
+                                                            }, function myError(response) {
+                                                                $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                document.getElementById('myModal').style.display = "flex";
                                                             }); 
                                                         }else{
                                                             $http({
@@ -354,8 +372,9 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                                 }
                                                             }).then(function mySuccess(response) {
                                                                 limpieza.limpiarRegistrarExpForm($scope);
-                                                                }, function myError(response) {
-                                                                    console.log(response.statusText);
+                                                            }, function myError(response) {
+                                                                $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                document.getElementById('myModal').style.display = "flex";
                                                             }); 
                                                         }
                                                     }    
@@ -377,62 +396,74 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                                     }).then(function mySuccess(response) {
                                                                         $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                                                                     }, function myError(response) {
-                                                                            console.log(response.statusText);
+                                                                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                        document.getElementById('myModal').style.display = "flex";
                                                                     }); 
                                                                 }else{
                                                                     $http({
-                                                                    method : "POST",
-                                                                    url : $scope.serverUrl + "/formularios/expedientes/registrar/acumulado",
-                                                                    data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
-                                                                        numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, expedientes : expedientes,
-                                                                        idAsunto : $scope.asunto_A_select.idAsunto, fecha : fechaPersonalizada, 
-                                                                        cantidadExpedientes : numeroExpedientes, apoderado : apoderadoLegal
-                                                                    }
-                                                                }).then(function mySuccess(response) {
-                                                                    limpieza.limpiarRegistrarExpForm($scope);
-                                                                }, function myError(response) {
-                                                                    console.log(response.statusText);
-                                                                }); 
+                                                                        method : "POST",
+                                                                        url : $scope.serverUrl + "/formularios/expedientes/registrar/acumulado",
+                                                                        data : {interesado : interesadoValidado, idProcedencia : $scope.procedencia_select.idDependencia, 
+                                                                            numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, expedientes : expedientes,
+                                                                            idAsunto : $scope.asunto_A_select.idAsunto, fecha : fechaPersonalizada, 
+                                                                            cantidadExpedientes : numeroExpedientes, apoderado : apoderadoLegal
+                                                                        }
+                                                                    }).then(function mySuccess(response) {
+                                                                        limpieza.limpiarRegistrarExpForm($scope);
+                                                                    }, function myError(response) {
+                                                                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                        document.getElementById('myModal').style.display = "flex";
+                                                                    }); 
+                                                                }        
+                                                            }else {
+                                                                $scope.modalMessage = "Por favor seleccione una cantidad de minutos valida entre 0 a 59";
+                                                                document.getElementById('myModal').style.display = "flex";
                                                             }
-                                                                    
                                                         }else {
-                                                            window.alert("Por favor seleccione una hora valida entre 1 a 12");
-                                                            }
-                                                        }else {
-                                                            window.alert("Por favor seleccione una hora valida entre 1 a 12");
+                                                            $scope.modalMessage = "Por favor seleccione una hora valida entre 1 a 12";
+                                                            document.getElementById('myModal').style.display = "flex";
                                                         }
                                                     }else {
-                                                        window.alert("Por favor seleccione la fecha de entrada del expediente");
+                                                        $scope.modalMessage = "Por favor seleccione la fecha de entrada del expediente";
+                                                        document.getElementById('myModal').style.display = "flex";
                                                     }
                                                 }
                                             }
                                         }else{
-                                            window.alert("Por favor seleccione un numero de folios de expediente valido y mayor a cero");
+                                            $scope.modalMessage = "Por favor seleccione un numero de folios de expediente valido y mayor a cero";
+                                            document.getElementById('myModal').style.display = "flex";
                                             break;
                                         }
 
                                     }else{
-                                        window.alert("El campo Número de expediente es muy largo o está vacío, por favor ingrese un valor valido y sin espacios");
+                                        $scope.modalMessage = "El campo Número de expediente es muy largo o está vacío, por favor ingrese un valor valido y sin espacios";
+                                        document.getElementById('myModal').style.display = "flex";
                                         break;
                                     }
                                 }
                             }else{
-                                window.alert("Por favor seleccione el asunto de los expedientes");
+                                $scope.modalMessage = "Por favor seleccione el asunto de los expedientes";
+                                document.getElementById('myModal').style.display = "flex";
                             }
                         }else{
-                            window.alert("Por favor seleccione si están ingresando expedientes acumulados");
+                            $scope.modalMessage = "Por favor seleccione si están ingresando expedientes acumulados";
+                            document.getElementById('myModal').style.display = "flex";
                         }
                     }else{
-                        window.alert("Por favor seleccione el empleado que recibe los expedientes");
+                        $scope.modalMessage = "Por favor seleccione el empleado que recibe los expedientes";
+                         document.getElementById('myModal').style.display = "flex";
                     }
                 }else{
-                    window.alert("Por favor seleccione una dependencia de procedencia");
+                    $scope.modalMessage = "Por favor seleccione una dependencia de procedencia";
+                    document.getElementById('myModal').style.display = "flex";
                 }
             }else{
-                window.alert("El campo apoderado legal es muy largo");
+                $scope.modalMessage = "El campo apoderado legal es muy largo";
+                document.getElementById('myModal').style.display = "flex";
             }
     	}else {
-    		window.alert("El campo Interesado es muy largo o está vacío, por favor ingrese un valor valido");
+            $scope.modalMessage = "El campo Interesado es muy largo o está vacío, por favor ingrese un valor valido";
+            document.getElementById('myModal').style.display = "flex";
     	}
     };
 

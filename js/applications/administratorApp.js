@@ -1,1 +1,1 @@
-var app = angular.module("administratorApp", []);
+var app = angular.module("administratorApp", ['angular-loading-bar']);

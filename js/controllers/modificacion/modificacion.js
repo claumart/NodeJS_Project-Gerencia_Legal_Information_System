@@ -39,7 +39,10 @@ app.controller("modCtrl", function($scope, $http, $window, utilities, urlUtility
     $scope.fichaRevisionPttList = [];
     $scope.fichaRemisionPttList = [];
 
-	
+	$scope.closeModal = ()=> {
+        document.getElementById('myModal').style.display = "none";
+    };
+
     $scope.ValidarBusqueda = ()=> {
         switch($scope.tipo_busqueda_select) {
             case "exp":
@@ -115,13 +118,15 @@ app.controller("modCtrl", function($scope, $http, $window, utilities, urlUtility
                         }
                     }
                 }, function myError(response) {
-                    console.log(response.statusText);
+                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                    document.getElementById('myModal').style.display = "flex";
                 });
             }
             
         	//$scope.expedientesList = utilities.formatearFecha(lista);
     	}, function myError(response) {
-        	console.log(response.statusText);
+        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
     	});
 
 	};
@@ -172,7 +177,8 @@ app.controller("modCtrl", function($scope, $http, $window, utilities, urlUtility
             }
             
         }, function myError(response) {
-            console.log(response.statusText);
+            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
         });
 
     };
@@ -222,7 +228,8 @@ app.controller("modCtrl", function($scope, $http, $window, utilities, urlUtility
                 }
             }
         }, function myError(response) {
-            console.log(response.statusText);
+            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
         });
 
     };

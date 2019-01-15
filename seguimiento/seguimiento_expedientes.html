@@ -10,6 +10,7 @@
 	    <link rel="stylesheet" href="../css/app.css">
 	    <link rel="stylesheet" href="../css/header.css">
 	    <link rel="stylesheet" href="../css/footer.css">
+	    <link rel="stylesheet" href="../css/modal.css">
 	    <link rel="stylesheet" href="../css/seguimiento.css">
 	    <script src="../js/angular.min.js"></script>
   	</head>
@@ -43,7 +44,7 @@
 					        </ul>
 					    </li>
 					    <li><a href="../buscar.html">Buscar</a></li>
-					    <li><a href="../modulo_administrador.html">Opciones de Administrador</a></li>
+					    <li><a href="../administrador/modulo_administrador.html">Opciones de Administrador</a></li>
 			    	</ul>
 				</div>
 			</div>
@@ -120,6 +121,18 @@
 		      			</div>
 		      		</div>
 		      	</div>
+		      	<div id="myModal" class="modal">
+					<div id="myContent" class="modal-content">
+						<p id="textModal">{{modalMessage}}</p>
+					    <div class="grid-x grid-padding-x">
+						   	<fieldset class="small-12 cell">
+							    <div class="center">
+							        <button class="button secondary" type="submit" value="Submit" ng-click="closeModal()">Aceptar</button>	
+							    </div>
+						   	</fieldset>
+					   	</div>
+					</div>
+				</div>
 	      	</div>
 
 		<footer>	

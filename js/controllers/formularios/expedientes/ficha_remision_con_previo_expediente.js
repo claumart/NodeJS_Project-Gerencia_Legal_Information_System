@@ -5,6 +5,10 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
     $scope.nombre_recibio = "";
     $scope.motivo_textarea = "";
 
+    $scope.closeModal = ()=> {
+        document.getElementById('myModal').style.display = "none";
+    };
+
     $http({
             method : "POST",
             url : $scope.serverUrl + "/populate/formularios/nombreExpedientes",
@@ -59,7 +63,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
             $scope.fecha_remision = new Date(lista[0].fechaRemision);
             
         }, function myError(response) {
-            console.log(response.statusText);
+            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
         }); 
     };
 
@@ -73,7 +78,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
             if($scope.motivo_textarea.length < 80){
                 var motivoValidado = $scope.motivo_textarea.trim();
                 if($scope.nombre_recibio.length < 46 && $scope.nombre_recibio.trim().length > 0) {
-                    var recibioValidado = $scope.nombre_recibio.trim();
+                    var recibioValidado = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.nombre_recibio).trim());
                     if($scope.fecha_remision != null) {
                         var fechaValidada = utilities.validarFecha($scope.fecha_remision);
                         if($scope.urlParams.mod == 1){
@@ -86,7 +91,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                             }).then(function mySuccess(response) {
                                 $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                             }, function myError(response) {
-                                    console.log(response.statusText);
+                                $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                document.getElementById('myModal').style.display = "flex";
                             });
                         }else{
                             $http({
@@ -98,20 +104,26 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, urlUtilit
                             }).then(function mySuccess(response) {
                                 $window.location.href = "../../seguimiento/seguimiento_expedientes.html#titulo_seguimiento";
                             }, function myError(response) {
-                                    console.log(response.statusText);
+                                $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                document.getElementById('myModal').style.display = "flex";
                             });
                         }
                     }else{
-                        window.alert("Por favor seleccione la fecha de remisión del expediente");
+                        $scope.modalMessage = "Por favor seleccione la fecha de remisión del expediente";
+                        document.getElementById('myModal').style.display = "flex";
                     }  
                 }else{
-                    window.alert("El campo Recibido Por es muy largo o está vacío, por favor ingrese un valor valido");
+                    $scope.modalMessage = "El campo Recibido Por es muy largo o está vacío, por favor ingrese un valor valido";
+                    document.getElementById('myModal').style.display = "flex";
                 }
             }else{
-                window.alert("El campo motivo es demasiado largo");
+                $scope.modalMessage = "El campo motivo es demasiado largo";
+                document.getElementById('myModal').style.display = "flex";
+
             }
         }else{
-            window.alert("Por favor seleccione la dependecnia de remisión");
+            $scope.modalMessage = "Por favor seleccione la dependecnia de remisión";
+            document.getElementById('myModal').style.display = "flex";
         }  
     };
 

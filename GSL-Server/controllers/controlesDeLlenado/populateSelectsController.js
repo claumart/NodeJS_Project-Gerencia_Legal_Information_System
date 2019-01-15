@@ -30,7 +30,7 @@ populateSelectsController.populateEmpleado = (req, res, next) => {
     req.getConnection((err, connection)=> {
         if (err) return next(err);
       
-        connection.query('SELECT numEmpleado, nombreEmpleado FROM Empleado', [], (err, results) => {
+        connection.query('SELECT numEmpleado, nombreEmpleado, activo, idCargo FROM Empleado', [], (err, results) => {
             if (err) return next(err);
             var string=JSON.stringify(results);
             res.json(string);
@@ -121,7 +121,7 @@ populateSelectsController.populateCargoEmpleado = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
       
-    	connection.query('SELECT idCargoEmpleado, nombreCargoEmpleado FROM CargoEmpleado WHERE idCargoEmpleado > 1', [], (err, results) => {
+    	connection.query('SELECT idCargoEmpleado, nombreCargoEmpleado FROM CargoEmpleado', [], (err, results) => {
         if (err) return next(err);
         var string=JSON.stringify(results);
         res.json(string);
@@ -135,7 +135,7 @@ populateSelectsController.populateComunidad = (req, res, next) => {
         if (err) return next(err);
         var query = "SELECT Comunidad.idComunidad, " +
         "CONCAT(TipoComunidad.nombreTipoComunidad, \' \' , Comunidad.nombreComunidad, \' - \', Municipio.codigoMunicipio) AS comunidad, " +
-        "Comunidad.idMunicipio, Comunidad.idTipoComunidad " +
+        "Comunidad.nombreComunidad, Comunidad.idMunicipio, Comunidad.idTipoComunidad " +
         "FROM Comunidad INNER JOIN Municipio " +
             "ON Comunidad.idMunicipio = Municipio.idMunicipio " +
         "INNER JOIN TipoComunidad " +

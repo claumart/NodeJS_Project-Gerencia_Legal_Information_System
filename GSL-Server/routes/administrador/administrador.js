@@ -14,21 +14,33 @@ router.post('/administrar/buscar/ficha/patronato', administradorController.mostr
 
 router.post('/administrar/eliminar/ficha/patronato', administradorController.eliminarPatronato);
 
-/*router.post('/buscar/expedientes/parametros1/conFecha', administradorController.parametros1ConFecha);
+router.post('/administrar/registrar/dependencia', administradorController.registrarDependencia);
 
-router.post('/buscar/expedientes/parametros2/conFecha', administradorController.parametros2ConFecha);
+router.post('/administrar/eliminar/dependencia', administradorController.eliminarDependencia);
 
-router.post('/administrar/eliminar/', buscarRegistroOpinionController.parametros1SinFecha);
+router.post('/administrar/modificar/dependencia', administradorController.actualizarDependencia);
 
-router.post('/buscar/opiniones/parametros1/conFecha', buscarRegistroOpinionController.parametros1ConFecha);
+router.post('/administrar/registrar/asunto', administradorController.registrarAsunto);
 
-router.post('/buscar/opiniones/parametros2/conFecha', buscarRegistroOpinionController.parametros2ConFecha);
+router.post('/administrar/eliminar/asunto', administradorController.eliminarAsunto);
 
-router.post('/administrar/eliminar/', buscarRegistroPatronatosController.parametros1SinFecha);
+router.post('/administrar/modificar/asunto', administradorController.actualizarAsunto);
 
-router.post('/buscar/patronatos/parametros1/conFecha', buscarRegistroPatronatosController.parametros1ConFecha);
+router.post('/administrar/registrar/empleado', administradorController.registrarEmpleado);
 
-router.post('/buscar/patronatos/parametros2/conFecha', buscarRegistroPatronatosController.parametros2ConFecha);*/
+router.post('/administrar/eliminar/empleado', administradorController.eliminarEmpleado);
+
+router.post('/administrar/modificar/empleado', administradorController.actualizarEmpleado);
+
+router.post('/administrar/registrar/cargoEmpleado', administradorController.registrarCargoEmpleado);
+
+router.post('/administrar/eliminar/cargoEmpleado', administradorController.eliminarCargoEmpleado);
+
+router.post('/administrar/modificar/cargoEmpleado', administradorController.actualizarCargoEmpleado);
+
+router.post('/administrar/eliminar/comunidad', administradorController.eliminarComunidad);
+
+router.post('/administrar/modificar/comunidad', administradorController.actualizarComunidad);
 
 
 module.exports = router;

@@ -23,6 +23,8 @@ router.post('/populate/select/estadoExpediente', populateSelectsController.popul
 
 router.post('/populate/select/cargoEmpleado', populateSelectsController.populateCargoEmpleado);
 
+router.post('/populate/select/cargoEmpleado/sinAbogado', populateSelectsController.populateCargoEmpleadoSinAbogado);
+
 router.post('/populate/select/comunidad', populateSelectsController.populateComunidad);
 
 

@@ -18,6 +18,10 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
     $scope.textoBoton = "";
     $scope.serverUrl = urlUtility.getServerUrl();
 
+    $scope.closeModal = ()=> {
+        document.getElementById('myModal').style.display = "none";
+    };
+
 	$scope.mostrarPatronatosRecibidos = ()=> {
 		$scope.accion = "asignar";
         $scope.textoBoton = "Asignar";
@@ -29,7 +33,8 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
     		var lista = JSON.parse(response.data);
         	$scope.opinionesList = utilities.formatearFecha(lista);
     	}, function myError(response) {
-        	console.log(response.statusText);
+        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
     	});
 
 	};
@@ -45,7 +50,8 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
     		var lista = JSON.parse(response.data);
         	$scope.opinionesList = utilities.formatearFecha(lista);
     	}, function myError(response) {
-        	console.log(response.statusText);
+        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
     	});
 
 	};
@@ -61,7 +67,8 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
     		var lista = JSON.parse(response.data);
         	$scope.opinionesList = utilities.formatearFecha(lista);
     	}, function myError(response) {
-        	console.log(response.statusText);
+        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
     	});
 
 	};
@@ -76,7 +83,8 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
     		var lista = JSON.parse(response.data);
         	$scope.opinionesList = utilities.formatearFecha(lista);
     	}, function myError(response) {
-        	console.log(response.statusText);
+        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
     	});
 
 	};
@@ -89,7 +97,8 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
     		var lista = JSON.parse(response.data);
         	$scope.opinionesList = utilities.formatearFecha(lista);
     	}, function myError(response) {
-        	console.log(response.statusText);
+        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
     	});
 
 	};
@@ -124,12 +133,14 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities, ur
                         $scope.textoBoton = "Completado";
                         break;
                     default:
-                        window.alert("Error del sistema en el registro del patronato");
+                        $scope.modalMessage = "Error del sistema en el registro del patronato";
+                        document.getElementById('myModal').style.display = "flex";
                 }
             }
         	$scope.opinionesList = utilities.formatearFecha(lista);
     	}, function myError(response) {
-        	console.log(response.statusText);
+        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
     	});
 	};
 

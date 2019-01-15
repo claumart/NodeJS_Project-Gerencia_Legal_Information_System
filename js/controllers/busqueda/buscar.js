@@ -39,6 +39,10 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 	$scope.nombreParametroId = "Expedientes";
 	$scope.usar_fechas = false;
 	
+	$scope.closeModal = ()=> {
+        document.getElementById('myModal').style.display = "none";
+    };
+
 	$http({
     	method : "POST",
     	url : $scope.serverUrl + "/populate/select/dependencia"
@@ -235,7 +239,8 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				BuscarExpPorParametrosTipo2("fechaRemision");
 				break;
 			default:
-				window.alert("Por favor seleccione un parametro de busqueda");
+				$scope.modalMessage = "Por favor seleccione un parametro de busqueda";
+                document.getElementById('myModal').style.display = "flex";
 		}
 
 	};
@@ -255,10 +260,12 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 			    		var lista = JSON.parse(response.data);
 			        	$scope.resultadosExpList = utilities.formatearFecha(lista);
 			    	}, function myError(response) {
-			        	console.log(response.statusText);
+			        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            			document.getElementById('myModal').style.display = "flex";
 			    	});
 				}else{
-					window.alert("Por favor seleccione la fecha para realizar la busqueda");
+					$scope.modalMessage = "Por favor seleccione la fecha para realizar la busqueda";
+                	document.getElementById('myModal').style.display = "flex";
 				}
 
 			}else if($scope.tipo_fecha1 == "fecha_rango") {
@@ -276,14 +283,17 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				    		var lista = JSON.parse(response.data);
 				        	$scope.resultadosExpList = utilities.formatearFecha(lista);
 				    	}, function myError(response) {
-				        	console.log(response.statusText);
+				        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            				document.getElementById('myModal').style.display = "flex";
 				    	});
 					}else{
-						window.alert("Por favor seleccione la fecha de finalización para realizar la busqueda");
+						$scope.modalMessage = "Por favor seleccione la fecha de finalización para realizar la busqueda";
+                		document.getElementById('myModal').style.display = "flex";
 					}
 
 				}else{
-					window.alert("Por favor seleccione la fecha de inicio para realizar la busqueda");
+					$scope.modalMessage = "Por favor seleccione la fecha de inicio para realizar la busqueda";
+                	document.getElementById('myModal').style.display = "flex";
 				}
 			}
 		}else {
@@ -296,7 +306,8 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 			    var lista = JSON.parse(response.data);
 			    $scope.resultadosExpList = utilities.formatearFecha(lista);
 			}, function myError(response) {
-			    console.log(response.statusText);
+			    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            	document.getElementById('myModal').style.display = "flex";
 			});
 		}
 	};
@@ -314,10 +325,12 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 			    	var lista = JSON.parse(response.data);
 			       	$scope.resultadosExpList = utilities.formatearFecha(lista);
 			    }, function myError(response) {
-			       	console.log(response.statusText);
+			       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            		document.getElementById('myModal').style.display = "flex";
 			   	});
 			}else{
-				window.alert("Por favor seleccione la fecha para realizar la busqueda");
+				$scope.modalMessage = "Por favor seleccione la fecha para realizar la busqueda";
+                document.getElementById('myModal').style.display = "flex";
 			}
 		}else if($scope.tipo_fecha2 == "fecha_rango") {
 			if($scope.fecha_inicio2 != null) {
@@ -334,14 +347,17 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				   		var lista = JSON.parse(response.data);
 				       	$scope.resultadosExpList = utilities.formatearFecha(lista);
 				   	}, function myError(response) {
-				       	console.log(response.statusText);
+				       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            			document.getElementById('myModal').style.display = "flex";
 			    	});
 				}else{
-					window.alert("Por favor seleccione la fecha de finalización para realizar la busqueda");
+					$scope.modalMessage = "Por favor seleccione la fecha de finalización para realizar la busqueda";
+                	document.getElementById('myModal').style.display = "flex";
 				}
 
 			}else{
-				window.alert("Por favor seleccione la fecha de inicio para realizar la busqueda");
+				$scope.modalMessage = "Por favor seleccione la fecha de inicio para realizar la busqueda";
+                document.getElementById('myModal').style.display = "flex";
 			}
 		}
 	};
@@ -396,7 +412,8 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				BuscarOpnPorParametrosTipo2("fechaRemision");
 				break;
 			default:
-				window.alert("Por favor seleccione un parametro de busqueda");
+				$scope.modalMessage = "Por favor seleccione un parametro de busqueda";
+                document.getElementById('myModal').style.display = "flex";
 		}
 
 	};
@@ -416,10 +433,12 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 			    		var lista = JSON.parse(response.data);
 			        	$scope.resultadosOpnList = utilities.formatearFecha(lista);
 			    	}, function myError(response) {
-			        	console.log(response.statusText);
+			        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            			document.getElementById('myModal').style.display = "flex";
 			    	});
 				}else{
-					window.alert("Por favor seleccione la fecha para realizar la busqueda");
+					$scope.modalMessage = "Por favor seleccione la fecha para realizar la busqueda";
+                	document.getElementById('myModal').style.display = "flex";
 				}
 
 			}else if($scope.tipo_fecha1 == "fecha_rango") {
@@ -437,14 +456,17 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				    		var lista = JSON.parse(response.data);
 				        	$scope.resultadosOpnList = utilities.formatearFecha(lista);
 				    	}, function myError(response) {
-				        	console.log(response.statusText);
+				        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            				document.getElementById('myModal').style.display = "flex";
 				    	});
 					}else{
-						window.alert("Por favor seleccione la fecha de finalización para realizar la busqueda");
+						$scope.modalMessage = "Por favor seleccione la fecha de finalización para realizar la busqueda";
+                		document.getElementById('myModal').style.display = "flex";
 					}
 
 				}else{
-					window.alert("Por favor seleccione la fecha de inicio para realizar la busqueda");
+					$scope.modalMessage = "Por favor seleccione la fecha de inicio para realizar la busqueda";
+                	document.getElementById('myModal').style.display = "flex";
 				}
 			}
 		}else {
@@ -457,7 +479,8 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 			    var lista = JSON.parse(response.data);
 			    $scope.resultadosOpnList = utilities.formatearFecha(lista);
 			}, function myError(response) {
-			    console.log(response.statusText);
+			    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            	document.getElementById('myModal').style.display = "flex";
 			});
 		}
 	};
@@ -468,17 +491,19 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				var fechaValidada = utilities.validarFecha($scope.fecha_dia2);
 				$http({
 			        method : "POST",
-			        url : $scope.serverUrl + "/buscar/expedientes/parametros2/conFecha",
+			        url : $scope.serverUrl + "/buscar/opiniones/parametros2/conFecha",
 			        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada
                 	}
 			    }).then(function mySuccess(response) {
 			    	var lista = JSON.parse(response.data);
 			       	$scope.resultadosOpnList = utilities.formatearFecha(lista);
 			    }, function myError(response) {
-			       	console.log(response.statusText);
+			       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            		document.getElementById('myModal').style.display = "flex";
 			   	});
 			}else{
-				window.alert("Por favor seleccione la fecha para realizar la busqueda");
+				$scope.modalMessage = "Por favor seleccione la fecha para realizar la busqueda";
+                document.getElementById('myModal').style.display = "flex";
 			}
 		}else if($scope.tipo_fecha2 == "fecha_rango") {
 			if($scope.fecha_inicio2 != null) {
@@ -495,14 +520,17 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				   		var lista = JSON.parse(response.data);
 				       	$scope.resultadosOpnList = utilities.formatearFecha(lista);
 				   	}, function myError(response) {
-				       	console.log(response.statusText);
+				       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            			document.getElementById('myModal').style.display = "flex";
 			    	});
 				}else{
-					window.alert("Por favor seleccione la fecha de finalización para realizar la busqueda");
+					$scope.modalMessage = "Por favor seleccione la fecha de finalización para realizar la busqueda";
+                	document.getElementById('myModal').style.display = "flex";
 				}
 
 			}else{
-				window.alert("Por favor seleccione la fecha de inicio para realizar la busqueda");
+				$scope.modalMessage = "Por favor seleccione la fecha de inicio para realizar la busqueda";
+                document.getElementById('myModal').style.display = "flex";
 			}
 		}
 	};
@@ -578,7 +606,8 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				BuscarPttPorParametrosTipo2("fechaRemision");
 				break;
 			default:
-				window.alert("Por favor seleccione un parametro de busqueda");
+				$scope.modalMessage = "Por favor seleccione un parametro de busqueda";
+                document.getElementById('myModal').style.display = "flex";
 		}
 
 	};
@@ -598,10 +627,12 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 			    		var lista = JSON.parse(response.data);
 			        	$scope.resultadosPttList = utilities.formatearFecha(lista);
 			    	}, function myError(response) {
-			        	console.log(response.statusText);
+			        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            			document.getElementById('myModal').style.display = "flex";
 			    	});
 				}else{
-					window.alert("Por favor seleccione la fecha para realizar la busqueda");
+					$scope.modalMessage = "Por favor seleccione la fecha para realizar la busqueda";
+                	document.getElementById('myModal').style.display = "flex";
 				}
 
 			}else if($scope.tipo_fecha1 == "fecha_rango") {
@@ -619,14 +650,17 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				    		var lista = JSON.parse(response.data);
 				        	$scope.resultadosPttList = utilities.formatearFecha(lista);
 				    	}, function myError(response) {
-				        	console.log(response.statusText);
+				        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            				document.getElementById('myModal').style.display = "flex";
 				    	});
 					}else{
-						window.alert("Por favor seleccione la fecha de finalización para realizar la busqueda");
+						$scope.modalMessage = "Por favor seleccione la fecha de finalización para realizar la busqueda";
+                		document.getElementById('myModal').style.display = "flex";
 					}
 
 				}else{
-					window.alert("Por favor seleccione la fecha de inicio para realizar la busqueda");
+					$scope.modalMessage = "Por favor seleccione la fecha de inicio para realizar la busqueda";
+                	document.getElementById('myModal').style.display = "flex";
 				}
 			}
 		}else {
@@ -639,7 +673,8 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 			    var lista = JSON.parse(response.data);
 			    $scope.resultadosPttList = utilities.formatearFecha(lista);
 			}, function myError(response) {
-			    console.log(response.statusText);
+			    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            	document.getElementById('myModal').style.display = "flex";
 			});
 		}
 	};
@@ -658,9 +693,12 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 			    	var lista = JSON.parse(response.data);
 			       	$scope.resultadosPttList = utilities.formatearFecha(lista);
 			    }, function myError(response) {
-			       	console.log(response.statusText);
+			       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            		document.getElementById('myModal').style.display = "flex";
 			   	});
 			}else{
+				$scope.modalMessage = "";
+                document.getElementById('myModal').style.display = "flex";
 				window.alert("Por favor seleccione la fecha para realizar la busqueda");
 			}
 		}else if($scope.tipo_fecha2 == "fecha_rango") {
@@ -678,14 +716,17 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities, urlUtil
 				   		var lista = JSON.parse(response.data);
 				       	$scope.resultadosPttList = utilities.formatearFecha(lista);
 				   	}, function myError(response) {
-				       	console.log(response.statusText);
+				       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            			document.getElementById('myModal').style.display = "flex";
 			    	});
 				}else{
-					window.alert("Por favor seleccione la fecha de finalización para realizar la busqueda");
+					$scope.modalMessage = "Por favor seleccione la fecha de finalización para realizar la busqueda";
+                	document.getElementById('myModal').style.display = "flex";
 				}
 
 			}else{
-				window.alert("Por favor seleccione la fecha de inicio para realizar la busqueda");
+				$scope.modalMessage = "Por favor seleccione la fecha de inicio para realizar la busqueda";
+                document.getElementById('myModal').style.display = "flex";
 			}
 		}
 	};

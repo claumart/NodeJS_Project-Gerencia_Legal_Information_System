@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `CargoEmpleado` (
   PRIMARY KEY (`idCargoEmpleado`))
 ENGINE = InnoDB;
 
+ALTER TABLE `CargoEmpleado` ADD UNIQUE `nombreCargoEmpleado_UNIQUE` (`nombreCargoEmpleado` ASC);
 
 -- -----------------------------------------------------
 -- Table `Empleado`
@@ -50,7 +51,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Empleado` ;
 
 CREATE TABLE IF NOT EXISTS `Empleado` (
-  `numEmpleado` INT NULL AUTO_INCREMENT,
+  `numEmpleado` INT NOT NULL AUTO_INCREMENT,
   `nombreEmpleado` VARCHAR(60) NOT NULL,
   `activo` TINYINT NOT NULL,
   `idCargo` INT NOT NULL,
@@ -740,6 +741,7 @@ INSERT INTO TipoComunidad(nombreTipoComunidad) VALUES('Aldea');
 INSERT INTO TipoComunidad(nombreTipoComunidad) VALUES('Colonia');
 INSERT INTO TipoComunidad(nombreTipoComunidad) VALUES('Barrio');
 INSERT INTO TipoComunidad(nombreTipoComunidad) VALUES('Caserío');
+INSERT INTO TipoComunidad(nombreTipoComunidad) VALUES('Residencial');
 
 INSERT INTO Municipio(nombreMunicipio, codigoMunicipio) VALUES('Distrito Central', 'DC');
 
@@ -758,18 +760,24 @@ INSERT INTO CargoEmpleado(nombreCargoEmpleado) VALUES('Gerente');
 INSERT INTO CargoEmpleado(nombreCargoEmpleado) VALUES('Sub-Gerente');
 
 
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(5419, 'Edgardo Bardales', true, 1, STR_TO_DATE('10-10-1959', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(3155, 'Carolina Arambu', true, 1, STR_TO_DATE('13-11-1971', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(4486, 'Alba Granados', true, 1, STR_TO_DATE('11-12-1956', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(7449, 'Karla Mairena', true, 1, STR_TO_DATE('21-09-1971', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(2061, 'Elsa López', true, 3, STR_TO_DATE('01-08-1958', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(8037, 'María de los Angeles Nuñez', true, 3, STR_TO_DATE('01-08-1962', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(5556, 'Denis Mejía', true, 1, STR_TO_DATE('16-03-1977', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(6968, 'Jorge Godoy', true, 4, STR_TO_DATE('12-12-1972', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(7974, 'Mirian Cruz', true, 1, STR_TO_DATE('03-07-1977', '%d-%m-%Y') );
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(8377, 'Eduardo Andino', true, 1, STR_TO_DATE('26-08-1978', '%d-%m-%Y'));
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(8379, 'Olman Lezama', true, 1, STR_TO_DATE('09-01-1961', '%d-%m-%Y'));
-INSERT INTO Empleado(numEmpleado, nombreEmpleado, activo, idCargo, fechaNacimiento) VALUES(8381, 'Wilmer Nuñez', true, 1, STR_TO_DATE('31-01-1978', '%d-%m-%Y'));
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Edgardo Bardales', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Carolina Arambu', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Alba Granados', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Karla Mairena', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Elsa López', true, 3);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('María de los Angeles Nuñez', true, 3);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Denis Mejía', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Jorge Godoy', true, 4);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Mirian Cruz', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Eduardo Andino', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Olman Lezama', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Wilmer Nuñez', true, 1);
+
+/*INSERT INTO Comunidad(nombreComunidad, idMunicipio, idTipoComunidad) VALUES('El Rosal', 1, 1);
+INSERT INTO Comunidad(nombreComunidad, idMunicipio, idTipoComunidad) VALUES('Miramontes', 1, 2);
+INSERT INTO Comunidad(nombreComunidad, idMunicipio, idTipoComunidad) VALUES('La Guadalupe', 1, 3);
+INSERT INTO Comunidad(nombreComunidad, idMunicipio, idTipoComunidad) VALUES('Güipile', 1, 4);
+INSERT INTO Comunidad(nombreComunidad, idMunicipio, idTipoComunidad) VALUES('Las Hadas', 1, 5);*/
 
 /*ALTER TABLE `empleado` CHANGE `nombresEmpleado` `nombreEmpleado` VARCHAR(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `fichaentradaexpediente` CHANGE `fechaAsignación` `fechaAsignacion` DATETIME NULL DEFAULT NULL;*/

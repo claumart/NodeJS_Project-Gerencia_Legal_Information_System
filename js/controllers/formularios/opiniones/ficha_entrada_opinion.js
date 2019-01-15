@@ -26,6 +26,9 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
     $scope.apoderado = "";
     $scope.urlParams = utilities.getAllUrlParams($window.location.href);
 
+    $scope.closeModal = ()=> {
+        document.getElementById('myModal').style.display = "none";
+    };
 
 	$http({
         method : "POST",
@@ -88,7 +91,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
             $scope.ampm = parametrosFecha['tipoHora'];
             
         }, function myError(response) {
-            console.log(response.statusText);
+            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myModal').style.display = "flex";
         }); 
     };
 
@@ -99,7 +103,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
 
     $scope.validarFormulario = ()=> {
         if($scope.apoderado.length < 46){
-            var apoderadoLegal = $scope.apoderado.trim();
+            var apoderadoLegal = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.apoderado).trim());
         	if($scope.procedencia_select != null){
                 if($scope.num_oficio.length < 31 && $scope.num_oficio.trim().length > 0){
                     var numOficioValidado = utilities.eliminateSpace($scope.num_oficio.toUpperCase().trim());
@@ -121,7 +125,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                     }).then(function mySuccess(response) {
                                         $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                                     }, function myError(response) {
-                                        console.log(response.statusText);
+                                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                        document.getElementById('myModal').style.display = "flex";
                                     });
                                 }else{
                                     $http({
@@ -135,7 +140,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                     }).then(function mySuccess(response) {
                                         limpieza.limpiarRegistrarOpinionForm($scope);
                                     }, function myError(response) {
-                                        console.log(response.statusText);
+                                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                        document.getElementById('myModal').style.display = "flex";
                                     });
                                 }
                             }else if($scope.tipo_fecha == "personalizada"){
@@ -155,7 +161,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                 }).then(function mySuccess(response) {
                                                     $window.location.href = "../../modificacion/modificacion.html#titulo_modificacion";
                                                 }, function myError(response) {
-                                                    console.log(response.statusText);
+                                                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                    document.getElementById('myModal').style.display = "flex";
                                                 });
                                             }else{
                                                 $http({
@@ -169,36 +176,45 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza,
                                                 }).then(function mySuccess(response) {
                                                     limpieza.limpiarRegistrarOpinionForm($scope);
                                                 }, function myError(response) {
-                                                    console.log(response.statusText);
+                                                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                    document.getElementById('myModal').style.display = "flex";
                                                 });
                                             }
                                             
 
                                         }else {
-                                            window.alert("Por favor seleccione un rango de minutos valido entre 0 a 59");
+                                            $scope.modalMessage = "Por favor seleccione un rango de minutos valido entre 0 a 59";
+                                            document.getElementById('myModal').style.display = "flex";
                                         }
                                     }else {
-                                         window.alert("Por favor seleccione una hora valida entre 1 a 12");
+                                        $scope.modalMessage = "Por favor seleccione una hora valida entre 1 a 12";
+                                        document.getElementById('myModal').style.display = "flex";
                                     }
                                 }else {
-                                    window.alert("Por favor seleccione la fecha de entrada del expediente");
+                                    $scope.modalMessage = "Por favor seleccione la fecha de entrada del oficio";
+                                    document.getElementById('myModal').style.display = "flex";
                                 }
                             }
                                         
             			}else{
-            				window.alert("Por favor seleccione el empleado que recibe los expedientes");
+                            $scope.modalMessage = "Por favor seleccione el empleado que recibe los oficios";
+                            document.getElementById('myModal').style.display = "flex";
             			 }
                     }else{
-                        window.alert("El campo Asunto es muy largo o está vacío, por favor ingrese un valor valido y sin espacios");
+                        $scope.modalMessage = "El campo Asunto es muy largo o está vacío, por favor ingrese un valor valido y sin espacios";
+                        document.getElementById('myModal').style.display = "flex";
                     } 
                 }else {
-                    window.alert("El campo Número de oficio es muy largo o está vacío, por favor ingrese un valor valido y sin espacios");
+                    $scope.modalMessage = "El campo Número de oficio es muy largo o está vacío, por favor ingrese un valor valido y sin espacios";
+                    document.getElementById('myModal').style.display = "flex";
                 }
         	}else{
-        		window.alert("Por favor seleccione una dependencia de procedencia");
+                $scope.modalMessage = "Por favor seleccione una dependencia de procedencia";
+                document.getElementById('myModal').style.display = "flex";
         	}
         }else{
-            window.alert("El campo apoderado legal es muy largo");
+            $scope.modalMessage = "El campo apoderado legal es muy largo";
+            document.getElementById('myModal').style.display = "flex";
         }
     
     };
