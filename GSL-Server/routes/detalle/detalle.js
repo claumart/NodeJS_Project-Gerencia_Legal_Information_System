@@ -14,13 +14,16 @@ router.post('/detalle/expediente/obtenerHistorialPrevision', detalleExpedienteCo
 
 router.post('/detalle/opinion/obtenerfichaCompleta', detalleOpinionController.obtenerfichaCompleta);
 
-router.post('/detalle/opinion/obtenerImagenesDictamen', detalleOpinionController.obtenerImagenesDictamen);
+router.post('/detalle/opinion/obtenerPdf', detalleOpinionController.obtenerPdf);
+
+router.post('/detalle/opinion/obtenerWord', detalleOpinionController.obtenerWord);
 
 router.post('/detalle/opinion/obtenerArchivosAdjuntos', detalleOpinionController.obtenerArchivosAdjuntos);
 
 router.post('/detalle/patronato/obtenerfichaCompleta', detallePatronatoController.obtenerfichaCompleta);
 
-router.post('/detalle/patronato/obtenerImagenesDictamen', detallePatronatoController.obtenerImagenesDictamen);
+router.post('/detalle/patronato/obtenerPdf', detallePatronatoController.obtenerPdf);
 
+router.post('/detalle/patronato/obtenerWord', detallePatronatoController.obtenerWord);
 
 module.exports = router;

@@ -78,12 +78,29 @@ detallePatronatoController.obtenerfichaCompleta = (req, res, next) => {
     });
 }
 
-detallePatronatoController.obtenerImagenesDictamen = (req, res, next) => {
+detallePatronatoController.obtenerPdf = (req, res, next) => {
     req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT PaginaDictamen.idDictamen, PaginaDictamen.numeroPagina, PaginaDictamen.urlPagina " + 
-        "FROM FichaEntradaPatronato as fichapatronato INNER JOIN PaginaDictamen ON fichapatronato.idDictamen = PaginaDictamen.idDictamen " + 
-        "WHERE fichapatronato.idFichaEntradaPatronato = ? ORDER BY PaginaDictamen.numeroPagina ASC";
+        var query = "SELECT PdfDictamen.urlPdf " + 
+        "FROM FichaEntradaPatronato as fichapatronato INNER JOIN PdfDictamen ON fichapatronato.idDictamen = PdfDictamen.idDictamen " + 
+        "WHERE fichapatronato.idFichaEntradaPatronato = ?";
+        connection.query(query, [req.body.idFicha], (err, results) => {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            var string=JSON.stringify(results);
+            res.status(status.OK).json(string);
+        });
+    });
+}
+
+detallePatronatoController.obtenerWord = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        var query = "SELECT WordDictamen.urlWord " + 
+        "FROM FichaEntradaPatronato as fichapatronato INNER JOIN WordDictamen ON fichapatronato.idDictamen = WordDictamen.idDictamen " + 
+        "WHERE fichapatronato.idFichaEntradaPatronato = ?";
         connection.query(query, [req.body.idFicha], (err, results) => {
             if (err) {
                 console.log(err);

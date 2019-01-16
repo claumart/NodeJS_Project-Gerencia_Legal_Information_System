@@ -50,12 +50,29 @@ detalleOpinionController.obtenerfichaCompleta = (req, res, next) => {
     });
 }
 
-detalleOpinionController.obtenerImagenesDictamen = (req, res, next) => {
+detalleOpinionController.obtenerPdf = (req, res, next) => {
     req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT PaginaDictamen.idDictamen, PaginaDictamen.numeroPagina, PaginaDictamen.urlPagina " + 
-        "FROM FichaEntradaOpinion as fichaOpinion INNER JOIN PaginaDictamen ON fichaOpinion.idDictamen = PaginaDictamen.idDictamen " + 
-        "WHERE fichaOpinion.idFichaEntradaOpinion = ? ORDER BY PaginaDictamen.numeroPagina ASC";
+        var query = "SELECT PdfDictamen.urlPdf " + 
+        "FROM FichaEntradaOpinion as fichaOpinion INNER JOIN PdfDictamen ON fichaOpinion.idDictamen = PdfDictamen.idDictamen " + 
+        "WHERE fichaOpinion.idFichaEntradaOpinion = ?";
+        connection.query(query, [req.body.idFicha], (err, results) => {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            var string=JSON.stringify(results);
+            res.status(status.OK).json(string);
+        });
+    });
+}
+
+detalleOpinionController.obtenerWord = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        var query = "SELECT WordDictamen.urlWord " + 
+        "FROM FichaEntradaOpinion as fichaOpinion INNER JOIN WordDictamen ON fichaOpinion.idDictamen = WordDictamen.idDictamen " + 
+        "WHERE fichaOpinion.idFichaEntradaOpinion = ?";
         connection.query(query, [req.body.idFicha], (err, results) => {
             if (err) {
                 console.log(err);
@@ -70,15 +87,14 @@ detalleOpinionController.obtenerImagenesDictamen = (req, res, next) => {
 detalleOpinionController.obtenerArchivosAdjuntos = (req, res, next) => {
     req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT PaginaArchivoAdjunto.idDictamen, PaginaArchivoAdjunto.numeroPagina, PaginaArchivoAdjunto.urlPagina " + 
-        "FROM FichaEntradaOpinion as fichaOpinion INNER JOIN PaginaArchivoAdjunto ON fichaOpinion.idDictamen = PaginaArchivoAdjunto.idDictamen " + 
-        "WHERE fichaOpinion.idFichaEntradaOpinion = ? ORDER BY PaginaArchivoAdjunto.numeroPagina ASC";
+        var query = "SELECT ArchivoAdjunto.urlArchivoAdjunto " + 
+        "FROM FichaEntradaOpinion as fichaOpinion INNER JOIN ArchivoAdjunto ON fichaOpinion.idDictamen = ArchivoAdjunto.idDictamen " + 
+        "WHERE fichaOpinion.idFichaEntradaOpinion = ?";
         connection.query(query, [req.body.idFicha], (err, results) => {
             if (err) {
                 console.log(err);
                 return next(err);
             }
-            console.log(results);
             var string=JSON.stringify(results);
             res.status(status.OK).json(string);
         });

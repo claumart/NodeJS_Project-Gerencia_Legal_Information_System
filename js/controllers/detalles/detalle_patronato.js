@@ -42,8 +42,10 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, urlUtil
     $scope.textoBoton = "";
     $scope.slideIndex = 0;
     $scope.registroPrevios = 0;
-    $scope.numeroImagenes = 0;
-    $scope.imagenes;
+    $scope.numPdf = 0;
+    $scope.numWord = 0;
+    //$scope.numeroImagenes = 0;
+    //$scope.imagenes;
 
     $scope.construirGaleria = ()=>{
         if($scope.imagenes.length != null && $scope.imagenes.length > 0){
@@ -78,7 +80,7 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, urlUtil
         }
     };
 
-    // Open the Modal
+    /*// Open the Modal
     $scope.openModal = (n)=> {
         document.getElementById('myModal').style.display = "block";
         $scope.currentSlide(n);
@@ -128,7 +130,7 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, urlUtil
         mySlideContainer.appendChild(img);
         container.appendChild(mySlideContainer);
 
-    }
+    }*/
 
     $http({
         method : "POST",
@@ -160,11 +162,25 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, urlUtil
 
     $http({
         method : "POST",
-        url : $scope.serverUrl + "/detalle/patronato/obtenerImagenesDictamen",
+        url : $scope.serverUrl + "/detalle/patronato/obtenerPdf",
         data : {idFicha : $scope.urlParams.idFicha}
     }).then(function mySuccess(response) {
-        $scope.imagenes = JSON.parse(response.data);
-        $scope.numeroImagenes = $scope.imagenes.length;
+        var pdf = JSON.parse(response.data);
+        $scope.numPdf = pdf.length;
+        if($scope.numPdf>0) $scope.urlPdf = $scope.serverUrl + pdf[0].urlPdf;
+        $scope.construirGaleria();
+    }, function myError(response) {
+        console.log(response.statusText);
+    });
+
+    $http({
+        method : "POST",
+        url : $scope.serverUrl + "/detalle/patronato/obtenerWord",
+        data : {idFicha : $scope.urlParams.idFicha}
+    }).then(function mySuccess(response) {
+        var word = JSON.parse(response.data);
+        $scope.numWord = word.length;
+        if($scope.numWord>0) $scope.urlWord = $scope.serverUrl + word[0].urlWord;
         $scope.construirGaleria();
     }, function myError(response) {
         console.log(response.statusText);

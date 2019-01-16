@@ -43,10 +43,13 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, urlUtil
     $scope.slideIndex = 0;
     $scope.slideAAIndex = 0;
     $scope.registroPrevios = 0;
-    $scope.numeroImagenes = 0;
-    $scope.numeroAA = 0;
-    $scope.imagenes;
-    $scope.archivosAdjuntos;
+    //$scope.numeroImagenes = 0;
+    //$scope.numeroAA = 0;
+    //$scope.imagenes;
+    //$scope.archivosAdjuntos;
+    $scope.numPdf = 0;
+    $scope.numWord = 0;
+    $scope.numAdjunto = 0;
 
     $scope.construirGaleria = ()=>{
         if($scope.imagenes != null && $scope.imagenes.length > 0){
@@ -168,7 +171,7 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, urlUtil
         }
     };
 
-    // Open the Modal
+    /*// Open the Modal
     $scope.openAAModal = (n)=> {
         document.getElementById('myAAModal').style.display = "block";
         $scope.currentAASlide(n);
@@ -218,7 +221,7 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, urlUtil
         mySlideContainer.appendChild(img);
         container.appendChild(mySlideContainer);
 
-    }
+    }*/
 
     $http({
         method : "POST",
@@ -248,24 +251,39 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, urlUtil
 
     $http({
         method : "POST",
-        url : $scope.serverUrl + "/detalle/opinion/obtenerImagenesDictamen",
+        url : $scope.serverUrl + "/detalle/opinion/obtenerPdf",
         data : {idFicha : $scope.urlParams.idFicha}
     }).then(function mySuccess(response) {
-        $scope.imagenes = JSON.parse(response.data);
-        $scope.numeroImagenes = $scope.imagenes.length;
+        var pdf = JSON.parse(response.data);
+        $scope.numPdf = pdf.length;
+        if($scope.numPdf>0) $scope.urlPdf = $scope.serverUrl + pdf[0].urlPdf;
         $scope.construirGaleria();
     }, function myError(response) {
         console.log(response.statusText);
     });
 
-     $http({
+    $http({
+        method : "POST",
+        url : $scope.serverUrl + "/detalle/opinion/obtenerWord",
+        data : {idFicha : $scope.urlParams.idFicha}
+    }).then(function mySuccess(response) {
+        var word = JSON.parse(response.data);
+        $scope.numWord = word.length;
+        if($scope.numWord>0) $scope.urlWord = $scope.serverUrl + word[0].urlWord;
+        $scope.construirGaleria();
+    }, function myError(response) {
+        console.log(response.statusText);
+    });
+
+    $http({
         method : "POST",
         url : $scope.serverUrl + "/detalle/opinion/obtenerArchivosAdjuntos",
         data : {idFicha : $scope.urlParams.idFicha}
     }).then(function mySuccess(response) {
-        $scope.archivosAdjuntos = JSON.parse(response.data);
-        $scope.numeroAA = $scope.archivosAdjuntos.length;
-        $scope.construirGaleriaDeArchivosAdjuntos();
+        var adjunto = JSON.parse(response.data);
+        $scope.numAdjunto = adjunto.length;
+        if($scope.numAdjunto>0) $scope.urlAdjunto = $scope.serverUrl + adjunto[0].urlArchivoAdjunto;
+        $scope.construirGaleria();
     }, function myError(response) {
         console.log(response.statusText);
     });
