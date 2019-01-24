@@ -7,7 +7,7 @@ populateSelectsController.populateDependencia = (req, res, next) => {
     	connection.query('SELECT idDependencia, nombreDependencia FROM Dependencia', [], (err, results) => {
         	if (err) return next(err);
         	var string=JSON.stringify(results);
-        	res.json(string);
+        	res.status(200).json(string);
       	});
       
     });
@@ -20,7 +20,8 @@ populateSelectsController.populateEmpleadoReceptor = (req, res, next) => {
     	connection.query('SELECT numEmpleado, nombreEmpleado FROM Empleado WHERE activo=?', [true], (err, results) => {
         	if (err) return next(err);
         	var string=JSON.stringify(results);
-        	res.json(string);
+        	res.setHeader('Content-Type', 'application/json');
+            res.status(200).json(string);
       	});
       
     });
@@ -33,7 +34,8 @@ populateSelectsController.populateEmpleado = (req, res, next) => {
         connection.query('SELECT numEmpleado, nombreEmpleado, activo, idCargo FROM Empleado', [], (err, results) => {
             if (err) return next(err);
             var string=JSON.stringify(results);
-            res.json(string);
+            res.setHeader('Content-Type', 'application/json');
+            res.status(200).json(string);
         });
       
     });
@@ -47,7 +49,8 @@ populateSelectsController.populateAbogadoAsignado = (req, res, next) => {
     	connection.query(query, [true, 1], (err, results) => {
 	        if (err) return next(err);
 	        var string=JSON.stringify(results);
-	        res.json(string);
+	        res.setHeader('Content-Type', 'application/json');
+            res.status(200).json(string);
       	});
       
     });
@@ -59,7 +62,8 @@ populateSelectsController.populateEstadoExpediente = (req, res, next) => {
     	connection.query('SELECT idEstadoExpediente, nombreEstadoExpediente as nombreEstado FROM EstadoExpediente', [], (err, results) => {
 	        if (err) return next(err);
 	        var string=JSON.stringify(results);
-	        res.json(string);
+	        res.setHeader('Content-Type', 'application/json');
+            res.status(200).json(string);
 	    });
       
     });
@@ -72,7 +76,8 @@ populateSelectsController.populateAsunto = (req, res, next) => {
     	connection.query('SELECT idAsunto, nombreAsunto FROM Asunto', [], (err, results) => {
         if (err) return next(err);
         var string=JSON.stringify(results);
-        res.json(string);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(string);
       });
       
     });
@@ -85,7 +90,8 @@ populateSelectsController.populateAsuntoPatronato = (req, res, next) => {
         connection.query('SELECT idAsuntoPatronato, nombreAsuntoPatronato FROM AsuntoPatronato', [], (err, results) => {
         if (err) return next(err);
         var string=JSON.stringify(results);
-        res.json(string);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(string);
       });
       
     });
@@ -98,7 +104,8 @@ populateSelectsController.populateMunicipio = (req, res, next) => {
         connection.query('SELECT idMunicipio, nombreMunicipio, codigoMunicipio FROM Municipio', [], (err, results) => {
         if (err) return next(err);
         var string=JSON.stringify(results);
-        res.json(string);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(string);
       });
       
     });
@@ -111,7 +118,8 @@ populateSelectsController.populateTipoComunidad = (req, res, next) => {
     	connection.query('SELECT idTipoComunidad, nombreTipoComunidad FROM TipoComunidad', [], (err, results) => {
         if (err) return next(err);
         var string=JSON.stringify(results);
-        res.json(string);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(string);
       });
       
     });
@@ -124,7 +132,8 @@ populateSelectsController.populateCargoEmpleado = (req, res, next) => {
     	connection.query('SELECT idCargoEmpleado, nombreCargoEmpleado FROM CargoEmpleado', [], (err, results) => {
         if (err) return next(err);
         var string=JSON.stringify(results);
-        res.json(string);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(string);
       });
       
     });
@@ -143,7 +152,8 @@ populateSelectsController.populateComunidad = (req, res, next) => {
         connection.query(query, [], (err, results) => {
         if (err) return next(err);
         var string=JSON.stringify(results);
-        res.json(string);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(string);
       });
       
     });
@@ -156,7 +166,8 @@ populateSelectsController.populateCargoEmpleadoSinAbogado = (req, res, next) => 
         connection.query('SELECT idCargoEmpleado, nombreCargoEmpleado FROM CargoEmpleado WHERE NOT idCargoEmpleado=?', [1], (err, results) => {
         if (err) return next(err);
         var string=JSON.stringify(results);
-        res.json(string);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(string);
       });
       
     });

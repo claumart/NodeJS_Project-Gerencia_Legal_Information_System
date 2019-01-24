@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html  lang="es">
+	<head>
+		<title>Gerencia Legal</title>
+		<meta name="author" content="Shirley Claudette Martínez">
+		<meta charset="utf-8">
+	    <meta http-equiv="x-ua-compatible" content="ie=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <link rel="icon" type="image/png" href="images/logo_amdc.png">
+	    <link rel="stylesheet" href="css/foundation.css">
+	    <link rel="stylesheet" href="css/app.css">
+	    <link rel="stylesheet" href="css/header.css">
+	    <link rel="stylesheet" href="css/footer.css">
+	    <script src="js/angular.min.js"></script>
+  </head>
+
+	<body >
+		<header >
+		</header>
+
+		<div class="title-bar" data-responsive-toggle="gsl-menu" data-hide-for="medium">
+			<button class="menu-icon" type="button" data-toggle></button>
+			<div class="title-bar-title">Menu</div>
+		</div>
+
+		<div class="top-bar" id="gsl-menu">
+			<div class="top-bar-left">
+			    <ul class="dropdown menu" data-dropdown-menu="">
+			      	<li style="flex-basis: 60px" title="inicio">
+			      		<a href="index.html"><span><img src="images/blue-home-icon.png" width="100%"></span></a>
+			      	</li>
+			      	<li class="has-submenu">
+			        	<a href="#0">Crear ficha de entrada</a>
+					    <ul class="submenu menu vertical" data-submenu="" id="opcion_registrar">
+						    <li><a href="/expedientes/nueva_ficha_expedientes#titulo_registro">De expedientes</a></li>
+						    <li><a href="/opiniones/nueva_ficha_opiniones#titulo_registro">De opiniones</a></li>
+						    <li><a href="/patronatos/nueva_ficha_patronatos#titulo_registro">De patronatos</a></li>
+					    </ul>
+					</li>
+					<li><a href="#0">Dar seguimiento</a>
+					    <ul class="submenu menu vertical" data-submenu="" id="opcion_seguimiento">
+						    <li><a href="/seguimiento_expedientes#titulo_seguimiento">A expedientes</a></li>
+						    <li><a href="/seguimiento_opiniones#titulo_seguimiento">A opiniones</a></li>
+						    <li><a href="/seguimiento_patronatos#titulo_seguimiento">A patronatos</a></li>
+					    </ul>
+					</li>
+					<li><a href="/buscar">Buscar</a></li>
+					<li><a href="/modificacion">Modificar Fichas</a></li>
+					<li><a href="/modulo_administrador">Opciones de Administrador</a></li>
+			    </ul>
+			</div>	
+		</div>
+
+		<footer>
+			
+		</footer>
+		<script src="js/vendor/jquery.js"></script>
+	    <script src="js/vendor/what-input.js"></script>
+	    <script src="js/vendor/foundation.js"></script>
+	    <script src="js/app.js"></script>
+	    <script src="js/header.js"></script>
+	    <script src="js/footer.js"></script>
+	    <script type="text/javascript">
+
+	    	window.onload = function(){
+	    		loadHeader();
+	    		loadFooter();
+
+	    	}
+	    </script>
+
+	</body>
+</html>

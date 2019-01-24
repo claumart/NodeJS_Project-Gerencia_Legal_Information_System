@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html  lang="es">
+	<head>
+		<title>Gerencia Legal</title>
+		<meta name="author" content="Shirley Claudette Martínez">
+		<meta charset="utf-8">
+	    <meta http-equiv="x-ua-compatible" content="ie=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <link rel="icon" type="image/png" href="/images/logo_amdc.png">
+	    <link rel="stylesheet" href="/css/foundation.css">
+	    <link rel="stylesheet" href="/css/app.css">
+	    <link rel="stylesheet" href="/css/modal.css">
+	    <link rel="stylesheet" href="/css/login.css">
+	    <script src="/js/angular.min.js"></script>
+  </head>
+
+	<body ng-app="loginApp">
+
+		<div id="barra">
+			<img src="/images/logo_amdc.png" width="35px" height="45px"><h3>AMDC - GSL</h3>
+		</div>
+		
+		<div id="formContainer" ng-controller="loginCtrl">
+			<div class="grid-x grid-padding-x">
+	        	<div class="small-12 cell">
+	          		<h2>Bienvenido al Sistema</h2>
+	        	</div>
+	      	</div>
+			<form>
+			
+				<div class="grid-x grid-padding-x">
+	        		<div class="small-12 cell">
+	          			<h5>Ingrese sus Credenciales</h5>
+	        		</div>
+	      		</div>
+	      		<div class="grid-x grid-padding-x">
+	        		<div class="small-12 cell">
+	          			<label>Id de Usuario:</label>
+	          			<input type="text" name="user_id_input" id="user_id_input" ng-model="user_id_input">
+	        		</div>
+	      		</div>
+	      		<div class="grid-x grid-padding-x">  	
+			        <div class="small-12 cell">
+			           	<label class="alerta" ng-show="mostrarIdInvalido">El id de usuario es invalido</label>
+			        </div>
+			    </div>
+	      		<div class="grid-x grid-padding-x">
+	        		<div class="small-12 cell">
+	          			<label>Contraseña:</label>
+	          			<input type="password" name="user_password" id="user_password" ng-model="user_password">
+	        		</div>
+	      		</div>
+	      		<div class="grid-x grid-padding-x">  	
+			        <div class="small-12 cell">
+			           	<label class="alerta" ng-show="mostrarPassInvalido">La contraseña es incorrecta</label>
+			        </div>
+			    </div>
+			</form>
+			<div class="grid-x grid-padding-x">
+			    <fieldset class="small-12 cell">
+			      	<div class="center">
+			        	<button class="button" id="acceder_btn" ng-click="validarAcceso()">Acceder</button>
+			        </div>		
+		   		</fieldset>
+	   		</div>
+			<div id="myModal" class="modal">
+				<div id="myContent" class="modal-content">
+					<p id="textModal">{{modalMessage}}</p>
+				    <div class="grid-x grid-padding-x">
+					   	<fieldset class="small-12 cell">
+						    <div class="center">
+								<button class="button secondary" ng-click="closeModal()">Aceptar</button>	
+							</div>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+
+		
+		<script src="/js/vendor/jquery.js"></script>
+	    <script src="/js/vendor/what-input.js"></script>
+	    <script src="/js/vendor/foundation.js"></script>
+	    <script src="/js/app.js"></script>
+	    <script src="/js/applications/loginApp.js"></script>
+	    <script src="/js/controllers/login/login.js"></script>
+
+	</body>
+</html>

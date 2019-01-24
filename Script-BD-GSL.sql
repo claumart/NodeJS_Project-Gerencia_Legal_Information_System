@@ -604,12 +604,14 @@ DROP TABLE IF EXISTS `Privilegio` ;
 CREATE TABLE IF NOT EXISTS `Privilegio` (
   `idPrivilegio` INT NOT NULL AUTO_INCREMENT,
   `nombrePrivilegio` VARCHAR(30) NOT NULL,
-  `descripcionPrivilegio` VARCHAR(50) NULL,
+  `codigoPrivilegio` VARCHAR(6) NOT NULL,
+  `descripcionPrivilegio` VARCHAR(70) NULL,
   PRIMARY KEY (`idPrivilegio`))
 ENGINE = InnoDB;
 
 ALTER TABLE `Privilegio` ADD INDEX `nombrePrivilegio_UNIQUE` (`nombrePrivilegio` ASC);
 
+ALTER TABLE `Privilegio` ADD INDEX `codigoPrivilegio_UNIQUE` (`codigoPrivilegio` ASC);
 
 -- -----------------------------------------------------
 -- Table `Usuario`
@@ -619,16 +621,19 @@ DROP TABLE IF EXISTS `Usuario` ;
 CREATE TABLE IF NOT EXISTS `Usuario` (
   `idUsuario` INT NOT NULL AUTO_INCREMENT,
   `numEmpleado` INT NOT NULL,
+  `identificacionUsuario` VARCHAR(16) NOT NULL,
+  `password` CHAR(64) NOT NULL,
   PRIMARY KEY (`idUsuario`),
   CONSTRAINT `Usuario_numEmpleado_FK`
     FOREIGN KEY (`numEmpleado`)
     REFERENCES `Empleado` (`numEmpleado`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 ALTER TABLE `Usuario` ADD UNIQUE `Usuario_UNIQUE` (`numEmpleado` ASC);
 
+ALTER TABLE `Usuario` ADD UNIQUE `identificacionUsuario_UNIQUE` (`identificacionUsuario` ASC);
 
 -- -----------------------------------------------------
 -- Table `PrivilegioXUsuario`
@@ -746,11 +751,24 @@ INSERT INTO TipoComunidad(nombreTipoComunidad) VALUES('Residencial');
 INSERT INTO Municipio(nombreMunicipio, codigoMunicipio) VALUES('Distrito Central', 'DC');
 
 
-INSERT INTO Privilegio(nombrePrivilegio, descripcionPrivilegio) VALUES('Visualizar', 'Derecho a usar la opción de busqueda y visualizar los registros');
-INSERT INTO Privilegio(nombrePrivilegio, descripcionPrivilegio) VALUES('Crear', 'Permiso para crear las diferentes fichas de entreada y seguimiento');
-INSERT INTO Privilegio(nombrePrivilegio, descripcionPrivilegio) VALUES('Modificar', 'Permiso para modificar las diferentes fichas guardadas en el sistema');
-INSERT INTO Privilegio(nombrePrivilegio, descripcionPrivilegio) VALUES('Archivar', 'Derecho a utilizar la opción de archivar');
-INSERT INTO Privilegio(nombrePrivilegio, descripcionPrivilegio) VALUES('Administrar', 'Derecho a utilizar todas las funciones del sitema');
+INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 
+VALUES('Recibir', 'rcb', 'Derecho a llenar y modificar los formularios de entrada');
+INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 
+VALUES('Asignar', 'asng', 'Derecho a llenar y modificar los formularios de asignación');
+INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 
+VALUES('Descargar', 'dscg', 'Derecho a llenar y modificar los formularios de Descargo');
+INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 
+VALUES('RevisarExp', 'rvsexp', 'Derecho a llenar y modificar el formulario de revisión de expediente');
+INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 
+VALUES('RevisarOpn', 'rvsopn', 'Derecho a llenar y modificar el formulario de revisión de opinión');
+INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 
+VALUES('RevisarPtt', 'rvsptt', 'Derecho a llenar y modificar el formulario de revisión de patronato');
+INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 
+VALUES('Remitir', 'rmt', 'Derecho a llenar y modificar los formularios de remisión');
+INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 
+VALUES('Visualizar', 'vslz', 'Derecho de ingresar al modulo de busqueda y visualizar registros');
+INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 
+VALUES('Administrar', 'admin', 'Derecho a utilizar todas las funciones de administrador del sistema');
 
 
 INSERT INTO CargoEmpleado(nombreCargoEmpleado) VALUES('Abogada(o)');
