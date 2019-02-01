@@ -14,12 +14,23 @@ app.service("utilities", function() {
 });
 
 app.controller("seguimientoCtrl", function($scope, $http, $window, utilities) {
-	$scope.accion = "";
+	$scope.privilegios = [];
+    $scope.accion = "";
     $scope.textoBoton = "";
 
     $scope.closeModal = ()=> {
         document.getElementById('myModal').style.display = "none";
     };
+
+    $http({
+        method : "POST",
+        url : "/usuario/obtenerPrivilegios",
+        headers: {'Content-Type': 'application/json'}
+    }).then(function mySuccess(response) {
+        $scope.privilegios = JSON.parse(response.data);
+    }, function myError(response) {
+        console.log(response.statusText);
+    });
 
 	$scope.mostrarExpedientesRecibidos = ()=> {
 		$scope.accion = "asignar";

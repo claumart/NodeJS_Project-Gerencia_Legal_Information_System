@@ -22,7 +22,7 @@ app.service("utilities", function() {
 	};
 });
 
-app.controller("administratorCtrl", function($scope, $http, utilities) {
+app.controller("administratorCtrl", function($scope, $http, utilities, $window) {
 	$scope.tipo_ficha_select = "exp";
 	$scope.parametro_admin = "fichas";
 	$scope.buscar_ficha_input = "";
@@ -36,7 +36,18 @@ app.controller("administratorCtrl", function($scope, $http, utilities) {
 	$scope.activo2 = "";
 	$scope.nuevo_cargo_input = "";
 	$scope.cargo_input = "";
-
+    $scope.nombre_comunidad_input = "";
+    $scope.nuevo_user_id_input = "";
+    $scope.nuevo_user_password_input = "";
+    $scope.nuevo_user_password_verification_input = "";
+    $scope.user_id_input = "";
+    $scope.user_password_input = "";
+    $scope.user_password_verification_input = "";
+    $scope.mostrarEmpleadoConUsuario = false;
+    $scope.mostrarIdExistente1 = false;
+    $scope.mostrarIdExistente2 = false;
+    console.log($scope.user_id_input);
+    
 	PopularDependencias = ()=>{
 		$http({
 	    	method : "POST",
@@ -141,6 +152,45 @@ app.controller("administratorCtrl", function($scope, $http, utilities) {
     	});
     };
 
+    PopularPrivilegios = ()=>{
+        $http({
+            method : "POST",
+            url : "/populate/checkbox/privilegio",
+            headers: {'Content-Type': 'application/json'}
+        }).then(function mySuccess(response) {
+            var lista = JSON.parse(response.data);
+            $scope.privilegioList = lista;
+        }, function myError(response) {
+            console.log(response.statusText);
+        });
+    };
+
+    PopularEmpleadosSinUsuario = ()=>{
+        $http({
+            method : "POST",
+            url : "/populate/select/empleado/sinUsuario",
+            headers: {'Content-Type': 'application/json'}
+        }).then(function mySuccess(response) {
+            var lista = JSON.parse(response.data);
+            $scope.empleadoSinUsuarioList = lista;
+        }, function myError(response) {
+            console.log(response.statusText);
+        });
+    };
+
+    PopularUsuarios = ()=>{
+        $http({
+            method : "POST",
+            url : "/populate/select/usuario",
+            headers: {'Content-Type': 'application/json'}
+        }).then(function mySuccess(response) {
+            var lista = JSON.parse(response.data);
+            $scope.usuarioList = lista;
+        }, function myError(response) {
+            console.log(response.statusText);
+        });
+    };
+
     PopularDependencias();
     PopularAsuntos();
     PopularEmpleados();
@@ -149,6 +199,9 @@ app.controller("administratorCtrl", function($scope, $http, utilities) {
     PopularComunidades();
     PopularMunicipios();
     PopularTiposComunidad();
+    PopularPrivilegios();
+    PopularEmpleadosSinUsuario();
+    PopularUsuarios();
 
     $scope.closeModal = ()=> {
         document.getElementById('myModal').style.display = "none";
@@ -278,6 +331,28 @@ app.controller("administratorCtrl", function($scope, $http, utilities) {
     		$scope.modalFeedback = "Seleccione una comunidad para poder realizar una acción";
     		document.getElementById('myFeedbackModal').style.display = "flex";
     	}
+    };
+
+    $scope.AbrirModalEliminarUsuario = ()=> {
+        if($scope.usuario_select != null){
+            $scope.modalMessage = "¿Está seguro que desea eliminar el usuario seleccionado?.";
+            document.getElementById('aceptButton').setAttribute('onclick', 'angular.element(this).scope().EliminarUsuario()');
+            document.getElementById('myModal').style.display = "flex";
+        }else{
+            $scope.modalFeedback = "Seleccione un usuario para poder realizar una acción";
+            document.getElementById('myFeedbackModal').style.display = "flex";
+        }
+    };
+
+    $scope.AbrirModalModificarUsuario = ()=> {
+        if($scope.usuario_select != null){
+            $scope.modalMessage = "¿Está seguro que desea realizar los cambios al usuario seleccionado?";
+            document.getElementById('aceptButton').setAttribute('onclick', 'angular.element(this).scope().ModificarUsuario()');
+            document.getElementById('myModal').style.display = "flex";
+        }else{
+            $scope.modalFeedback = "Seleccione un usuario para poder realizar una acción";
+            document.getElementById('myFeedbackModal').style.display = "flex";
+        }
     };
 
     $scope.LimpiarTablasDeFichas = ()=>{
@@ -651,13 +726,17 @@ app.controller("administratorCtrl", function($scope, $http, utilities) {
                 headers: {'Content-Type': 'application/json'},
 				data : {numEmpleado : $scope.empleado_select.numEmpleado}
 			}).then(function mySuccess(response) {
-				$scope.empleado_input = "";
-				$scope.actual_cargo_empleado_select = null;
-				$scope.activo2 = "";
-				$scope.empleado_select = null;
-				$scope.modalFeedback = response.data.message;
-    			document.getElementById('myFeedbackModal').style.display = "flex";
-				PopularEmpleados();
+                if(response.data.message == "Si"){
+                    $window.location.href = "/";
+                }else{
+                    $scope.empleado_input = "";
+                    $scope.actual_cargo_empleado_select = null;
+                    $scope.activo2 = "";
+                    $scope.empleado_select = null;
+                    $scope.modalFeedback = response.data.message;
+                    document.getElementById('myFeedbackModal').style.display = "flex";
+                    PopularEmpleados();
+                }
 			}, function myError(response) {
 				console.log(response.statusText);
 				$scope.modalFeedback = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
@@ -883,4 +962,303 @@ app.controller("administratorCtrl", function($scope, $http, utilities) {
     	}
     };
 
+    $scope.LlenarDatosUsuario = async ()=>{
+        $scope.mostrarEmpleadoConUsuario = false;
+        $scope.mostrarIdExistente2 = false;
+        if($scope.usuario_select != null){
+            var checkboxes = document.getElementsByClassName('user_checkbox');
+            for(checkbox in checkboxes){
+                checkboxes[checkbox].checked = false;
+            }
+            for(let i = 0; i<$scope.empleadoList.length; i++){
+                if($scope.usuario_select.numEmpleado == $scope.empleadoList[i].numEmpleado){
+                    $scope.user_empleado_select = $scope.empleadoList[i];
+                    break;
+                }
+            }
+            $scope.user_id_input = $scope.usuario_select.identificacionUsuario;
+            $scope.user_password_input = $scope.usuario_select.password;
+            $scope.user_password_verification_input = $scope.usuario_select.password;
+        }
+        await $http({
+            method : "POST",
+            url : "/extraInfo/usuario/obtenerPrivilegios",
+            headers: {'Content-Type': 'application/json'},
+            data : {idUsuario : $scope.usuario_select.idUsuario}
+        }).then(function mySuccess(response) {
+            var lista = JSON.parse(response.data);
+            $scope.privilegiosUsuarioActual = lista.map(function(value, index, array){return value.idPrivilegio;});
+            for(let i = 0; i < lista.length;i++){
+                for(checkbox in checkboxes){
+                    if(checkboxes[checkbox].value == lista[i].idPrivilegio){
+                        checkboxes[checkbox].checked = true;
+                        break;
+                    } 
+                }
+            }
+        }, function myError(response) {
+            $scope.modalFeedback = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+            document.getElementById('myFeedbackModal').style.display = "flex";
+        });
+    };
+
+    $scope.RegistrarUsuario = ()=>{
+        $scope.mostrarIdExistente1 = false;
+         if($scope.nuevo_user_empleado_select != null){
+            if($scope.nuevo_user_id_input.length < 27 && $scope.nuevo_user_id_input.trim().length > 3){
+                if($scope.nuevo_user_id_input.search(/(á|é|í|ó|ú|Á|É|Í|Ó|Ú| |ü|Ü)+/g) == -1){    
+                    $http({
+                        method : "POST",
+                        url :"/administrar/verificar/existeUserId",
+                        headers: {'Content-Type': 'application/json'},
+                        data : {userId : $scope.nuevo_user_id_input}
+                    }).then(function mySuccess(response) {
+                        if(!response.data){
+                            if($scope.nuevo_user_password_input.length < 21 && $scope.nuevo_user_password_input.trim().length > 6){
+                                if($scope.nuevo_user_password_input == $scope.nuevo_user_password_verification_input){
+                                    var checkboxes = document.getElementsByClassName('new_user_checkbox');
+                                    var arrayCheckboxes = [];
+                                    for(checkbox in checkboxes){
+                                        if(checkboxes[checkbox].checked) arrayCheckboxes.push(checkboxes[checkbox].value);
+                                    }
+                                    if(arrayCheckboxes.length > 0){
+                                        $http({
+                                            method : "POST",
+                                            url : "/administrar/registrar/usuario",
+                                            headers: {'Content-Type': 'application/json'},
+                                            data : {numEmpleado : $scope.nuevo_user_empleado_select.numEmpleado, 
+                                            identificacionUsuario : $scope.nuevo_user_id_input, 
+                                            password : $scope.nuevo_user_password_input, passwordVerification : $scope.nuevo_user_password_verification_input,
+                                            privilegios : arrayCheckboxes}
+                                        }).then(function mySuccess(response) {
+                                            $scope.nuevo_user_empleado_select = null;
+                                            $scope.nuevo_user_id_input = "";
+                                            $scope.nuevo_user_password_input = "";
+                                            $scope.nuevo_user_password_verification_input = "";
+                                            for(checkbox in checkboxes){
+                                                checkboxes[checkbox].checked = false;
+                                            }
+                                            PopularUsuarios();
+                                            PopularEmpleadosSinUsuario();
+                                        }, function myError(response) {
+                                            console.log(response.statusText);
+                                            $scope.modalFeedback = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                            document.getElementById('myFeedbackModal').style.display = "flex";
+                                        });
+                                    }else{
+                                        $scope.modalFeedback = "Por favor seleccione al menos un privilegio para asignar a la cuenta de usuario";
+                                        document.getElementById('myFeedbackModal').style.display = "flex";
+                                    }
+                                }else{
+                                    $scope.modalFeedback = "Las contraseñas no coinciden";
+                                    document.getElementById('myFeedbackModal').style.display = "flex";
+                                }
+                            }else{
+                                $scope.modalFeedback = "Por favor escriba una contraseña de 6 a 20 caracteres";
+                                document.getElementById('myFeedbackModal').style.display = "flex";
+                            }
+                        }else{
+                            $scope.mostrarIdExistente1 = true;
+                        }
+                    }, function myError(response) {
+                        console.log(response.statusText);
+                        $scope.modalFeedback = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                        document.getElementById('myFeedbackModal').style.display = "flex";
+                    });
+                }else{
+                    $scope.modalFeedback = "El campo Identificación de Cuenta de Usuario contiene caracteres invalidos, por favor evite usar tildes, diéresis y espacios";
+                    document.getElementById('myFeedbackModal').style.display = "flex";
+                }
+            }else{
+                $scope.modalFeedback = "El campo Identificación de Cuenta de Usuario es muy largo o está vacío";
+                document.getElementById('myFeedbackModal').style.display = "flex";
+            }
+        }else{
+            $scope.modalFeedback = "Por favor seleccione un empleado";
+            document.getElementById('myFeedbackModal').style.display = "flex";
+        }
+    };
+
+    $scope.EliminarUsuario = ()=>{
+        document.getElementById('myModal').style.display = "none";
+        if($scope.usuario_select != null){
+            $http({
+                method : "POST",
+                url : "/administrar/eliminar/usuario",
+                headers: {'Content-Type': 'application/json'},
+                data : {idUsuario : $scope.usuario_select.idUsuario}
+            }).then(function mySuccess(response) {
+                if(!response.data){
+                    var checkboxes = document.getElementsByClassName('user_checkbox');
+                    $scope.user_empleado_select = null;
+                    $scope.user_id_input = "";
+                    $scope.user_password_input = "";
+                    $scope.user_password_verification_input = "";
+                    for(checkbox in checkboxes){
+                        checkboxes[checkbox].checked = false;
+                    }
+                    $scope.usuario_select = null;
+                    $scope.modalFeedback = "Registro eliminado correctamente";
+                    document.getElementById('myFeedbackModal').style.display = "flex";
+                    PopularUsuarios();
+                    PopularEmpleadosSinUsuario();
+                }else{
+                    $window.location.href = "/";
+                }
+            }, function myError(response) {
+                console.log(response.statusText);
+                $scope.modalFeedback = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                document.getElementById('myFeedbackModal').style.display = "flex";
+            });
+        }else{
+            $scope.modalFeedback = "Seleccione un usuario para realizar una acción";
+            document.getElementById('myFeedbackModal').style.display = "flex";
+        }
+    };
+
+    $scope.ModificarUsuario = ()=>{
+        document.getElementById('myModal').style.display = "none";
+        if($scope.user_password_input.length < 21 && $scope.user_password_input.trim().length > 6){
+            if($scope.user_password_input == $scope.user_password_verification_input){
+                var checkboxes = document.getElementsByClassName('user_checkbox');
+                var arrayCheckboxes = [];
+                for(checkbox in checkboxes){
+                    if(checkboxes[checkbox].checked) arrayCheckboxes.push(parseInt(checkboxes[checkbox].value, 10));
+                }
+                if(arrayCheckboxes.length > 0){
+                    $http({
+                        method : "POST",
+                        url : "/administrar/modificar/usuario",
+                        headers: {'Content-Type': 'application/json'},
+                        data : {numEmpleado : $scope.user_empleado_select.numEmpleado, 
+                        identificacionUsuario : $scope.user_id_input, 
+                        password : $scope.user_password_input, passwordVerification : $scope.user_password_verification_input,
+                        privilegios : arrayCheckboxes, privilegiosAntiguos : $scope.privilegiosUsuarioActual,
+                        numEmpleadoOld : $scope.usuario_select.numEmpleado, identificacionUsuarioOld : $scope.usuario_select.identificacionUsuario,
+                        idUsuario : $scope.usuario_select.idUsuario}
+                    }).then(function mySuccess(response) {
+                        $scope.user_empleado_select = null;
+                        $scope.user_id_input = "";
+                        $scope.user_password_input = "";
+                        $scope.user_password_verification_input = "";
+                        for(checkbox in checkboxes){
+                            checkboxes[checkbox].checked = false;
+                        }
+                        $scope.usuario_select = null;
+                        PopularUsuarios();
+                        PopularEmpleadosSinUsuario();
+                    }, function myError(response) {
+                        console.log(response.statusText);
+                        $scope.modalFeedback = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                        document.getElementById('myFeedbackModal').style.display = "flex";
+                    });
+                }else{
+                    $scope.modalFeedback = "Por favor seleccione al menos un privilegio para asignar a la cuenta de usuario";
+                    document.getElementById('myFeedbackModal').style.display = "flex";
+                }
+            }else{
+                $scope.modalFeedback = "Las contraseñas no coinciden";
+                document.getElementById('myFeedbackModal').style.display = "flex";
+            }
+        }else{
+            $scope.modalFeedback = "Por favor escriba una contraseña de 6 a 20 caracteres";
+            document.getElementById('myFeedbackModal').style.display = "flex";
+        }
+    };
+
+
+    $scope.ValidarModificarUsuario =()=>{
+        $scope.mostrarEmpleadoConUsuario = false;
+        $scope.mostrarIdExistente2 = false;
+        if($scope.usuario_select != null){
+            if($scope.user_empleado_select != null){
+                if($scope.usuario_select.numEmpleado != $scope.user_empleado_select.numEmpleado){
+                    $http({
+                        method : "POST",
+                        url : "/administrar/verificar/empleadoConUsuario",
+                        headers: {'Content-Type': 'application/json'},
+                        data : {numEmpleado : $scope.user_empleado_select.numEmpleado}
+                    }).then(function mySuccess(response) {
+                        if(!response.data){
+                            if($scope.user_id_input.length < 27 && $scope.user_id_input.trim().length > 3){
+                                if($scope.user_id_input.search(/(á|é|í|ó|ú|Á|É|Í|Ó|Ú| |ü|Ü)+/g) == -1){
+                                    if(!($scope.user_id_input == $scope.usuario_select.identificacionUsuario)){
+                                        $http({
+                                            method : "POST",
+                                            url :"/administrar/verificar/existeUserId",
+                                            headers: {'Content-Type': 'application/json'},
+                                            data : {userId : $scope.user_id_input}
+                                        }).then(function mySuccess(response) {
+                                            if(!response.data){
+                                                $scope.AbrirModalModificarUsuario();
+                                            }else{
+                                                $scope.mostrarIdExistente2 = true;
+                                            }
+                                        }, function myError(response) {
+                                            console.log(response.statusText);
+                                            $scope.modalFeedback = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                            document.getElementById('myFeedbackModal').style.display = "flex";
+                                        });
+                                    }else{
+                                        $scope.AbrirModalModificarUsuario();
+                                    }
+                                    
+                                }else{
+                                    $scope.modalFeedback = "El campo Identificación de Cuenta de Usuario contiene caracteres invalidos, por favor evite usar tildes, diéresis y espacios";
+                                    document.getElementById('myFeedbackModal').style.display = "flex";
+                                }
+                            }else{
+                                $scope.modalFeedback = "El campo Identificación de Cuenta de Usuario es muy largo o está vacío";
+                                document.getElementById('myFeedbackModal').style.display = "flex";
+                            }
+                        }else{
+                            $scope.mostrarEmpleadoConUsuario = true;
+                        }
+                    }, function myError(response) {
+                        console.log(response.statusText);
+                        $scope.modalFeedback = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                        document.getElementById('myFeedbackModal').style.display = "flex";
+                    });
+                }else {
+                    if($scope.user_id_input.length < 27 && $scope.user_id_input.trim().length > 3){
+                        if($scope.user_id_input.search(/(á|é|í|ó|ú|Á|É|Í|Ó|Ú| |ü|Ü)+/g) == -1){
+                            if(!($scope.user_id_input == $scope.usuario_select.identificacionUsuario)){
+                                $http({
+                                    method : "POST",
+                                    url :"/administrar/verificar/existeUserId",
+                                    headers: {'Content-Type': 'application/json'},
+                                    data : {userId : $scope.user_id_input}
+                                }).then(function mySuccess(response) {
+                                    if(!response.data){
+                                        $scope.AbrirModalModificarUsuario();
+                                    }else{
+                                        $scope.mostrarIdExistente2 = true;
+                                    }
+                                }, function myError(response) {
+                                    console.log(response.statusText);
+                                    $scope.modalFeedback = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                    document.getElementById('myFeedbackModal').style.display = "flex";
+                                });
+                            }else{
+                                $scope.AbrirModalModificarUsuario();
+                            }
+                                
+                        }else{
+                            $scope.modalFeedback = "El campo Identificación de Cuenta de Usuario contiene caracteres invalidos, por favor evite usar tildes, diéresis y espacios";
+                            document.getElementById('myFeedbackModal').style.display = "flex";
+                        }
+                    }else{
+                        $scope.modalFeedback = "El campo Identificación de Cuenta de Usuario es muy largo o está vacío";
+                        document.getElementById('myFeedbackModal').style.display = "flex";
+                    }
+                }
+            }else{
+                $scope.modalFeedback = "Por favor seleccione un empleado";
+                document.getElementById('myFeedbackModal').style.display = "flex";
+            }
+        }else{
+            $scope.modalFeedback = "Seleccione un usuario para realizar una acción";
+            document.getElementById('myFeedbackModal').style.display = "flex";
+        }
+    };
 });

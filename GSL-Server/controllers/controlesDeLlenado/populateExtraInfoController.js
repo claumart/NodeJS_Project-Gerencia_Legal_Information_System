@@ -114,5 +114,18 @@ populateExtraInfoController.existeDictamenMod = (req, res, next) => {
     });
 }
 
+populateExtraInfoController.obtenerPrivilegiosDeUsuario = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        var query = "SELECT PrivilegioXUsuario.idPrivilegio FROM PrivilegioXUsuario WHERE PrivilegioXUsuario.idUsuario = ?";
+        connection.query(query, [req.body.idUsuario], (err, results) => {
+            var string=JSON.stringify(results);
+            res.setHeader('Content-Type', 'application/json');
+            res.status(200).json(string);
+        });
+      
+    });
+}
+
 
 module.exports = populateExtraInfoController;

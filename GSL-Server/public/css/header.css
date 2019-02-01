@@ -27,3 +27,15 @@ header img {
 	padding: 0;
 	position: inline;
 }
+
+#img-user {
+	margin-right: 4px;
+}
+
+#userOptions {
+	float: right;
+}
+
+.menu a, .menu .button {
+    line-height: 2;
+}

@@ -10,5 +10,7 @@ router.post('/usuario/iniciarSesion', usuarioController.iniciarSesion);
 
 router.post('/usuario/obtenerPrivilegios', usuarioController.obtenerPrivilegios);
 
+router.post('/usuario/comprobar/password', usuarioController.comprobarPassword);
 
+router.post('/usuario/cambiar/password', usuarioController.cambiarPassword);
 module.exports = router;

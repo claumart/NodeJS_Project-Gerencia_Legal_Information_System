@@ -662,18 +662,35 @@ administradorController.eliminarEmpleado = (req, res, next) => {
         var numeroRegistrosOpn;
         var numeroRegistrosPtt;
         var numeroRegistrosPrevision;
+        var numEmpleado;
         var promise = new Promise((resolve, reject)=>{
-            connection.query('SELECT COUNT(idFichaEntradaExpediente) as numeroRegistros FROM FichaEntradaExpediente WHERE ' +
-            'idEmpleadoReceptor = ? OR idAbogadoAsignado = ?', [req.body.numEmpleado, req.body.numEmpleado], (err, results) => {
-                if (err) {
-                    console.log(err);
-                    return next(err);
-                }
-                resolve(results[0].numeroRegistros);
-            });
+            connection.query('SELECT numEmpleado FROM Usuario WHERE identificacionUsuario = ?', 
+	        [req.session.userId], (err, results) => {
+	            if (err) {
+	                console.log(err);
+	                return next(err);
+	            }
+	            numEmpleado = results[0].numEmpleado;
+	            resolve("");
+	        });
         });
 
         promise.then((result)=>{
+        	return new Promise((resolve, reject)=>{
+        		connection.query('SELECT COUNT(idFichaEntradaExpediente) as numeroRegistros FROM FichaEntradaExpediente WHERE ' +
+	            'idEmpleadoReceptor = ? OR idAbogadoAsignado = ?', [req.body.numEmpleado, req.body.numEmpleado], (err, results) => {
+	                if (err) {
+	                    console.log(err);
+	                    return next(err);
+	                }
+	                resolve(results[0].numeroRegistros);
+	            });
+        	});
+        }, (err)=>{
+        	console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
             numeroRegistrosExp = result;
             return new Promise((resolve, reject)=>{
                 connection.query('SELECT COUNT(idFichaEntradaOpinion) as numeroRegistros FROM FichaEntradaOpinion WHERE ' +
@@ -739,7 +756,12 @@ administradorController.eliminarEmpleado = (req, res, next) => {
                             res.status(500).send(err);
                             return next(err);
                         }
-                        res.status(status.OK).json({ message: 'Registro eliminado correctamente' });
+                        if(numEmpleado == req.body.numEmpleado){
+				        	req.session = null;
+				        	res.status(status.OK).json({ message: 'Si' });
+				        }else{
+				            res.status(status.OK).json({ message: 'Registro eliminado correctamente' });
+				        }  
                     });
                 }
             });       
@@ -754,14 +776,36 @@ administradorController.eliminarEmpleado = (req, res, next) => {
 administradorController.actualizarEmpleado = (req, res, next) => {
     req.getConnection((err, connection)=> {
         if (err) return next(err);
-        connection.query("UPDATE Empleado SET nombreEmpleado = ?, activo = ?, idCargo = ?  WHERE numEmpleado = ?", 
-        [req.body.nombreEmpleado, req.body.activo, req.body.idCargo, req.body.numEmpleado], (err, rows) => {
-            if (err) {
-                console.log(err);
-                res.status(500).send(err);
-                return next(err);
-            }
-            res.status(status.OK).json({ message: 'Registro guardado correctamente' });
+        var promise = new Promise((resolve, reject)=>{
+            connection.query('SELECT numEmpleado FROM Usuario WHERE identificacionUsuario = ?', 
+	        [req.session.userId], (err, results) => {
+	            if (err) {
+	                console.log(err);
+	                return next(err);
+	            }
+	            resolve(results[0].numEmpleado);
+	        });
+        });
+
+        promise.then((result)=>{
+        	return new Promise((resolve, reject)=>{
+        		connection.query("UPDATE Empleado SET nombreEmpleado = ?, activo = ?, idCargo = ?  WHERE numEmpleado = ?", 
+		        [req.body.nombreEmpleado, req.body.activo, req.body.idCargo, req.body.numEmpleado], (err, rows) => {
+		            if (err) {
+		                console.log(err);
+		                res.status(500).send(err);
+		                return next(err);
+		            }
+		            if(result == req.body.numEmpleado){
+				        req.session.nombreEmpleado = req.body.nombreEmpleado;
+				    }
+				    res.status(status.OK).json({ message: 'Registro actualizado correctamente' });  
+		        });
+        	});
+        }, (err)=>{
+        	console.log(err);
+            res.status(500).send(err);
+            return next(err);
         });
     });
 }
@@ -892,6 +936,322 @@ administradorController.actualizarComunidad = (req, res, next) => {
     });
 }
 
+administradorController.empleadoPoseeUsuario = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        connection.query('SELECT idUsuario FROM Usuario WHERE numEmpleado = ?', 
+        [req.body.numEmpleado], (err, results) => {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            if(results.length > 0){
+            	res.send(true);
+            }else{
+            	res.send(false);
+            }    
+        });   
+    });
+}
 
+
+administradorController.existeUserId = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        connection.query("SELECT identificacionUsuario FROM Usuario WHERE identificacionUsuario = ?", [req.body.userId], (err, results) => {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+
+            if(results.length > 0){
+	            res.send(true);
+	        }else {
+            	res.send(false);
+            }
+        });
+      
+    });
+}
+
+administradorController.registrarUsuario = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        var empleadoPoseeUsuario;
+        var existeUserId;
+        var promise = new Promise((resolve, reject)=>{
+        	connection.query('SELECT idUsuario FROM Usuario WHERE numEmpleado = ?', 
+	        [req.body.numEmpleado], (err, results) => {
+	            if (err) {
+	                console.log(err);
+	                return next(err);
+	            }
+	            if(results.length >0){
+        			empleadoPoseeUsuario = true;
+	        	}else{
+	        		empleadoPoseeUsuario = 	false;
+	        	}
+	            resolve("");  
+	        });
+        });
+        
+        promise.then((result)=>{
+        	return new Promise((resolve, reject)=>{
+		        connection.query("SELECT identificacionUsuario FROM Usuario WHERE identificacionUsuario = ?", [req.body.userId], (err, results) => {
+				    if (err) {
+				        console.log(err);
+				        return next(err);
+				    }
+				    if(results.length >0){
+	        			existeUserId = true;
+		        	}else{
+		        		existeUserId = 	false;
+		        	}
+				    resolve("");    
+				});
+		    });
+        }, (err)=>{
+        	console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
+        	return new Promise((resolve, reject)=>{
+        		if(!empleadoPoseeUsuario && !existeUserId){
+        			if(req.body.password == req.body.passwordVerification){
+        				connection.query("INSERT INTO Usuario(numEmpleado, identificacionUsuario, password) VALUES(?, ?, ?)", 
+						[req.body.numEmpleado, req.body.identificacionUsuario, req.body.password], async(err, rows) => {
+						    if (err) {
+						        console.log(err);
+						        res.status(500).send(err);
+						        return next(err);
+						    }
+						    let idUsuario = rows.insertId;
+						    for(let i = 0; i < req.body.privilegios.length; i++){
+								await connection.query("INSERT INTO PrivilegioXUsuario(idPrivilegio, idUsuario) VALUES(?, ?)", 
+								[req.body.privilegios[i], idUsuario], (err, rows) => {
+					                if (err) {
+					                    console.log(err);
+					                    res.status(500).send(err);
+					                    return next(err);
+					                }
+					                if(i == req.body.privilegios.length -1){
+					                   	res.status(status.OK).json({ message: 'Registro guardado correctamente' });
+					                }
+					            });
+						    }
+						});
+        			}else{
+        				res.status(status.OK).json({ message: 'No se pudo guardar el registro porque las contraseñas no coinciden' });
+        			}
+	        	}else{
+	        		res.status(status.OK).json({ message: 'No se pudo guardar el registro ya que la información está corrupta' });
+	        	}
+        	});
+        }, (err)=>{
+        	console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        });
+    });
+}
+
+administradorController.eliminarUsuario = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        connection.query('SELECT idUsuario FROM Usuario WHERE identificacionUsuario = ?', 
+        [req.session.userId], (err, results) => {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            connection.query("DELETE FROM Usuario WHERE idUsuario = ?", [req.body.idUsuario], (err, rows) => {
+		        if (err) {
+		            console.log(err);
+		            res.status(500).send(err);
+		            return next(err);
+		        }
+		        if(results[0].idUsuario == req.body.idUsuario){
+		        	req.session = null;
+		        	res.status(status.OK).send(true);
+		        }else{
+		            res.status(status.OK).send(false);
+		        }  
+		    });    
+        });
+    });
+}
+
+administradorController.actualizarUsuario = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+        let idUsuario;
+        var empleadoPoseeUsuario;
+        var existeUserId;
+        var promise = new Promise((resolve, reject)=>{
+        	connection.query('SELECT idUsuario FROM Usuario WHERE identificacionUsuario = ?', 
+	        [req.session.userId], (err, results) => {
+	            if (err) {
+	                console.log(err);
+	                return next(err);
+	            }
+	            idUsuario = results[0].idUsuario;
+	            resolve("");
+	        });
+        });
+        
+        promise.then((result)=>{
+        	return new Promise((resolve, reject)=>{
+        		connection.query('SELECT idUsuario FROM Usuario WHERE numEmpleado = ?', 
+		        [req.body.numEmpleado], (err, results) => {
+		            if (err) {
+		                console.log(err);
+		                return next(err);
+		            }
+		            if(results.length >0){
+	        			empleadoPoseeUsuario = true;
+		        	}else{
+		        		empleadoPoseeUsuario = 	false;
+		        	}
+		            resolve("");  
+		        });
+        	});
+        }, (err)=>{
+        	console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
+        	return new Promise((resolve, reject)=>{
+		        connection.query("SELECT identificacionUsuario FROM Usuario WHERE identificacionUsuario = ?", [req.body.userId], (err, results) => {
+				    if (err) {
+				        console.log(err);
+				        return next(err);
+				    }
+				    if(results.length >0){
+	        			existeUserId = true;
+		        	}else{
+		        		existeUserId = 	false;
+		        	}
+				    resolve("");    
+				});
+		    });
+        }, (err)=>{
+        	console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
+        	return new Promise((resolve, reject)=>{
+        		if(!empleadoPoseeUsuario && !existeUserId){
+        			if(req.body.password == req.body.passwordVerification){
+        				connection.query("UPDATE Usuario SET numEmpleado = ?, identificacionUsuario = ?, password = ?  WHERE idUsuario = ?", 
+				        [req.body.numEmpleado, req.body.identificacionUsuario, req.body.password, req.body.idUsuario], (err, rows) => {
+				            if (err) {
+				                console.log(err);
+				                res.status(500).send(err);
+				                return next(err);
+				            }
+				            resolve(true);
+				        });
+        			}else{
+        				resolve(false);
+        			}
+	        	}else if((req.body.numEmpleado == req.body.numEmpleadoOld && req.body.identificacionUsuario == req.body.identificacionUsuarioOld)
+	        	||(!empleadoPoseeUsuario && req.body.identificacionUsuario == req.body.identificacionUsuarioOld)
+	        	||(!existeUserId && req.body.numEmpleado == req.body.numEmpleadoOld)){
+	        		if(req.body.password == req.body.passwordVerification){
+        				connection.query("UPDATE Usuario SET numEmpleado = ?, identificacionUsuario = ?, password = ?  WHERE idUsuario = ?", 
+				        [req.body.numEmpleado, req.body.identificacionUsuario, req.body.password, req.body.idUsuario], (err, rows) => {
+				            if (err) {
+				                console.log(err);
+				                res.status(500).send(err);
+				                return next(err);
+				            }
+				            resolve(true);
+				        });
+        			}else{
+        				resolve(false);
+        			}
+	        	}else{
+	        		resolve(false);
+	        	}
+        	});
+        }, (err)=>{
+        	console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
+        	return new Promise((resolve, reject)=>{
+        		if(result){
+        			for(let i = 0; i < req.body.privilegios.length; i++){
+						if(req.body.privilegiosAntiguos.indexOf(req.body.privilegios[i]) == -1){
+							connection.query("INSERT INTO PrivilegioXUsuario(idPrivilegio, idUsuario) VALUES(?, ?)", 
+							[req.body.privilegios[i], req.body.idUsuario], (err, rows) => {
+					            if (err) {
+					                console.log(err);
+					                res.status(500).send(err);
+					                return next(err);
+					            }
+					        });
+						}
+					}
+					resolve(true);
+        		}else{
+        			resolve(false);
+        		}
+        	});
+        }, (err)=>{
+        	console.log(err);
+            res.status(500).send(err);
+            return next(err);	
+        }).then((result)=>{
+        	return new Promise((resolve, reject)=>{
+        		if(result){
+        			for(let j = 0; j < req.body.privilegiosAntiguos.length; j++){
+						if(req.body.privilegios.indexOf(req.body.privilegiosAntiguos[j]) == -1){
+							connection.query("DELETE FROM PrivilegioXUsuario WHERE idPrivilegio = ? AND idUsuario = ?", 
+							[req.body.privilegiosAntiguos[j], req.body.idUsuario], (err, rows) => {
+					            if (err) {
+					                console.log(err);
+					                res.status(500).send(err);
+					                return next(err);
+					            }
+					        });
+						}
+					}
+					resolve(true);
+        		}else{
+        			resolve(false);
+        		}
+        	});
+        }, (err)=>{
+        	console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
+        	return new Promise((resolve, reject)=>{
+        		if(result){
+        			if(idUsuario == req.body.idUsuario){
+        				var query = "SELECT Privilegio.codigoPrivilegio FROM PrivilegioXUsuario INNER JOIN Privilegio " +
+	            		"ON Privilegio.idPrivilegio = PrivilegioXUsuario.idPrivilegio WHERE PrivilegioXUsuario.idUsuario = ?";
+	            		connection.query(query, [idUsuario], (err, results) => {
+				            if (err) {
+				                console.log(err);
+				                return next(err);
+				            }
+				            req.session.userId = req.body.identificacionUsuario;
+	            			req.session.userPrivileges = results.map(function(value, index, array){return value.codigoPrivilegio;});
+				        });
+        			}
+        			res.status(status.OK).json({ message: 'Registro actualizado correctamente' });
+        		}else{
+        			res.status(status.OK).json({ message: 'No se pudo actualizar el registro porque la información no coincide o está corrupta' });
+        		}
+        	});
+        }, (err)=>{
+        	console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        });
+    });
+}
 
 module.exports = administradorController;

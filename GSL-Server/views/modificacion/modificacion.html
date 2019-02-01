@@ -31,7 +31,7 @@
 			      	<li style="flex-basis: 60px" title="inicio">
 			      		<a href="/inicio"><span><img src="/images/blue-home-icon.png" width="100%"></span></a>
 			      	</li>
-			      	<li class="has-submenu">
+			      	<li class="has-submenu" ng-show="privilegios.indexOf('rcb')!=-1">
 			        	<a href="#0">Crear ficha de entrada</a>
 					    <ul class="submenu menu vertical" data-submenu>
 						    <li><a href="/expedientes/nueva_ficha_expedientes#titulo_registro">De expedientes</a></li>
@@ -39,16 +39,23 @@
 						    <li><a href="/patronatos/nueva_ficha_patronatos#titulo_registro">De patronatos</a></li>
 					    </ul>
 					</li>
-					<li><a href="#0">Dar seguimiento</a>
+					<li ng-show="privilegios.indexOf('asng')!=-1||privilegios.indexOf('dscg')!=-1||privilegios.indexOf('rvsexp')!=-1||privilegios.indexOf('rvsopn')!=-1||privilegios.indexOf('rvsptt')!=-1||privilegios.indexOf('rmt')!=-1||privilegios.indexOf('rngpre')!=-1">
+						<a href="#0">Dar seguimiento</a>
 					    <ul class="submenu menu vertical" data-submenu>
-						    <li><a href="/seguimiento_expedientes#titulo_seguimiento">A expedientes</a></li>
-						    <li><a href="/seguimiento_opiniones#titulo_seguimiento">A opiniones</a></li>
-						    <li><a href="/seguimiento_patronatos#titulo_seguimiento">A patronatos</a></li>
+						    <li ng-show="privilegios.indexOf('asng')!=-1||privilegios.indexOf('dscg')!=-1||privilegios.indexOf('rvsexp')!=-1||privilegios.indexOf('rmt')!=-1||privilegios.indexOf('rngpre')!=-1"><a href="/seguimiento_expedientes#titulo_seguimiento">A expedientes</a></li>
+						    <li ng-show="privilegios.indexOf('asng')!=-1||privilegios.indexOf('dscg')!=-1||privilegios.indexOf('rvsopn')!=-1||privilegios.indexOf('rmt')!=-1"><a href="/seguimiento_opiniones#titulo_seguimiento">A opiniones</a></li>
+						    <li ng-show="privilegios.indexOf('asng')!=-1||privilegios.indexOf('dscg')!=-1||privilegios.indexOf('rvsptt')!=-1||privilegios.indexOf('rmt')!=-1"><a href="/seguimiento_patronatos#titulo_seguimiento">A patronatos</a></li>
 					    </ul>
 					</li>
-					<li><a href="/buscar">Buscar</a></li>
-					<li><a href="/modificacion">Modificar Fichas</a></li>
-					<li><a href="/modulo_administrador">Opciones de Administrador</a></li>
+					<li ng-show="privilegios.indexOf('vslz')!=-1"><a href="/buscar">Buscar</a></li>
+					<li ng-show="privilegios.indexOf('rcb')!=-1||privilegios.indexOf('asng')!=-1||privilegios.indexOf('dscg')!=-1||privilegios.indexOf('rvsexp')!=-1||privilegios.indexOf('rvsopn')!=-1||privilegios.indexOf('rvsptt')!=-1||privilegios.indexOf('rmt')!=-1||privilegios.indexOf('rngpre')!=-1"><a href="/modificacion">Modificar Fichas</a></li>
+					<li ng-show="privilegios.indexOf('admin')!=-1"><a href="/modulo_administrador">Opciones de Administrador</a></li>
+					<li id="userOptions"><a href="#0"><span><img src="/images/user.png" width="30px" id="img-user"></span><%= nombreEmpleado %></a>
+					    <ul class="submenu menu vertical" data-submenu>
+						    <li><a href="/">Cerrar Sesión</a></li>
+						    <li><a href="/usuario/cambiar_password#titulo">Cambiar contraseña</a></li>
+					    </ul>
+					</li>
 			    </ul>
 			</div>
 		</div>
@@ -250,7 +257,7 @@
 		      		</div>
 		      	</section>
 
-		      	<section class="grid-container fluid" ng-show="fichaReingresoPrevioList.length>0&&tipo_busqueda_select=='exp'&&(privilegios.indexOf('rmt')!=-1)">
+		      	<section class="grid-container fluid" ng-show="fichaReingresoPrevioList.length>0&&tipo_busqueda_select=='exp'&&(privilegios.indexOf('rngpre')!=-1)">
 		      		<div class="grid-x grid-padding-x">
 		      			<div class="large-12 cell">
 		          			<h5 id="titulo_modificacion">De Reingreso con previo</h5>

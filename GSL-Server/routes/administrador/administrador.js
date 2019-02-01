@@ -42,5 +42,14 @@ router.post('/administrar/eliminar/comunidad', administradorController.eliminarC
 
 router.post('/administrar/modificar/comunidad', administradorController.actualizarComunidad);
 
+router.post('/administrar/verificar/empleadoConUsuario', administradorController.empleadoPoseeUsuario);
+
+router.post('/administrar/verificar/existeUserId', administradorController.existeUserId);
+
+router.post('/administrar/registrar/usuario', administradorController.registrarUsuario);
+
+router.post('/administrar/eliminar/usuario', administradorController.eliminarUsuario);
+
+router.post('/administrar/modificar/usuario', administradorController.actualizarUsuario);
 
 module.exports = router;

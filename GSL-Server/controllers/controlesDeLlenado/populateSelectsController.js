@@ -173,4 +173,48 @@ populateSelectsController.populateCargoEmpleadoSinAbogado = (req, res, next) => 
     });
 }
 
+populateSelectsController.populatePrivilegio = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+      
+        connection.query('SELECT idPrivilegio, nombrePrivilegio, descripcionPrivilegio FROM Privilegio', [], (err, results) => {
+        if (err) return next(err);
+        var string=JSON.stringify(results);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(string);
+      });
+      
+    });
+}
+
+populateSelectsController.populateEmpleadoSinUsuario = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+      
+        connection.query('SELECT numEmpleado, nombreEmpleado FROM Empleado WHERE ' +
+        'NOT EXISTS (SELECT idUsuario FROM Usuario WHERE Usuario.numEmpleado = Empleado.numEmpleado)', [], (err, results) => {
+        if (err) return next(err);
+        var string=JSON.stringify(results);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(string);
+      });
+      
+    });
+}
+
+populateSelectsController.populateUsuario = (req, res, next) => {
+    req.getConnection((err, connection)=> {
+        if (err) return next(err);
+      
+        connection.query('SELECT idUsuario, numEmpleado, identificacionUsuario, password FROM Usuario', [], (err, results) => {
+        if (err) return next(err);
+        var string=JSON.stringify(results);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(string);
+      });
+      
+    });
+}
+
+
 module.exports = populateSelectsController;

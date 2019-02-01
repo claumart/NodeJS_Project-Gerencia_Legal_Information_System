@@ -621,7 +621,7 @@ DROP TABLE IF EXISTS `Usuario` ;
 CREATE TABLE IF NOT EXISTS `Usuario` (
   `idUsuario` INT NOT NULL AUTO_INCREMENT,
   `numEmpleado` INT NOT NULL,
-  `identificacionUsuario` VARCHAR(16) NOT NULL,
+  `identificacionUsuario` VARCHAR(26) NOT NULL,
   `password` CHAR(64) NOT NULL,
   PRIMARY KEY (`idUsuario`),
   CONSTRAINT `Usuario_numEmpleado_FK`
@@ -765,6 +765,8 @@ INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio
 VALUES('RevisarPtt', 'rvsptt', 'Derecho a llenar y modificar el formulario de revisión de patronato');
 INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 
 VALUES('Remitir', 'rmt', 'Derecho a llenar y modificar los formularios de remisión');
+INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 
+VALUES('ReingresarPrevio', 'rngpre', 'Derecho a llenar y modificar el formulario de reingreso con previo');
 INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 
 VALUES('Visualizar', 'vslz', 'Derecho de ingresar al modulo de busqueda y visualizar registros');
 INSERT INTO Privilegio(nombrePrivilegio, codigoPrivilegio, descripcionPrivilegio) 

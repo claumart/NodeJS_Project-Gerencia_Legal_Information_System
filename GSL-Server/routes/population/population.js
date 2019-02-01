@@ -27,13 +27,19 @@ router.post('/populate/select/cargoEmpleado/sinAbogado', populateSelectsControll
 
 router.post('/populate/select/comunidad', populateSelectsController.populateComunidad);
 
+router.post('/populate/checkbox/privilegio', populateSelectsController.populatePrivilegio);
 
+router.post('/populate/select/empleado/sinUsuario', populateSelectsController.populateEmpleadoSinUsuario);
+
+router.post('/populate/select/usuario', populateSelectsController.populateUsuario);
 /*************************Informacion extra******************************/
 router.post('/populate/formularios/nombreExpedientes', populateExtraInfoController.getNombreExpedientes);
 router.post('/populate/formularios/nombreOpiniones', populateExtraInfoController.getNombreOpiniones);
 router.post('/populate/formularios/nombrePatronatos', populateExtraInfoController.getNombrePatronatos);
 router.post('/extraInfo/formularios/comunidades', populateExtraInfoController.getComunidades);
 router.post('/extraInfo/formularios/existeDictamen', populateExtraInfoController.existeDictamen);
+router.post('/extraInfo/usuario/obtenerPrivilegios', populateExtraInfoController.obtenerPrivilegiosDeUsuario);
+
 
 
 module.exports = router;

@@ -16,7 +16,7 @@
 	    <script src="/js/angular.min.js"></script>
   	</head>
 
-	<body ng-app="seguimientoApp">
+	<body ng-app="seguimientoApp" ng-controller="seguimientoCtrl">
 		<header>
 		</header>
 
@@ -31,7 +31,7 @@
 			      	<li style="flex-basis: 60px" title="inicio">
 			      		<a href="/inicio"><span><img src="/images/blue-home-icon.png" width="100%"></span></a>
 			      	</li>
-			      	<li class="has-submenu">
+			      	<li class="has-submenu" ng-show="privilegios.indexOf('rcb')!=-1">
 			        	<a href="#0">Crear ficha de entrada</a>
 					    <ul class="submenu menu vertical" data-submenu>
 						    <li><a href="/expedientes/nueva_ficha_expedientes#titulo_registro">De expedientes</a></li>
@@ -39,16 +39,23 @@
 						    <li><a href="/patronatos/nueva_ficha_patronatos#titulo_registro">De patronatos</a></li>
 					    </ul>
 					</li>
-					<li><a href="#0">Dar seguimiento</a>
+					<li ng-show="privilegios.indexOf('asng')!=-1||privilegios.indexOf('dscg')!=-1||privilegios.indexOf('rvsexp')!=-1||privilegios.indexOf('rvsopn')!=-1||privilegios.indexOf('rvsptt')!=-1||privilegios.indexOf('rmt')!=-1||privilegios.indexOf('rngpre')!=-1">
+						<a href="#0">Dar seguimiento</a>
 					    <ul class="submenu menu vertical" data-submenu>
-						    <li><a href="/seguimiento_expedientes#titulo_seguimiento">A expedientes</a></li>
-						    <li><a href="/seguimiento_opiniones#titulo_seguimiento">A opiniones</a></li>
-						    <li><a href="/seguimiento_patronatos#titulo_seguimiento">A patronatos</a></li>
+						    <li ng-show="privilegios.indexOf('asng')!=-1||privilegios.indexOf('dscg')!=-1||privilegios.indexOf('rvsexp')!=-1||privilegios.indexOf('rmt')!=-1||privilegios.indexOf('rngpre')!=-1"><a href="/seguimiento_expedientes#titulo_seguimiento">A expedientes</a></li>
+						    <li ng-show="privilegios.indexOf('asng')!=-1||privilegios.indexOf('dscg')!=-1||privilegios.indexOf('rvsopn')!=-1||privilegios.indexOf('rmt')!=-1"><a href="/seguimiento_opiniones#titulo_seguimiento">A opiniones</a></li>
+						    <li ng-show="privilegios.indexOf('asng')!=-1||privilegios.indexOf('dscg')!=-1||privilegios.indexOf('rvsptt')!=-1||privilegios.indexOf('rmt')!=-1"><a href="/seguimiento_patronatos#titulo_seguimiento">A patronatos</a></li>
 					    </ul>
 					</li>
-					<li><a href="/buscar">Buscar</a></li>
-					<li><a href="/modificacion">Modificar Fichas</a></li>
-					<li><a href="/modulo_administrador">Opciones de Administrador</a></li>
+					<li ng-show="privilegios.indexOf('vslz')!=-1"><a href="/buscar">Buscar</a></li>
+					<li ng-show="privilegios.indexOf('rcb')!=-1||privilegios.indexOf('asng')!=-1||privilegios.indexOf('dscg')!=-1||privilegios.indexOf('rvsexp')!=-1||privilegios.indexOf('rvsopn')!=-1||privilegios.indexOf('rvsptt')!=-1||privilegios.indexOf('rmt')!=-1||privilegios.indexOf('rngpre')!=-1"><a href="/modificacion">Modificar Fichas</a></li>
+					<li ng-show="privilegios.indexOf('admin')!=-1"><a href="/modulo_administrador">Opciones de Administrador</a></li>
+					<li id="userOptions"><a href="#0"><span><img src="/images/user.png" width="30px" id="img-user"></span><%= nombreEmpleado %></a>
+					    <ul class="submenu menu vertical" data-submenu>
+						    <li><a href="/">Cerrar Sesión</a></li>
+						    <li><a href="/usuario/cambiar_password#titulo">Cambiar contraseña</a></li>
+					    </ul>
+					</li>
 			    </ul>
 			</div>
 		</div>
@@ -61,7 +68,7 @@
         			</div>
       			</div>
       		</div>
-      		<div ng-controller="seguimientoCtrl">
+      		<div>
 	      		<form class="grid-container full">
 					<div class="grid-x grid-padding-x" id="buscador_principal">
 						<div class="small-6 medium-2 cell" id="buscar_por_label">
@@ -75,16 +82,16 @@
 				      	</div>
 		      		</div>
 		      		<div class="grid-x grid-padding-x">
-		      			<fieldset class="medium-3 small-12 cell">
+		      			<fieldset class="medium-3 small-12 cell" ng-show="privilegios.indexOf('asng')!=-1">
 			            	<button type="button" id="asignar_btn" class="button secondary" ng-click="mostrarPatronatosRecibidos()">Asignar</button>
 			            </fieldset>
-			            <fieldset class="medium-3 small-12 cell">
+			            <fieldset class="medium-3 small-12 cell" ng-show="privilegios.indexOf('dscg')!=-1">
 			            	<button type="button" id="descargar_btn" class="button secondary" ng-click="mostrarPatronatosAsignados()">Descargar</button>
 			            </fieldset>
-			            <fieldset class="medium-3 small-12 cell">
+			            <fieldset class="medium-3 small-12 cell" ng-show="privilegios.indexOf('rvsptt')!=-1">
 			            	<button type="button" id="revisar_btn" class="button secondary" ng-click="mostrarPatronatosDescargados()">Revisar</button>
 			            </fieldset>
-			            <fieldset class="medium-3 small-12 cell">
+			            <fieldset class="medium-3 small-12 cell" ng-show="privilegios.indexOf('rmt')!=-1">
 			            	<button type="button" id="remitir_btn" class="button secondary" ng-click="mostrarPatronatosRevisados()">Remitir</button>
 			            </fieldset>
 		      		</div>
