@@ -40,6 +40,7 @@ modPttRevisionController.getFichaRevision = (req, res, next) => {
 modPttRevisionController.updateRevision = (req, res, next) => {
     req.getConnection(async function(err, connection){
         if (err) return next(err);
+        let carpeta;
         let promise = new Promise((resolve, reject) => {
             connection.query('UPDATE Dictamen SET numDictamen = ? WHERE idDictamen = ?', [req.body.numDictamen, req.body.idDictamen], (err, rows) => {
                 if (err) {
@@ -51,11 +52,33 @@ modPttRevisionController.updateRevision = (req, res, next) => {
         });
 
         promise.then((result)=>{
+            return new Promise((resolve, reject)=>{
+                connection.query('SELECT urlPdf FROM PdfDictamen WHERE idDictamen = ?', [req.body.idDictamen], (err, results) => {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+                    if(results.length > 0){
+                        carpeta = results[0].urlPdf.split('/')[1];
+                        resolve("");
+                    }else{
+                        console.log('Error, un registro que debería existir no existe');
+                        res.status(500);
+                        return next();
+                    }
+                    
+                });
+            });
+        }, (err)=>{
+            console.log(err);
+            res.status(500).send(err);
+            return next(err);
+        }).then((result)=>{
             return new Promise((resolve, reject) => {
                 if(req.files != null && req.files.pdfInput != null){
                     var arrayExtensionPdf = req.files.pdfInput.name.split(".");
                     var extensionPdf = arrayExtensionPdf[arrayExtensionPdf.length -1];
-                    var urlPdf = '/' + req.body.idDictamen + '/' + 'dictamen' + req.body.idDictamen + "." + extensionPdf;
+                    var urlPdf = '/' + carpeta + '/' + 'dictamen' + req.body.idDictamen + "." + extensionPdf;
                     if(req.body.existePdf == "true"){
                         fs.unlink(path + req.body.urlPdf, (err) => {
                             if (err){
@@ -107,7 +130,7 @@ modPttRevisionController.updateRevision = (req, res, next) => {
                 if(req.files != null && req.files.wordInput != null){
                     var arrayExtensionWord = req.files.wordInput.name.split(".");
                     var extensionWord = arrayExtensionWord[arrayExtensionWord.length -1];
-                    var urlWord = '/' + req.body.idDictamen + '/' + 'dictamen' + req.body.idDictamen + "." + extensionWord;
+                    var urlWord = '/' + carpeta + '/' + 'dictamen' + req.body.idDictamen + "." + extensionWord;
                     if(req.body.existeWord == "true"){
                         fs.unlink(path + req.body.urlWord, (err) => {
                             if (err){

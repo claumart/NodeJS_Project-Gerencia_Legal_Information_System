@@ -2,25 +2,32 @@ var status = require('http-status');
 var fs = require('fs');
 var revisarOficioController = {};
 var path = require('../dictamenPath');
+const crypto = require('crypto');
 
 revisarOficioController.revisarOpinion = (req, res, next) => {
 	req.getConnection(async function(err, connection){
         if (err) return next(err);
         let DictamenId;
+        let carpeta;
         let promise = new Promise((resolve, reject) => {
             connection.query('INSERT INTO Dictamen(numDictamen, idTipoDictamen) VALUES(?, ?)', [req.body.numDictamen, 2], (err, rows) => {
                 if (err) {
                     console.log(err);
                     return next(err);
                 }
-
-                fs.mkdir(path + '/' + rows.insertId, err => { 
-                    if (err && err.code != 'EEXIST') throw 'up';
-                    if (err && err.code == 'EEXIST') {
-                        res.status(status.OK).json({ message: 'La carpeta ya existe' });
-                        return next(err);
-                    }
-                    resolve(rows.insertId);     
+                var date = new Date();
+                var now = d.toLocaleString() + '.' + d.getMilliseconds();
+                crypto.scrypt(now, Math.random().toString(36).substring(2), 32, (err, derivedKey) => {
+                    if (err) throw err;
+                    carpeta = derivedKey.toString('hex');
+                    fs.mkdir(path + '/' + carpeta, err => { 
+                        if (err && err.code != 'EEXIST') throw 'up';
+                        if (err && err.code == 'EEXIST') {
+                            res.status(status.OK).json({ message: 'La carpeta ya existe' });
+                            return next(err);
+                        }
+                        resolve(rows.insertId);
+                    });
                 });
                 
             });
@@ -32,7 +39,7 @@ revisarOficioController.revisarOpinion = (req, res, next) => {
             return new Promise((resolve, reject) => {
                 var arrayExtensionPdf = req.files.pdfInput.name.split(".");
                 var extensionPdf = arrayExtensionPdf[arrayExtensionPdf.length -1];
-                var urlPdf = '/' + DictamenId + '/' + 'dictamen' + DictamenId + "." + extensionPdf;
+                var urlPdf = '/' + carpeta + '/' + 'dictamen' + DictamenId + "." + extensionPdf;
                 req.files.pdfInput.mv(path + urlPdf, async function(err) {
                     if (err) {
                         console.log(err);
@@ -58,7 +65,7 @@ revisarOficioController.revisarOpinion = (req, res, next) => {
                 if(req.files.wordInput != null){
                     var arrayExtensionWord = req.files.wordInput.name.split(".");
                     var extensionWord = arrayExtensionWord[arrayExtensionWord.length -1];
-                    var urlWord = '/' + DictamenId + '/' + 'dictamen' + DictamenId + "." + extensionWord; 
+                    var urlWord = '/' + carpeta + '/' + 'dictamen' + DictamenId + "." + extensionWord; 
                     req.files.wordInput.mv(path + urlWord, async function(err) {
                         if (err) {
                             console.log(err);
@@ -87,7 +94,7 @@ revisarOficioController.revisarOpinion = (req, res, next) => {
                 if(req.files.archivoAdjuntoInput != null){
                     var arrayExtensionAA = req.files.archivoAdjuntoInput.name.split(".");
                     var extensionAA = arrayExtensionAA[arrayExtensionAA.length -1];
-                    var urlAA = '/' + DictamenId + '/' + 'archivo-adjunto-dictamen' + DictamenId + "." + extensionAA; 
+                    var urlAA = '/' + carpeta + '/' + 'archivo-adjunto-dictamen' + DictamenId + "." + extensionAA; 
                     req.files.archivoAdjuntoInput.mv(path + urlAA, async function(err) {
                         if (err) {
                             console.log(err);

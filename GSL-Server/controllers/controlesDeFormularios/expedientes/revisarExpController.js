@@ -2,24 +2,32 @@ var status = require('http-status');
 var fs = require('fs');
 var revisarExpController = {};
 var path = require('../dictamenPath');
+const crypto = require('crypto');
 
 revisarExpController.crearDictamen = (req, res, next) => {
 	req.getConnection(async function(err, connection){
         if (err) return next(err);
         let DictamenId;
+        let carpeta;
         let promise = new Promise((resolve, reject) => {
             connection.query('INSERT INTO Dictamen(numDictamen, idTipoDictamen) VALUES(?, ?)', [req.body.numDictamen, 1], (err, rows) => {
                 if (err) {
                     console.log(err);
                     return next(err);
                 }
-                fs.mkdir(path + '/' + rows.insertId, err => { 
-                    if (err && err.code != 'EEXIST') throw 'up';
-                    if (err && err.code == 'EEXIST') {
-                        res.status(status.OK).json({ message: 'La carpeta ya existe' });
-                        return next(err);
-                    }
-                    resolve(rows.insertId);
+                var date = new Date();
+                var now = d.toLocaleString() + '.' + d.getMilliseconds();
+                crypto.scrypt(now, Math.random().toString(36).substring(2), 32, (err, derivedKey) => {
+                    if (err) throw err;
+                    carpeta = derivedKey.toString('hex');
+                    fs.mkdir(path + '/' + carpeta, err => { 
+                        if (err && err.code != 'EEXIST') throw 'up';
+                        if (err && err.code == 'EEXIST') {
+                            res.status(status.OK).json({ message: 'La carpeta ya existe' });
+                            return next(err);
+                        }
+                        resolve(rows.insertId);
+                    });
                 });
             });
         });
@@ -30,7 +38,7 @@ revisarExpController.crearDictamen = (req, res, next) => {
             return new Promise((resolve, reject) => {
                 var arrayExtensionPdf = req.files.pdfInput.name.split(".");
                 var extensionPdf = arrayExtensionPdf[arrayExtensionPdf.length -1];
-                var urlPdf = '/' + DictamenId + '/' + 'dictamen' + DictamenId + "." + extensionPdf;
+                var urlPdf = '/' + carpeta + '/' + 'dictamen' + DictamenId + "." + extensionPdf;
                 req.files.pdfInput.mv(path + urlPdf, async function(err) {
                     if (err) {
                         console.log(err);
@@ -56,7 +64,7 @@ revisarExpController.crearDictamen = (req, res, next) => {
                 if(req.files.wordInput != null){
                     var arrayExtensionWord = req.files.wordInput.name.split(".");
                     var extensionWord = arrayExtensionWord[arrayExtensionWord.length -1];
-                    var urlWord = '/' + DictamenId + '/' + 'dictamen' + DictamenId + "." + extensionWord; 
+                    var urlWord = '/' + carpeta + '/' + 'dictamen' + DictamenId + "." + extensionWord; 
                     req.files.wordInput.mv(path + urlWord, async function(err) {
                         if (err) {
                             console.log(err);

@@ -667,7 +667,7 @@ DROP TABLE IF EXISTS `ArchivoAdjunto` ;
 CREATE TABLE IF NOT EXISTS `ArchivoAdjunto` (
   `idArchivoAdjunto` INT NOT NULL AUTO_INCREMENT,
   `idDictamen` INT NOT NULL,
-  `urlArchivoAdjunto` VARCHAR(90) NOT NULL,
+  `urlArchivoAdjunto` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`idArchivoAdjunto`),
   CONSTRAINT `AA_idDictamen_FK`
     FOREIGN KEY (`idDictamen`)
@@ -781,17 +781,22 @@ INSERT INTO CargoEmpleado(nombreCargoEmpleado) VALUES('Sub-Gerente');
 
 
 INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Edgardo Bardales', true, 1);
-INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Carolina Arambu', true, 1);
-INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Alba Granados', true, 1);
-INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Karla Mairena', true, 1);
-INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Elsa López', true, 3);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Doris Carolina Arambu', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Alba Rosa Granados', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Amanda Alicia Alvarez', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Karla Marina Mairena', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Karla Maritza Maldonado', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Karen Yaneth Bonilla', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Elsa Marina Vásquez', true, 3);
 INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('María de los Angeles Nuñez', true, 3);
 INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Denis Mejía', true, 1);
 INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Jorge Godoy', true, 4);
-INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Mirian Cruz', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Mirian Lastenia Cruz', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Mirian Marlen Izaguirre', true, 2);
 INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Eduardo Andino', true, 1);
-INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Olman Lezama', true, 1);
-INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Wilmer Nuñez', true, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Olman Lezama', true, 5);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Wilmer Nuñez', false, 1);
+INSERT INTO Empleado(nombreEmpleado, activo, idCargo) VALUES('Shirley Claudette Martínez', true, 2);
 
 /*INSERT INTO Comunidad(nombreComunidad, idMunicipio, idTipoComunidad) VALUES('El Rosal', 1, 1);
 INSERT INTO Comunidad(nombreComunidad, idMunicipio, idTipoComunidad) VALUES('Miramontes', 1, 2);

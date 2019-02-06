@@ -348,6 +348,8 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza)
                                             expedientes[i-1] = {numExpediente : numExpValidado, folios : inputFolio.value};
                                             if(i == numeroExpedientes){
                                                 if($scope.tipo_fecha == "actual"){
+                                                    var date = new Date();
+                                                    var now = date.toLocaleString('es-GB');
                                                     now = utilities.formatearFechaActual(now);
                                                     if(j == numeroExpedientes){
                                                         var numeroExpedientes = parseInt($scope.numAcumulados, 10);
