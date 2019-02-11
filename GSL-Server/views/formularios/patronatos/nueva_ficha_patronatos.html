@@ -103,6 +103,13 @@
 
             <div class="grid-x grid-padding-x">
               	<div class="medium-6 small-12 cell medium-offset-3">
+              		<label>Información Adicional (opcional):</label>
+			        <textarea id="extrainfo_textarea" name="extrainfo_textarea" ng-model="extrainfo_textarea"></textarea>
+              	</div>
+            </div>
+
+            <div class="grid-x grid-padding-x">
+              	<div class="medium-6 small-12 cell medium-offset-3">
               		<label>Asunto del patronato:</label>
 			        <select id="asunto_patronato_select" name="asunto_patronato_select" ng-model="asunto_patronato_select" ng-options="x.nombreAsuntoPatronato for x in asuntoPatronatoList">
 			        </select>

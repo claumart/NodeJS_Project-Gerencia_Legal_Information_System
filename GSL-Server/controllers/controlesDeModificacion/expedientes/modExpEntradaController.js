@@ -6,7 +6,7 @@ var modExpEntradaController = {};
 modExpEntradaController.getFichaEntrada = (req, res, next) => {
     req.getConnection(async function(err, connection) {
         var query = "SELECT idFichaEntradaExpediente as idficha, " +
-        "idProcedencia, interesado, apoderadoLegal, idAsunto, idEmpleadoReceptor, fechaEntrada " +
+        "idProcedencia, interesado, apoderadoLegal, idAsunto, idEmpleadoReceptor, fechaEntrada, informacionAdicional " +
         "FROM fichaEntradaExpediente " +
         "WHERE idFichaEntradaExpediente = ?";
 
@@ -50,9 +50,9 @@ modExpEntradaController.updateNoAcumulado = (req, res, next) => {
         let promise1 = new Promise((resolve, reject) => {
             if(req.body.apoderado != "") {
                 connection.query('UPDATE FichaEntradaExpediente SET idProcedencia = ?, interesado = ?, apoderadoLegal = ?, idAsunto = ?, ' + 
-                'idEmpleadoReceptor = ?, fechaEntrada = STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\') WHERE idFichaEntradaExpediente = ?',
+                'idEmpleadoReceptor = ?, fechaEntrada = STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), informacionAdicional = ? WHERE idFichaEntradaExpediente = ?',
                 [req.body.idProcedencia, req.body.interesado, req.body.apoderado, req.body.idAsunto, 
-                req.body.numEmpleadoReceptor, req.body.fecha, req.body.idFicha], (err, rows) => {
+                req.body.numEmpleadoReceptor, req.body.fecha, req.body.extrainfo, req.body.idFicha], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -61,8 +61,9 @@ modExpEntradaController.updateNoAcumulado = (req, res, next) => {
                 });
             }else {
                 connection.query('UPDATE FichaEntradaExpediente SET idProcedencia = ?, interesado = ?, idAsunto = ?, ' + 
-                'idEmpleadoReceptor = ?, fechaEntrada = STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\') WHERE idFichaEntradaExpediente = ?', 
-                [req.body.idProcedencia, req.body.interesado, req.body.idAsunto, req.body.numEmpleadoReceptor, req.body.fecha, req.body.idFicha], (err, rows) => {
+                'idEmpleadoReceptor = ?, fechaEntrada = STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), informacionAdicional = ? WHERE idFichaEntradaExpediente = ?', 
+                [req.body.idProcedencia, req.body.interesado, req.body.idAsunto, req.body.numEmpleadoReceptor, 
+                req.body.fecha, req.body.extrainfo, req.body.idFicha], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -136,22 +137,31 @@ modExpEntradaController.updateNoAcumulado = (req, res, next) => {
                                 console.log(err);
                                 return next(err);
                             }
-                            if(results[0].numeroRegistros ==0){
-                                connection.query('DELETE FROM Expediente WHERE idExpediente = ?', 
-                                [req.body.expedientesAntiguos[i].idExpediente], (err, results) => {
-                                    if (err) {
-                                        console.log(err);
-                                        return next(err);
-                                    }
-                                    if(i == req.body.expedientesAntiguos.length -1){
+                            let numRecordExp = results[0].numeroRegistros;
+                            connection.query('SELECT COUNT(idFichaEntradaOpinion) as numeroRegistros FROM FichaEntradaOpinionXExpediente WHERE idExpediente = ?', 
+                            [req.body.expedientesAntiguos[i].idExpediente], (err, results) => {
+                                if (err) {
+                                    console.log(err);
+                                    return next(err);
+                                }
+                                let numRecordOpn = results[0].numeroRegistros;
+                                if(numRecordExp == 0 && numRecordOpn == 0){
+                                    connection.query('DELETE FROM Expediente WHERE idExpediente = ?', 
+                                    [req.body.expedientesAntiguos[i].idExpediente], (err, results) => {
+                                        if (err) {
+                                            console.log(err);
+                                            return next(err);
+                                        }
+                                        if(i == req.body.expedientesAntiguos.length -1){
+                                            res.status(status.OK).json({ message: 'formulario actualizado correctamente' });
+                                        }     
+                                    });
+                                }else{
+                                   if(i == req.body.expedientesAntiguos.length -1){
                                         res.status(status.OK).json({ message: 'formulario actualizado correctamente' });
-                                    }     
-                                });
-                            }else{
-                               if(i == req.body.expedientesAntiguos.length -1){
-                                    res.status(status.OK).json({ message: 'formulario actualizado correctamente' });
-                                }  
-                            }     
+                                    }  
+                                }
+                            });     
                         });
                     });
                 }else{
@@ -184,9 +194,9 @@ modExpEntradaController.updateAcumulado = (req, res, next) => {
         let promise1 = new Promise((resolve, reject) => {
             if(req.body.apoderado != "") {
                 connection.query('UPDATE FichaEntradaExpediente SET idProcedencia = ?, interesado = ?, apoderadoLegal = ?, idAsunto = ?, ' + 
-                'idEmpleadoReceptor = ?, fechaEntrada = STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\') WHERE idFichaEntradaExpediente = ?',
+                'idEmpleadoReceptor = ?, fechaEntrada = STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), informacionAdicional = ? WHERE idFichaEntradaExpediente = ?',
                 [req.body.idProcedencia, req.body.interesado, req.body.apoderado, req.body.idAsunto, 
-                req.body.numEmpleadoReceptor, req.body.fecha, req.body.idFicha], (err, rows) => {
+                req.body.numEmpleadoReceptor, req.body.fecha, req.body.extrainfo, req.body.idFicha], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -195,8 +205,8 @@ modExpEntradaController.updateAcumulado = (req, res, next) => {
                 });
             }else {
                 connection.query('UPDATE FichaEntradaExpediente SET idProcedencia = ?, interesado = ?, idAsunto = ?, ' + 
-                'idEmpleadoReceptor = ?, fechaEntrada = STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\') WHERE idFichaEntradaExpediente = ?', 
-                [req.body.idProcedencia, req.body.interesado, req.body.idAsunto, req.body.numEmpleadoReceptor, req.body.fecha, req.body.idFicha], (err, rows) => {
+                'idEmpleadoReceptor = ?, fechaEntrada = STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), informacionAdicional = ? WHERE idFichaEntradaExpediente = ?', 
+                [req.body.idProcedencia, req.body.interesado, req.body.idAsunto, req.body.numEmpleadoReceptor, req.body.fecha, req.body.extrainfo, req.body.idFicha], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -247,6 +257,7 @@ modExpEntradaController.updateAcumulado = (req, res, next) => {
                                         return next(err);
                                     }
                                     if(i == req.body.expedientes.length - 1){
+                                        console.log("Se insertaron los nuevos expedientes");
                                         resolve(req.body.expedientes.map(function(value, index, array){return value.numExpediente;}));
                                     }
                                 });
@@ -254,6 +265,10 @@ modExpEntradaController.updateAcumulado = (req, res, next) => {
                             });
                         }
                     });
+                }else{
+                    if(i == req.body.expedientes.length - 1){
+                        resolve(req.body.expedientes.map(function(value, index, array){return value.numExpediente;}));
+                    }  
                 }
             }
         });
@@ -274,26 +289,37 @@ modExpEntradaController.updateAcumulado = (req, res, next) => {
                             console.log(err);
                             return next(err);
                         }
-                        if(results[0].numeroRegistros ==0){
-                            connection.query('DELETE FROM Expediente WHERE idExpediente = ?', 
-                            [req.body.expedientesAntiguos[i].idExpediente], (err, results) => {
-                                if (err) {
-                                    console.log(err);
-                                    return next(err);
-                                }
+                        let numRecordExp = results[0].numeroRegistros;
+                        connection.query('SELECT COUNT(idFichaEntradaOpinion) as numeroRegistros FROM FichaEntradaOpinionXExpediente WHERE idExpediente = ?', 
+                        [req.body.expedientesAntiguos[i].idExpediente], (err, results) => {
+                            if (err) {
+                                console.log(err);
+                                return next(err);
+                            }
+                            let numRecordOpn = results[0].numeroRegistros;
+                            if(numRecordExp == 0 && numRecordOpn == 0){
+                                connection.query('DELETE FROM Expediente WHERE idExpediente = ?', 
+                                [req.body.expedientesAntiguos[i].idExpediente], (err, results) => {
+                                    if (err) {
+                                        console.log(err);
+                                        return next(err);
+                                    }
+                                    if(i == req.body.expedientesAntiguos.length -1){
+                                        res.status(status.OK).json({ message: 'formulario actualizado correctamente' });
+                                    }     
+                                });
+                            }else{
                                 if(i == req.body.expedientesAntiguos.length -1){
                                     res.status(status.OK).json({ message: 'formulario actualizado correctamente' });
-                                }     
-                            });
-                        }else{
-                            if(i == req.body.expedientesAntiguos.length -1){
-                                res.status(status.OK).json({ message: 'formulario actualizado correctamente' });
-                            }  
-                        }      
+                                }  
+                            }
+                        });      
                     });
                 });
             }else{
-                connection.query('UPDATE Expediente SET folios = ? WHERE idExpediente = ?', [req.body.req.body.expedientes[indice].folios, req.body.expedientesAntiguos[i].idExpediente], (err, rows) => {
+                console.log("Se va a actualizar el número de folios");
+                connection.query('UPDATE Expediente SET folios = ? WHERE idExpediente = ?', 
+                [req.body.expedientes[indice].folios, req.body.expedientesAntiguos[i].idExpediente], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);

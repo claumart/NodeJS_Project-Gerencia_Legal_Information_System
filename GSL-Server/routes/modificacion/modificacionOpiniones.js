@@ -10,6 +10,8 @@ var modOpnRemisionController = require('../../controllers/controlesDeModificacio
 
 router.post('/modificacion/opiniones/mostrar/fichas', modificacionOpnController.getFichas);
 
+router.post('/modificacion/opiniones/obtener/expedientes', modOpnEntradaController.getExpedientes);
+
 router.post('/modificacion/opiniones/obtener/formularioEntrada', modOpnEntradaController.getFichaEntrada);
 
 router.post('/modificacion/opiniones/actualizar/fichaEntrada', modOpnEntradaController.updateOpinion);

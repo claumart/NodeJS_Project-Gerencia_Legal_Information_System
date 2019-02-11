@@ -6,8 +6,9 @@ detalleExpedienteController.obtenerfichaCompleta = (req, res, next) => {
     	if (err) return next(err);
         var query = "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, " +
         "Procedencia.nombreDependencia as nombreProcedencia, fichaexp.interesado, fichaexp.apoderadoLegal, asunto.nombreAsunto as nombreAsunto, " +
-        "empleadoReceptor.nombreEmpleado as nombreEmpleadoReceptor, fichaexp.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado, " +
-        "fichaexp.fechaAsignacion, fichaexp.fechaDescargo, fichaexp.fechaRevision, dependenciaRemision.nombreDependencia as nombreDependenciaRemision, " +
+        "empleadoReceptor.nombreEmpleado as nombreEmpleadoReceptor, fichaexp.fechaEntrada, fichaexp.informacionAdicional, " + 
+        "abogado.nombreEmpleado as nombreAbogadoAsignado, fichaexp.fechaAsignacion, fichaexp.fechaDescargo, fichaexp.fechaRevision, " + 
+        "dependenciaRemision.nombreDependencia as nombreDependenciaRemision, " +
         "fichaexp.recibidoPor, fichaexp.fechaRemision, EstadoExpediente.nombreEstadoExpediente, Dictamen.numDictamen " +
         "FROM fichaentradaexpediente as fichaexp " + 
         "LEFT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -32,8 +33,9 @@ detalleExpedienteController.obtenerfichaCompleta = (req, res, next) => {
         "UNION " +
         "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, " +
         "Procedencia.nombreDependencia as nombreProcedencia, fichaexp.interesado, fichaexp.apoderadoLegal, asunto.nombreAsunto as nombreAsunto, " +
-        "empleadoReceptor.nombreEmpleado as nombreEmpleadoReceptor, fichaexp.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado, " +
-        "fichaexp.fechaAsignacion, fichaexp.fechaDescargo, fichaexp.fechaRevision, dependenciaRemision.nombreDependencia as nombreDependenciaRemision, " +
+        "empleadoReceptor.nombreEmpleado as nombreEmpleadoReceptor, fichaexp.fechaEntrada, fichaexp.informacionAdicional, " + 
+        "abogado.nombreEmpleado as nombreAbogadoAsignado, fichaexp.fechaAsignacion, fichaexp.fechaDescargo, fichaexp.fechaRevision, " + 
+        "dependenciaRemision.nombreDependencia as nombreDependenciaRemision, " +
         "fichaexp.recibidoPor, fichaexp.fechaRemision, EstadoExpediente.nombreEstadoExpediente, Dictamen.numDictamen " +
         "FROM fichaentradaexpediente as fichaexp " +
         "RIGHT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +

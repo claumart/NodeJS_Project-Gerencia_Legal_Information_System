@@ -6,6 +6,7 @@ app.service('limpieza', function() {
         scope.apoderado = "";
         scope.procedencia_select = null;
         scope.empleado_receptor_select = null;
+        scope.extrainfo_textarea = "";
         scope.asunto_patronato_select = null;
         scope.municipio1_select = null;
         scope.tipo_comunidad1_select = null;
@@ -39,6 +40,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza)
     $scope.apoderado = "";
     $scope.procedencia_select = null;
     $scope.empleado_receptor_select = null;
+    $scope.extrainfo_textarea = "";
     $scope.asunto_patronato_select = null;
     $scope.municipio1_select = null;
     $scope.tipo_comunidad1_select = null;
@@ -257,7 +259,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza)
                     break;
                 }
             }
-
+            $scope.extrainfo_textarea = lista[0].informacionAdicional;
             for(let i = 0; i<$scope.asuntoPatronatoList.length; i++){
                 if(lista[0].idAsuntoPatronato == $scope.asuntoPatronatoList[i].idAsuntoPatronato){
                     $scope.asunto_patronato_select = $scope.asuntoPatronatoList[i];
@@ -379,176 +381,81 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza)
                 var apoderadoLegal = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.apoderado).trim());
                 if($scope.procedencia_select != null){
                     if($scope.empleado_receptor_select != null){
-                        if($scope.asunto_patronato_select != null && $scope.asunto_patronato_select.idAsuntoPatronato == 1){
-                            if($scope.comunidad1.length < 46 && $scope.comunidad1.trim().length > 0){
-                                var comunidadValidada = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.comunidad1).trim());
-                                if(!isNaN($scope.anio_proceso_ins) && $scope.anio_proceso_ins > 0){
-                                    if(!isNaN($scope.periodo_validez_ins) && $scope.periodo_validez_ins > 0){
-                                        if(!isNaN($scope.folios_ins) && $scope.folios_ins > 0){
-                                            if($scope.tipo_fecha == "actual"){
-                                                var date = new Date();
-                                                var now = date.toLocaleString('es-GB');
-                                                now = utilities.formatearFechaActual(now);
-                                                if($scope.urlParams.mod == 1){
-                                                    $http({
-                                                        method : "POST",
-                                                        url : "/modificacion/patronatos/actualizar/fichaEntrada/noAcumulado",
-                                                        headers: {'Content-Type': 'application/json'},
-                                                        data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
-                                                            idProcedencia : $scope.procedencia_select.idDependencia, 
-                                                            numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
-                                                            idMunicipio : $scope.municipio1_select.idMunicipio,
-                                                            codigoMunicipio : $scope.municipio1_select.codigoMunicipio,
-                                                            idTipoComunidad : $scope.tipo_comunidad1_select.idTipoComunidad,
-                                                            comunidad : comunidadValidada, foliosIns : $scope.folios_ins, 
-                                                            anioProceso : $scope.anio_proceso_ins, periodoValidez : $scope.periodo_validez_ins,
-                                                            idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : now,
-                                                            expedientesAntiguos: $scope.antiguosExp, idFicha : $scope.urlParams.idFicha
-                                                        }
-                                                    }).then(function mySuccess(response) {
-                                                        $window.location.href = "/modificacion#titulo_modificacion";
-                                                    }, function myError(response) {
-                                                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-                                                        document.getElementById('myModal').style.display = "flex";
-                                                    });
-                                                }else{
-                                                    $http({
-                                                        method : "POST",
-                                                        url : "/formularios/patronatos/registrar/noAcumulado",
-                                                        headers: {'Content-Type': 'application/json'},
-                                                        data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
-                                                            idProcedencia : $scope.procedencia_select.idDependencia, 
-                                                            numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
-                                                            idMunicipio : $scope.municipio1_select.idMunicipio,
-                                                            codigoMunicipio : $scope.municipio1_select.codigoMunicipio,
-                                                            idTipoComunidad : $scope.tipo_comunidad1_select.idTipoComunidad,
-                                                            comunidad : comunidadValidada, foliosIns : $scope.folios_ins, 
-                                                            anioProceso : $scope.anio_proceso_ins, periodoValidez : $scope.periodo_validez_ins,
-                                                            idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : now   
-                                                        }
-                                                    }).then(function mySuccess(response) {
-                                                        limpieza.limpiarRegistrarPatronatoForm($scope);
-                                                    }, function myError(response) {
-                                                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-                                                        document.getElementById('myModal').style.display = "flex";
-                                                    });
-                                                }
-                                            }else if($scope.tipo_fecha == "personalizada"){
-                                                if($scope.fecha_entrada != null) {
-                                                    if(!isNaN($scope.hora_entrada) && $scope.hora_entrada >= 1 && $scope.hora_entrada <= 12){
-                                                        if(!isNaN($scope.minuto_entrada) && $scope.minuto_entrada >= 0 && $scope.minuto_entrada <= 59){
-                                                            var fechaPersonalizada = utilities.formatearFechaPersonalizada($scope.fecha_entrada, $scope.hora_entrada, $scope.minuto_entrada, $scope.ampm);
-                                                            var apoderadoLegal = $scope.apoderado.trim();
-                                                            if($scope.urlParams.mod == 1){
-                                                                $http({
-                                                                    method : "POST",
-                                                                    url : "/modificacion/patronatos/actualizar/fichaEntrada/noAcumulado",
-                                                                    headers: {'Content-Type': 'application/json'},
-                                                                    data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
-                                                                        idProcedencia : $scope.procedencia_select.idDependencia, 
-                                                                        numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
-                                                                        idMunicipio : $scope.municipio1_select.idMunicipio,
-                                                                        codigoMunicipio : $scope.municipio1_select.codigoMunicipio, 
-                                                                        idTipoComunidad : $scope.tipo_comunidad1_select.idTipoComunidad,
-                                                                        comunidad : comunidadValidada, foliosIns : $scope.folios_ins, 
-                                                                        anioProceso : $scope.anio_proceso_ins, periodoValidez : $scope.periodo_validez_ins,
-                                                                        idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : fechaPersonalizada,
-                                                                        expedientesAntiguos: $scope.antiguosExp, idFicha : $scope.urlParams.idFicha
-                                                                    }
-                                                                }).then(function mySuccess(response) {
-                                                                    $window.location.href = "/modificacion#titulo_modificacion";
-                                                                }, function myError(response) {
-                                                                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-                                                                    document.getElementById('myModal').style.display = "flex";
-                                                                });
-                                                            }else{
-                                                               $http({
-                                                                    method : "POST",
-                                                                    url : "/formularios/patronatos/registrar/noAcumulado",
-                                                                    headers: {'Content-Type': 'application/json'},
-                                                                    data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
-                                                                        idProcedencia : $scope.procedencia_select.idDependencia, 
-                                                                        numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
-                                                                        idMunicipio : $scope.municipio1_select.idMunicipio,
-                                                                        codigoMunicipio : $scope.municipio1_select.codigoMunicipio, 
-                                                                        idTipoComunidad : $scope.tipo_comunidad1_select.idTipoComunidad,
-                                                                        comunidad : comunidadValidada, foliosIns : $scope.folios_ins, 
-                                                                        anioProceso : $scope.anio_proceso_ins, periodoValidez : $scope.periodo_validez_ins,
-                                                                        idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : fechaPersonalizada
-                                                                    }
-                                                                }).then(function mySuccess(response) {
-                                                                    limpieza.limpiarRegistrarPatronatoForm($scope);
-                                                                }, function myError(response) {
-                                                                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-                                                                    document.getElementById('myModal').style.display = "flex";
-                                                                }); 
+                        if($scope.extrainfo_textarea.length < 201){
+                            if($scope.asunto_patronato_select != null && $scope.asunto_patronato_select.idAsuntoPatronato == 1){
+                                if($scope.comunidad1.length < 46 && $scope.comunidad1.trim().length > 0){
+                                    var comunidadValidada = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.comunidad1).trim());
+                                    if(!isNaN($scope.anio_proceso_ins) && $scope.anio_proceso_ins > 0){
+                                        if(!isNaN($scope.periodo_validez_ins) && $scope.periodo_validez_ins > 0){
+                                            if(!isNaN($scope.folios_ins) && $scope.folios_ins > 0){
+                                                if($scope.tipo_fecha == "actual"){
+                                                    var date = new Date();
+                                                    var now = date.toLocaleString('es-GB');
+                                                    now = utilities.formatearFechaActual(now);
+                                                    if($scope.urlParams.mod == 1){
+                                                        $http({
+                                                            method : "POST",
+                                                            url : "/modificacion/patronatos/actualizar/fichaEntrada/noAcumulado",
+                                                            headers: {'Content-Type': 'application/json'},
+                                                            data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
+                                                                idProcedencia : $scope.procedencia_select.idDependencia, 
+                                                                numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado,
+                                                                extrainfo : $scope.extrainfo_textarea, idMunicipio : $scope.municipio1_select.idMunicipio,
+                                                                codigoMunicipio : $scope.municipio1_select.codigoMunicipio,
+                                                                idTipoComunidad : $scope.tipo_comunidad1_select.idTipoComunidad,
+                                                                comunidad : comunidadValidada, foliosIns : $scope.folios_ins, 
+                                                                anioProceso : $scope.anio_proceso_ins, periodoValidez : $scope.periodo_validez_ins,
+                                                                idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : now,
+                                                                expedientesAntiguos: $scope.antiguosExp, idFicha : $scope.urlParams.idFicha
                                                             }
-                                                        }else {
-                                                            $scope.modalMessage = "Por favor seleccione un rango de minutos valido entre 0 a 59";
+                                                        }).then(function mySuccess(response) {
+                                                            $window.location.href = "/modificacion#titulo_modificacion";
+                                                        }, function myError(response) {
+                                                            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
                                                             document.getElementById('myModal').style.display = "flex";
-                                                        }
-                                                    }else {
-                                                        $scope.modalMessage = "Por favor seleccione una hora valida entre 1 a 12";
-                                                        document.getElementById('myModal').style.display = "flex";
+                                                        });
+                                                    }else{
+                                                        $http({
+                                                            method : "POST",
+                                                            url : "/formularios/patronatos/registrar/noAcumulado",
+                                                            headers: {'Content-Type': 'application/json'},
+                                                            data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
+                                                                idProcedencia : $scope.procedencia_select.idDependencia, 
+                                                                numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
+                                                                extrainfo : $scope.extrainfo_textarea, idMunicipio : $scope.municipio1_select.idMunicipio,
+                                                                codigoMunicipio : $scope.municipio1_select.codigoMunicipio,
+                                                                idTipoComunidad : $scope.tipo_comunidad1_select.idTipoComunidad,
+                                                                comunidad : comunidadValidada, foliosIns : $scope.folios_ins, 
+                                                                anioProceso : $scope.anio_proceso_ins, periodoValidez : $scope.periodo_validez_ins,
+                                                                idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : now   
+                                                            }
+                                                        }).then(function mySuccess(response) {
+                                                            limpieza.limpiarRegistrarPatronatoForm($scope);
+                                                        }, function myError(response) {
+                                                            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                            document.getElementById('myModal').style.display = "flex";
+                                                        });
                                                     }
-                                                }else {
-                                                    $scope.modalMessage = "Por favor seleccione la fecha de entrada del expediente";
-                                                    document.getElementById('myModal').style.display = "flex";
-                                                }
-                                            }
-                                        }else{
-                                            $scope.modalMessage = "Por favor seleccione un numero de folios de expediente valido y mayor a cero";
-                                            document.getElementById('myModal').style.display = "flex";
-                                        }
-                                    }else{
-                                        $scope.modalMessage = "Por favor seleccione un periodo de validez del patronato valido y mayor a cero";
-                                        document.getElementById('myModal').style.display = "flex";
-                                    }
-                                }else{
-                                    $scope.modalMessage = "Por favor seleccione un año valido y mayor a cero";
-                                    document.getElementById('myModal').style.display = "flex";
-                                }
-                            }else {
-                                $scope.modalMessage = "El campo nombre de la comunidad es muy largo o está vacio";
-                                document.getElementById('myModal').style.display = "flex";
-                            }
-                        }else if($scope.asunto_patronato_select != null && $scope.asunto_patronato_select.idAsuntoPatronato == 2){
-                            if($scope.comunidad2.length < 46 && $scope.comunidad2.trim().length > 0){
-                                var comunidadValidada = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.comunidad2).trim());
-                                if(!isNaN($scope.anio_proceso_imp) && $scope.anio_proceso_imp > 0){
-                                    if(!isNaN($scope.periodo_validez_imp) && $scope.periodo_validez_imp > 0){
-                                        if(!isNaN($scope.folios_imp) && $scope.folios_imp > 0){
-                                            var numeroExpedientes = parseInt($scope.numAcumulados, 10);
-                                            var expedientesPatronato = [];
-                                            for(i = 1; i <= numeroExpedientes; i++) {
-                                                var inputExpId = "num_expediente" + i;
-                                                var inputExp = document.getElementById(inputExpId);
-                                                var inputFolioId = "num_folios_expediente" + i;
-                                                var inputFolio = document.getElementById(inputFolioId);
-                                                if(inputExp.value.length < 26 && inputExp.value.trim().length > 0) {
-                                                    var numExpValidado = utilities.eliminateSpace(inputExp.value.toUpperCase().trim());
-                                                    if(!isNaN(inputFolio.value) && inputFolio.value > 0){
-                                                        expedientesPatronato[i-1] = {numExpediente : numExpValidado, folios : inputFolio.value};
-                                                        if(i == numeroExpedientes){
-                                                            if($scope.tipo_fecha == "actual"){
-                                                                var date = new Date();
-                                                                var now = date.toLocaleString('es-GB');
-                                                                now = utilities.formatearFechaActual(now);
+                                                }else if($scope.tipo_fecha == "personalizada"){
+                                                    if($scope.fecha_entrada != null) {
+                                                        if(!isNaN($scope.hora_entrada) && $scope.hora_entrada >= 1 && $scope.hora_entrada <= 12){
+                                                            if(!isNaN($scope.minuto_entrada) && $scope.minuto_entrada >= 0 && $scope.minuto_entrada <= 59){
+                                                                var fechaPersonalizada = utilities.formatearFechaPersonalizada($scope.fecha_entrada, $scope.hora_entrada, $scope.minuto_entrada, $scope.ampm);
+                                                                var apoderadoLegal = $scope.apoderado.trim();
                                                                 if($scope.urlParams.mod == 1){
                                                                     $http({
                                                                         method : "POST",
-                                                                        url : "/modificacion/patronatos/actualizar/fichaEntrada/acumulado",
+                                                                        url : "/modificacion/patronatos/actualizar/fichaEntrada/noAcumulado",
                                                                         headers: {'Content-Type': 'application/json'},
                                                                         data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
                                                                             idProcedencia : $scope.procedencia_select.idDependencia, 
                                                                             numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
-                                                                            idMunicipio : $scope.municipio2_select.idMunicipio,
-                                                                            codigoMunicipio : $scope.municipio2_select.codigoMunicipio,
-                                                                            idTipoComunidad : $scope.tipo_comunidad2_select.idTipoComunidad,
-                                                                            comunidad : comunidadValidada, foliosIns : $scope.folios_imp, 
-                                                                            anioProceso : $scope.anio_proceso_imp, periodoValidez : $scope.periodo_validez_imp,
-                                                                            idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : now,
-                                                                            expedientes : expedientesPatronato, cantidadExpedientes : numeroExpedientes,
+                                                                            extrainfo : $scope.extrainfo_textarea, idMunicipio : $scope.municipio1_select.idMunicipio,
+                                                                            codigoMunicipio : $scope.municipio1_select.codigoMunicipio, 
+                                                                            idTipoComunidad : $scope.tipo_comunidad1_select.idTipoComunidad,
+                                                                            comunidad : comunidadValidada, foliosIns : $scope.folios_ins, 
+                                                                            anioProceso : $scope.anio_proceso_ins, periodoValidez : $scope.periodo_validez_ins,
+                                                                            idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : fechaPersonalizada,
                                                                             expedientesAntiguos: $scope.antiguosExp, idFicha : $scope.urlParams.idFicha
                                                                         }
                                                                     }).then(function mySuccess(response) {
@@ -558,124 +465,224 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza)
                                                                         document.getElementById('myModal').style.display = "flex";
                                                                     });
                                                                 }else{
-                                                                    $http({
+                                                                   $http({
                                                                         method : "POST",
-                                                                        url : "/formularios/patronatos/registrar/acumulado",
+                                                                        url : "/formularios/patronatos/registrar/noAcumulado",
                                                                         headers: {'Content-Type': 'application/json'},
                                                                         data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
                                                                             idProcedencia : $scope.procedencia_select.idDependencia, 
                                                                             numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
-                                                                            idMunicipio : $scope.municipio2_select.idMunicipio,
-                                                                            codigoMunicipio : $scope.municipio2_select.codigoMunicipio,
-                                                                            idTipoComunidad : $scope.tipo_comunidad2_select.idTipoComunidad,
-                                                                            comunidad : comunidadValidada, foliosIns : $scope.folios_imp, 
-                                                                            anioProceso : $scope.anio_proceso_imp, periodoValidez : $scope.periodo_validez_imp,
-                                                                            idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : now,
-                                                                            expedientes : expedientesPatronato, cantidadExpedientes : numeroExpedientes
+                                                                            extrainfo : $scope.extrainfo_textarea, idMunicipio : $scope.municipio1_select.idMunicipio,
+                                                                            codigoMunicipio : $scope.municipio1_select.codigoMunicipio, 
+                                                                            idTipoComunidad : $scope.tipo_comunidad1_select.idTipoComunidad,
+                                                                            comunidad : comunidadValidada, foliosIns : $scope.folios_ins, 
+                                                                            anioProceso : $scope.anio_proceso_ins, periodoValidez : $scope.periodo_validez_ins,
+                                                                            idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : fechaPersonalizada
                                                                         }
                                                                     }).then(function mySuccess(response) {
                                                                         limpieza.limpiarRegistrarPatronatoForm($scope);
                                                                     }, function myError(response) {
                                                                         $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
                                                                         document.getElementById('myModal').style.display = "flex";
-                                                                    });
+                                                                    }); 
                                                                 }
-                                                            }else if($scope.tipo_fecha == "personalizada"){
-                                                                if($scope.fecha_entrada != null) {
-                                                                    if(!isNaN($scope.hora_entrada) && $scope.hora_entrada >= 1 && $scope.hora_entrada <= 12){
-                                                                        if(!isNaN($scope.minuto_entrada) && $scope.minuto_entrada >= 0 && $scope.minuto_entrada <= 59){
-                                                                            var fechaPersonalizada = utilities.formatearFechaPersonalizada($scope.fecha_entrada, $scope.hora_entrada, $scope.minuto_entrada, $scope.ampm);
-                                                                            var numeroExpedientes = parseInt($scope.numAcumulados, 10);
-                                                                            if($scope.urlParams.mod == 1){
-                                                                                $http({
-                                                                                    method : "POST",
-                                                                                    url : "/modificacion/patronatos/actualizar/fichaEntrada/acumulado",
-                                                                                    headers: {'Content-Type': 'application/json'},
-                                                                                    data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
-                                                                                        idProcedencia : $scope.procedencia_select.idDependencia, 
-                                                                                        numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
-                                                                                        idMunicipio : $scope.municipio2_select.idMunicipio,
-                                                                                        codigoMunicipio : $scope.municipio2_select.codigoMunicipio, 
-                                                                                        idTipoComunidad : $scope.tipo_comunidad2_select.idTipoComunidad,
-                                                                                        comunidad : comunidadValidada, foliosIns : $scope.folios_imp, 
-                                                                                        anioProceso : $scope.anio_proceso_imp, periodoValidez : $scope.periodo_validez_imp,
-                                                                                        idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : fechaPersonalizada,
-                                                                                        expedientes : expedientesPatronato, cantidadExpedientes : numeroExpedientes,
-                                                                                        expedientesAntiguos: $scope.antiguosExp, idFicha : $scope.urlParams.idFicha
-                                                                                    }
-                                                                                }).then(function mySuccess(response) {
-                                                                                    $window.location.href = "/modificacion#titulo_modificacion";
-                                                                                }, function myError(response) {
-                                                                                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-                                                                                    document.getElementById('myModal').style.display = "flex";
-                                                                                });
-                                                                            }else{
-                                                                                $http({
-                                                                                    method : "POST",
-                                                                                    url : "/formularios/patronatos/registrar/acumulado",
-                                                                                    headers: {'Content-Type': 'application/json'},
-                                                                                    data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
-                                                                                        idProcedencia : $scope.procedencia_select.idDependencia, 
-                                                                                        numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
-                                                                                        idMunicipio : $scope.municipio2_select.idMunicipio,
-                                                                                        codigoMunicipio : $scope.municipio2_select.codigoMunicipio, 
-                                                                                        idTipoComunidad : $scope.tipo_comunidad2_select.idTipoComunidad,
-                                                                                        comunidad : comunidadValidada, foliosIns : $scope.folios_imp, 
-                                                                                        anioProceso : $scope.anio_proceso_imp, periodoValidez : $scope.periodo_validez_imp,
-                                                                                        idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : fechaPersonalizada,
-                                                                                        expedientes : expedientesPatronato, cantidadExpedientes : numeroExpedientes
-                                                                                    }
-                                                                                }).then(function mySuccess(response) {
-                                                                                    limpieza.limpiarRegistrarPatronatoForm($scope);
-                                                                                }, function myError(response) {
-                                                                                    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-                                                                                    document.getElementById('myModal').style.display = "flex";
-                                                                                });
-                                                                            }
-                                                                        }else {
-                                                                            $scope.modalMessage = "Por favor seleccione una cantidad de minutos valida entre 0 a 59";
-                                                                            document.getElementById('myModal').style.display = "flex";
-                                                                        }
-                                                                    }else {
-                                                                        $scope.modalMessage = "Por favor seleccione una hora valida entre 1 a 12";
-                                                                        document.getElementById('myModal').style.display = "flex";
-                                                                    }
-                                                                }else {
-                                                                    $scope.modalMessage = "Por favor seleccione la fecha de entrada del expediente";
-                                                                    document.getElementById('myModal').style.display = "flex";
-                                                                }
+                                                            }else {
+                                                                $scope.modalMessage = "Por favor seleccione un rango de minutos valido entre 0 a 59";
+                                                                document.getElementById('myModal').style.display = "flex";
                                                             }
+                                                        }else {
+                                                            $scope.modalMessage = "Por favor seleccione una hora valida entre 1 a 12";
+                                                            document.getElementById('myModal').style.display = "flex";
                                                         }
-                                                    }else{
-                                                        $scope.modalMessage = "Por favor seleccione un numero de folios de expediente valido y mayor a cero";
+                                                    }else {
+                                                        $scope.modalMessage = "Por favor seleccione la fecha de entrada del expediente";
                                                         document.getElementById('myModal').style.display = "flex";
-                                                        break;
                                                     }
-
-                                                }else{
-                                                    $scope.modalMessage = "El campo Número de expediente es muy largo o está vacío, por favor ingrese un valor valido y sin espacios";
-                                                    document.getElementById('myModal').style.display = "flex";
-                                                    break;
                                                 }
+                                            }else{
+                                                $scope.modalMessage = "Por favor seleccione un numero de folios de expediente valido y mayor a cero";
+                                                document.getElementById('myModal').style.display = "flex";
                                             }
                                         }else{
-                                            $scope.modalMessage = "Por favor seleccione un numero de folios de expediente valido y mayor a cero";
+                                            $scope.modalMessage = "Por favor seleccione un periodo de validez del patronato valido y mayor a cero";
                                             document.getElementById('myModal').style.display = "flex";
                                         }
                                     }else{
-                                        $scope.modalMessage = "Por favor seleccione un periodo de validez del patronato valido y mayor a cero";
+                                        $scope.modalMessage = "Por favor seleccione un año valido y mayor a cero";
+                                        document.getElementById('myModal').style.display = "flex";
+                                    }
+                                }else {
+                                    $scope.modalMessage = "El campo nombre de la comunidad es muy largo o está vacio";
+                                    document.getElementById('myModal').style.display = "flex";
+                                }
+                            }else if($scope.asunto_patronato_select != null && $scope.asunto_patronato_select.idAsuntoPatronato == 2){
+                                if($scope.comunidad2.length < 46 && $scope.comunidad2.trim().length > 0){
+                                    var comunidadValidada = utilities.firstWordLetterToUpperCase(utilities.eliminateMultipleSpaces($scope.comunidad2).trim());
+                                    if(!isNaN($scope.anio_proceso_imp) && $scope.anio_proceso_imp > 0){
+                                        if(!isNaN($scope.periodo_validez_imp) && $scope.periodo_validez_imp > 0){
+                                            if(!isNaN($scope.folios_imp) && $scope.folios_imp > 0){
+                                                var numeroExpedientes = parseInt($scope.numAcumulados, 10);
+                                                var expedientesPatronato = [];
+                                                for(i = 1; i <= numeroExpedientes; i++) {
+                                                    var inputExpId = "num_expediente" + i;
+                                                    var inputExp = document.getElementById(inputExpId);
+                                                    var inputFolioId = "num_folios_expediente" + i;
+                                                    var inputFolio = document.getElementById(inputFolioId);
+                                                    if(inputExp.value.length < 31 && inputExp.value.trim().length > 0) {
+                                                        var numExpValidado = utilities.eliminateSpace(inputExp.value.toUpperCase().trim());
+                                                        if(!isNaN(inputFolio.value) && inputFolio.value > 0){
+                                                            expedientesPatronato[i-1] = {numExpediente : numExpValidado, folios : inputFolio.value};
+                                                            if(i == numeroExpedientes){
+                                                                if($scope.tipo_fecha == "actual"){
+                                                                    var date = new Date();
+                                                                    var now = date.toLocaleString('es-GB');
+                                                                    now = utilities.formatearFechaActual(now);
+                                                                    if($scope.urlParams.mod == 1){
+                                                                        $http({
+                                                                            method : "POST",
+                                                                            url : "/modificacion/patronatos/actualizar/fichaEntrada/acumulado",
+                                                                            headers: {'Content-Type': 'application/json'},
+                                                                            data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
+                                                                                idProcedencia : $scope.procedencia_select.idDependencia, 
+                                                                                numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
+                                                                                extrainfo : $scope.extrainfo_textarea, idMunicipio : $scope.municipio2_select.idMunicipio,
+                                                                                codigoMunicipio : $scope.municipio2_select.codigoMunicipio,
+                                                                                idTipoComunidad : $scope.tipo_comunidad2_select.idTipoComunidad,
+                                                                                comunidad : comunidadValidada, foliosIns : $scope.folios_imp, 
+                                                                                anioProceso : $scope.anio_proceso_imp, periodoValidez : $scope.periodo_validez_imp,
+                                                                                idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : now,
+                                                                                expedientes : expedientesPatronato, cantidadExpedientes : numeroExpedientes,
+                                                                                expedientesAntiguos: $scope.antiguosExp, idFicha : $scope.urlParams.idFicha
+                                                                            }
+                                                                        }).then(function mySuccess(response) {
+                                                                            $window.location.href = "/modificacion#titulo_modificacion";
+                                                                        }, function myError(response) {
+                                                                            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                            document.getElementById('myModal').style.display = "flex";
+                                                                        });
+                                                                    }else{
+                                                                        $http({
+                                                                            method : "POST",
+                                                                            url : "/formularios/patronatos/registrar/acumulado",
+                                                                            headers: {'Content-Type': 'application/json'},
+                                                                            data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
+                                                                                idProcedencia : $scope.procedencia_select.idDependencia, 
+                                                                                numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
+                                                                                extrainfo : $scope.extrainfo_textarea, idMunicipio : $scope.municipio2_select.idMunicipio,
+                                                                                codigoMunicipio : $scope.municipio2_select.codigoMunicipio,
+                                                                                idTipoComunidad : $scope.tipo_comunidad2_select.idTipoComunidad,
+                                                                                comunidad : comunidadValidada, foliosIns : $scope.folios_imp, 
+                                                                                anioProceso : $scope.anio_proceso_imp, periodoValidez : $scope.periodo_validez_imp,
+                                                                                idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : now,
+                                                                                expedientes : expedientesPatronato, cantidadExpedientes : numeroExpedientes
+                                                                            }
+                                                                        }).then(function mySuccess(response) {
+                                                                            limpieza.limpiarRegistrarPatronatoForm($scope);
+                                                                        }, function myError(response) {
+                                                                            $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                            document.getElementById('myModal').style.display = "flex";
+                                                                        });
+                                                                    }
+                                                                }else if($scope.tipo_fecha == "personalizada"){
+                                                                    if($scope.fecha_entrada != null) {
+                                                                        if(!isNaN($scope.hora_entrada) && $scope.hora_entrada >= 1 && $scope.hora_entrada <= 12){
+                                                                            if(!isNaN($scope.minuto_entrada) && $scope.minuto_entrada >= 0 && $scope.minuto_entrada <= 59){
+                                                                                var fechaPersonalizada = utilities.formatearFechaPersonalizada($scope.fecha_entrada, $scope.hora_entrada, $scope.minuto_entrada, $scope.ampm);
+                                                                                var numeroExpedientes = parseInt($scope.numAcumulados, 10);
+                                                                                if($scope.urlParams.mod == 1){
+                                                                                    $http({
+                                                                                        method : "POST",
+                                                                                        url : "/modificacion/patronatos/actualizar/fichaEntrada/acumulado",
+                                                                                        headers: {'Content-Type': 'application/json'},
+                                                                                        data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
+                                                                                            idProcedencia : $scope.procedencia_select.idDependencia, 
+                                                                                            numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
+                                                                                            extrainfo : $scope.extrainfo_textarea, idMunicipio : $scope.municipio2_select.idMunicipio,
+                                                                                            codigoMunicipio : $scope.municipio2_select.codigoMunicipio, 
+                                                                                            idTipoComunidad : $scope.tipo_comunidad2_select.idTipoComunidad,
+                                                                                            comunidad : comunidadValidada, foliosIns : $scope.folios_imp, 
+                                                                                            anioProceso : $scope.anio_proceso_imp, periodoValidez : $scope.periodo_validez_imp,
+                                                                                            idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : fechaPersonalizada,
+                                                                                            expedientes : expedientesPatronato, cantidadExpedientes : numeroExpedientes,
+                                                                                            expedientesAntiguos: $scope.antiguosExp, idFicha : $scope.urlParams.idFicha
+                                                                                        }
+                                                                                    }).then(function mySuccess(response) {
+                                                                                        $window.location.href = "/modificacion#titulo_modificacion";
+                                                                                    }, function myError(response) {
+                                                                                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                                        document.getElementById('myModal').style.display = "flex";
+                                                                                    });
+                                                                                }else{
+                                                                                    $http({
+                                                                                        method : "POST",
+                                                                                        url : "/formularios/patronatos/registrar/acumulado",
+                                                                                        headers: {'Content-Type': 'application/json'},
+                                                                                        data : {interesado : interesadoValidado, apoderado : apoderadoLegal, 
+                                                                                            idProcedencia : $scope.procedencia_select.idDependencia, 
+                                                                                            numEmpleadoReceptor : $scope.empleado_receptor_select.numEmpleado, 
+                                                                                            extrainfo : $scope.extrainfo_textarea, idMunicipio : $scope.municipio2_select.idMunicipio,
+                                                                                            codigoMunicipio : $scope.municipio2_select.codigoMunicipio, 
+                                                                                            idTipoComunidad : $scope.tipo_comunidad2_select.idTipoComunidad,
+                                                                                            comunidad : comunidadValidada, foliosIns : $scope.folios_imp, 
+                                                                                            anioProceso : $scope.anio_proceso_imp, periodoValidez : $scope.periodo_validez_imp,
+                                                                                            idAsunto : $scope.asunto_patronato_select.idAsuntoPatronato, fecha : fechaPersonalizada,
+                                                                                            expedientes : expedientesPatronato, cantidadExpedientes : numeroExpedientes
+                                                                                        }
+                                                                                    }).then(function mySuccess(response) {
+                                                                                        limpieza.limpiarRegistrarPatronatoForm($scope);
+                                                                                    }, function myError(response) {
+                                                                                        $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+                                                                                        document.getElementById('myModal').style.display = "flex";
+                                                                                    });
+                                                                                }
+                                                                            }else {
+                                                                                $scope.modalMessage = "Por favor seleccione una cantidad de minutos valida entre 0 a 59";
+                                                                                document.getElementById('myModal').style.display = "flex";
+                                                                            }
+                                                                        }else {
+                                                                            $scope.modalMessage = "Por favor seleccione una hora valida entre 1 a 12";
+                                                                            document.getElementById('myModal').style.display = "flex";
+                                                                        }
+                                                                    }else {
+                                                                        $scope.modalMessage = "Por favor seleccione la fecha de entrada del expediente";
+                                                                        document.getElementById('myModal').style.display = "flex";
+                                                                    }
+                                                                }
+                                                            }
+                                                        }else{
+                                                            $scope.modalMessage = "Por favor seleccione un numero de folios de expediente valido y mayor a cero";
+                                                            document.getElementById('myModal').style.display = "flex";
+                                                            break;
+                                                        }
+
+                                                    }else{
+                                                        $scope.modalMessage = "El campo Número de expediente es muy largo o está vacío, por favor ingrese un valor valido y sin espacios";
+                                                        document.getElementById('myModal').style.display = "flex";
+                                                        break;
+                                                    }
+                                                }
+                                            }else{
+                                                $scope.modalMessage = "Por favor seleccione un numero de folios de expediente valido y mayor a cero";
+                                                document.getElementById('myModal').style.display = "flex";
+                                            }
+                                        }else{
+                                            $scope.modalMessage = "Por favor seleccione un periodo de validez del patronato valido y mayor a cero";
+                                            document.getElementById('myModal').style.display = "flex";
+                                        }
+                                    }else{
+                                        $scope.modalMessage = "Por favor seleccione un año valido y mayor a cero";
                                         document.getElementById('myModal').style.display = "flex";
                                     }
                                 }else{
-                                    $scope.modalMessage = "Por favor seleccione un año valido y mayor a cero";
+                                    $scope.modalMessage = "El campo nombre de la comunidad es muy largo o está vacio";
                                     document.getElementById('myModal').style.display = "flex";
                                 }
                             }else{
-                                $scope.modalMessage = "El campo nombre de la comunidad es muy largo o está vacio";
+                                $scope.modalMessage = "Por favor seleccione un asunto";
                                 document.getElementById('myModal').style.display = "flex";
                             }
                         }else{
-                            $scope.modalMessage = "Por favor seleccione un asunto";
+                            $scope.modalMessage = "El campo Informacion Adicional es muy largo";
                             document.getElementById('myModal').style.display = "flex";
                         }
                     }else{

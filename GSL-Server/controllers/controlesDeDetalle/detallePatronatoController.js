@@ -8,9 +8,10 @@ detallePatronatoController.obtenerfichaCompleta = (req, res, next) => {
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \' , Comunidad.nombreComunidad) AS comunidad, " +
         "Procedencia.nombreDependencia as nombreProcedencia, fichapatronato.interesado, fichapatronato.apoderadoLegal, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, empleadoReceptor.nombreEmpleado as nombreEmpleadoReceptor, " +
-        "fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado, fichapatronato.fechaAsignacion, " +
-        "fichapatronato.fechaDescargo, fichapatronato.fechaRevision, dependenciaRemision.nombreDependencia as nombreDependenciaRemision, " +
-        "fichapatronato.recibidoPor, fichapatronato.fechaRemision, EstadoExpediente.nombreEstadoExpediente, Dictamen.numDictamen " +
+        "fichapatronato.fechaEntrada as fechaEntrada, fichapatronato.informacionAdicional, abogado.nombreEmpleado as nombreAbogadoAsignado, " + 
+        "fichapatronato.fechaAsignacion, fichapatronato.fechaDescargo, fichapatronato.fechaRevision, " + 
+        "dependenciaRemision.nombreDependencia as nombreDependenciaRemision, fichapatronato.recibidoPor, fichapatronato.fechaRemision, " + 
+        "EstadoExpediente.nombreEstadoExpediente, Dictamen.numDictamen " +
         "FROM FichaEntradaPatronato as fichapatronato " +
         "LEFT JOIN FichaEntradaPatronatoXExpedientePatronato as fichaxpatronato " +
             "ON fichapatronato.idFichaEntradaPatronato = fichaxpatronato.idFichaEntradaPatronato " +
@@ -40,9 +41,10 @@ detallePatronatoController.obtenerfichaCompleta = (req, res, next) => {
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \' , Comunidad.nombreComunidad) AS comunidad, " +
         "Procedencia.nombreDependencia as nombreProcedencia, fichapatronato.interesado, fichapatronato.apoderadoLegal, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, empleadoReceptor.nombreEmpleado as nombreEmpleadoReceptor, " +
-        "fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado, fichapatronato.fechaAsignacion, " +
-        "fichapatronato.fechaDescargo, fichapatronato.fechaRevision, dependenciaRemision.nombreDependencia as nombreDependenciaRemision, " +
-        "fichapatronato.recibidoPor, fichapatronato.fechaRemision, EstadoExpediente.nombreEstadoExpediente, Dictamen.numDictamen " +
+        "fichapatronato.fechaEntrada as fechaEntrada, fichapatronato.informacionAdicional, abogado.nombreEmpleado as nombreAbogadoAsignado, " + 
+        "fichapatronato.fechaAsignacion, fichapatronato.fechaDescargo, fichapatronato.fechaRevision, " + 
+        "dependenciaRemision.nombreDependencia as nombreDependenciaRemision, fichapatronato.recibidoPor, fichapatronato.fechaRemision, " + 
+        "EstadoExpediente.nombreEstadoExpediente, Dictamen.numDictamen " +
         "FROM FichaEntradaPatronato as fichapatronato " +
         "RIGHT JOIN FichaEntradaPatronatoXExpedientePatronato as fichaxpatronato " +
             "ON fichapatronato.idFichaEntradaPatronato = fichaxpatronato.idFichaEntradaPatronato " +

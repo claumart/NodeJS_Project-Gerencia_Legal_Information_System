@@ -155,6 +155,7 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, detailU
         $scope.nombreAsunto = detalleExpedienteList[0].nombreAsunto;
         $scope.nombreEmpleadoReceptor = detalleExpedienteList[0].nombreEmpleadoReceptor;
         $scope.fechaEntrada = detalleExpedienteList[0].fechaEntrada;
+        $scope.extrainfo = detalleExpedienteList[0].informacionAdicional;
         $scope.nombreAbogadoAsignado = detalleExpedienteList[0].nombreAbogadoAsignado;
         $scope.fechaAsignacion = detalleExpedienteList[0].fechaAsignacion;
         $scope.fechaDescargo = detalleExpedienteList[0].fechaDescargo;

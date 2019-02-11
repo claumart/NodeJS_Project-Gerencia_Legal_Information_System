@@ -61,6 +61,7 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, detailU
         $scope.nombreAsunto = detallePatronatoList[0].nombreAsunto;
         $scope.nombreEmpleadoReceptor = detallePatronatoList[0].nombreEmpleadoReceptor;
         $scope.fechaEntrada = detallePatronatoList[0].fechaEntrada;
+        $scope.extrainfo = detalleExpedienteList[0].informacionAdicional;
         $scope.nombreAbogadoAsignado = detallePatronatoList[0].nombreAbogadoAsignado;
         $scope.fechaAsignacion = detallePatronatoList[0].fechaAsignacion;
         $scope.fechaDescargo = detallePatronatoList[0].fechaDescargo;

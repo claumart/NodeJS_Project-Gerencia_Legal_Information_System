@@ -5,7 +5,7 @@ var modPttEntradaController = {};
 modPttEntradaController.getFichaEntrada = (req, res, next) => {
     req.getConnection(async function(err, connection) {
         var query = "SELECT idFichaEntradaPatronato as idficha, " +
-        "idProcedencia, interesado, apoderadoLegal, idAsuntoPatronato, idEmpleadoReceptor, fechaEntrada " +
+        "idProcedencia, interesado, apoderadoLegal, idAsuntoPatronato, idEmpleadoReceptor, fechaEntrada, informacionAdicional " +
         "FROM FichaEntradaPatronato " +
         "WHERE idFichaEntradaPatronato = ?";
 
@@ -66,9 +66,9 @@ modPttEntradaController.updateNoAcumulado = (req, res, next) => {
         let promise1 = new Promise((resolve, reject) => {
             if(req.body.apoderado != "") {
                 connection.query('UPDATE FichaEntradaPatronato SET idProcedencia = ?, interesado = ?, apoderadoLegal = ?, idAsuntoPatronato = ?, ' +
-                'idEmpleadoReceptor = ?, fechaEntrada = STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\') WHERE idFichaEntradaPatronato = ?', 
+                'idEmpleadoReceptor = ?, fechaEntrada = STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), informacionAdicional = ? WHERE idFichaEntradaPatronato = ?', 
                 [req.body.idProcedencia, req.body.interesado, req.body.apoderado, req.body.idAsunto, req.body.numEmpleadoReceptor, 
-                req.body.fecha, req.body.idFicha], (err, rows) => {
+                req.body.fecha, req.body.extrainfo, req.body.idFicha], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -77,8 +77,8 @@ modPttEntradaController.updateNoAcumulado = (req, res, next) => {
                 });
             }else {
                 connection.query('UPDATE FichaEntradaPatronato SET idProcedencia = ?, interesado = ?, idAsuntoPatronato = ?, idEmpleadoReceptor = ?, ' +
-                    'fechaEntrada =  STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\') WHERE idFichaEntradaPatronato = ?', [req.body.idProcedencia, req.body.interesado, 
-                    req.body.idAsunto, req.body.numEmpleadoReceptor, req.body.fecha, req.body.idFicha], (err, rows) => {
+                    'fechaEntrada =  STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), informacionAdicional = ? WHERE idFichaEntradaPatronato = ?', [req.body.idProcedencia, req.body.interesado, 
+                    req.body.idAsunto, req.body.numEmpleadoReceptor, req.body.fecha, req.body.extrainfo, req.body.idFicha], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -235,9 +235,9 @@ modPttEntradaController.updateAcumulado = (req, res, next) => {
         let promise1 = new Promise((resolve, reject) => {
             if(req.body.apoderado != "") {
                 connection.query('UPDATE FichaEntradaPatronato SET idProcedencia = ?, interesado = ?, apoderadoLegal = ?, idAsuntoPatronato = ?, ' +
-                'idEmpleadoReceptor = ?, fechaEntrada = STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\') WHERE idFichaEntradaPatronato = ?', 
+                'idEmpleadoReceptor = ?, fechaEntrada = STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), informacionAdicional = ? WHERE idFichaEntradaPatronato = ?', 
                 [req.body.idProcedencia, req.body.interesado, req.body.apoderado, req.body.idAsunto, req.body.numEmpleadoReceptor, 
-                req.body.fecha, req.body.idFicha], (err, rows) => {
+                req.body.fecha, req.body.extrainfo, req.body.idFicha], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -246,8 +246,8 @@ modPttEntradaController.updateAcumulado = (req, res, next) => {
                 });
             }else {
                 connection.query('UPDATE FichaEntradaPatronato SET idProcedencia = ?, interesado = ?, idAsuntoPatronato = ?, idEmpleadoReceptor = ?, ' +
-                    'fechaEntrada =  STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\') WHERE idFichaEntradaPatronato = ?', [req.body.idProcedencia, req.body.interesado, 
-                    req.body.idAsunto, req.body.numEmpleadoReceptor, req.body.fecha, req.body.idFicha], (err, rows) => {
+                    'fechaEntrada =  STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), informacionAdicional = ? WHERE idFichaEntradaPatronato = ?', [req.body.idProcedencia, req.body.interesado, 
+                    req.body.idAsunto, req.body.numEmpleadoReceptor, req.body.fecha, req.body.extrainfo, req.body.idFicha], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);

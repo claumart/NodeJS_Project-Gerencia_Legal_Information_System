@@ -4,12 +4,16 @@ var detalleOpinionController = {};
 detalleOpinionController.obtenerfichaCompleta = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
-        var query = "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, " +
-        "Procedencia.nombreDependencia as nombreProcedencia, fichaOpinion.apoderadoLegal, fichaOpinion.asunto, " +
-        "empleadoReceptor.nombreEmpleado as nombreEmpleadoReceptor, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado, " +
-        "fichaOpinion.fechaAsignacion, fichaOpinion.fechaDescargo, fichaOpinion.fechaRevision, " +
+        var query = "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as expedientes, " +
+        "fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, fichaOpinion.apoderadoLegal, fichaOpinion.asunto, " +
+        "empleadoReceptor.nombreEmpleado as nombreEmpleadoReceptor, fichaOpinion.fechaEntrada, fichaOpinion.informacionAdicional, " +
+        "abogado.nombreEmpleado as nombreAbogadoAsignado, fichaOpinion.fechaAsignacion, fichaOpinion.fechaDescargo, fichaOpinion.fechaRevision, " +
         "fichaOpinion.recibidoPor, fichaOpinion.fechaRemision, EstadoExpediente.nombreEstadoExpediente as nombreEstadoOpinion, Dictamen.numDictamen " +
-        "FROM FichaEntradaOpinion as fichaOpinion " + 
+        "FROM FichaEntradaOpinion as fichaOpinion " +
+        "LEFT JOIN fichaEntradaOpinionXExpediente as fichaxexp " +
+            "ON fichaOpinion.idFichaEntradaOpinion = fichaxexp.idFichaEntradaOpinion " +
+        "LEFT JOIN Expediente " +
+            "ON Expediente.idExpediente = fichaxexp.idExpediente " + 
         "LEFT JOIN Dependencia as Procedencia " + 
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " + 
         "LEFT JOIN Empleado as empleadoReceptor " + 
@@ -20,14 +24,18 @@ detalleOpinionController.obtenerfichaCompleta = (req, res, next) => {
             "ON EstadoExpediente.idEstadoExpediente = fichaOpinion.idEstadoOpinion " +
         "LEFT JOIN Dictamen " +
             "ON Dictamen.idDictamen = fichaOpinion.idDictamen " +
-        "WHERE fichaOpinion.idFichaEntradaOpinion = ? " +  
+        "WHERE fichaOpinion.idFichaEntradaOpinion = ? GROUP BY fichaOpinion.idFichaEntradaOpinion " +  
         "UNION " +
-        "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, " +
-        "Procedencia.nombreDependencia as nombreProcedencia, fichaOpinion.apoderadoLegal, fichaOpinion.asunto, " +
-        "empleadoReceptor.nombreEmpleado as nombreEmpleadoReceptor, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado, " +
-        "fichaOpinion.fechaAsignacion, fichaOpinion.fechaDescargo, fichaOpinion.fechaRevision, " +
+        "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as expedientes, " +
+        "fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, fichaOpinion.apoderadoLegal, fichaOpinion.asunto, " +
+        "empleadoReceptor.nombreEmpleado as nombreEmpleadoReceptor, fichaOpinion.fechaEntrada, fichaOpinion.informacionAdicional, " +
+        "abogado.nombreEmpleado as nombreAbogadoAsignado, fichaOpinion.fechaAsignacion, fichaOpinion.fechaDescargo, fichaOpinion.fechaRevision, " +
         "fichaOpinion.recibidoPor, fichaOpinion.fechaRemision, EstadoExpediente.nombreEstadoExpediente as nombreEstadoOpinion, Dictamen.numDictamen " +
         "FROM FichaEntradaOpinion as fichaOpinion " +
+        "RIGHT JOIN fichaEntradaOpinionXExpediente as fichaxexp " +
+            "ON fichaOpinion.idFichaEntradaOpinion = fichaxexp.idFichaEntradaOpinion " +
+        "RIGHT JOIN Expediente " +
+            "ON Expediente.idExpediente = fichaxexp.idExpediente " + 
         "RIGHT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "RIGHT JOIN Empleado as empleadoReceptor " +
@@ -38,7 +46,7 @@ detalleOpinionController.obtenerfichaCompleta = (req, res, next) => {
             "ON EstadoExpediente.idEstadoExpediente = fichaOpinion.idEstadoOpinion " +
         "RIGHT JOIN Dictamen " +
             "ON Dictamen.idDictamen = fichaOpinion.idDictamen " +
-        "WHERE fichaOpinion.idFichaEntradaOpinion = ?";
+        "WHERE fichaOpinion.idFichaEntradaOpinion = ? GROUP BY fichaOpinion.idFichaEntradaOpinion";
     	connection.query(query, [req.body.idFicha, req.body.idFicha], (err, results) => {
         	if (err) {
                 console.log(err);

@@ -8,9 +8,9 @@ registrarPatronatoController.saveNoAcumulado = (req, res, next) => {
         var expedienteId;
         let promise1 = new Promise((resolve, reject) => {
             if(req.body.apoderado != "") {
-                connection.query('INSERT INTO FichaEntradaPatronato(idProcedencia, interesado, apoderadoLegal, idAsuntoPatronato, idEmpleadoReceptor, fechaEntrada, idEstadoPatronato) ' +
-                    'VALUES(?, ?, ?, ?, ?, STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), ?)', [req.body.idProcedencia, req.body.interesado, req.body.apoderado, req.body.idAsunto, 
-                    req.body.numEmpleadoReceptor, req.body.fecha, 1], (err, rows) => {
+                connection.query('INSERT INTO FichaEntradaPatronato(idProcedencia, interesado, apoderadoLegal, idAsuntoPatronato, idEmpleadoReceptor, fechaEntrada, informacionAdicional, idEstadoPatronato) ' +
+                    'VALUES(?, ?, ?, ?, ?, STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), ?, ?)', [req.body.idProcedencia, req.body.interesado, req.body.apoderado, req.body.idAsunto, 
+                    req.body.numEmpleadoReceptor, req.body.fecha, req.body.extrainfo, 1], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -18,9 +18,9 @@ registrarPatronatoController.saveNoAcumulado = (req, res, next) => {
                     resolve(rows.insertId);
                 });
             }else {
-                connection.query('INSERT INTO FichaEntradaPatronato(idProcedencia, interesado, idAsuntoPatronato, idEmpleadoReceptor, fechaEntrada, idEstadoPatronato) ' +
-                    'VALUES(?, ?, ?, ?, STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), ?)', [req.body.idProcedencia, req.body.interesado, req.body.idAsunto, 
-                    req.body.numEmpleadoReceptor, req.body.fecha, 1], (err, rows) => {
+                connection.query('INSERT INTO FichaEntradaPatronato(idProcedencia, interesado, idAsuntoPatronato, idEmpleadoReceptor, fechaEntrada, informacionAdicional, idEstadoPatronato) ' +
+                    'VALUES(?, ?, ?, ?, STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), ?, ?)', [req.body.idProcedencia, req.body.interesado, req.body.idAsunto, 
+                    req.body.numEmpleadoReceptor, req.body.fecha, req.body.extrainfo, 1], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -113,9 +113,9 @@ registrarPatronatoController.saveAcumulado = (req, res, next) => {
         var expedienteId;
         let promise1 = new Promise((resolve, reject) => {
             if(req.body.apoderado != "") {
-                connection.query('INSERT INTO FichaEntradaPatronato(idProcedencia, interesado, apoderadoLegal, idAsuntoPatronato, idEmpleadoReceptor, fechaEntrada, idEstadoPatronato) ' +
-                    'VALUES(?, ?, ?, ?, ?, STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), ?)', [req.body.idProcedencia, req.body.interesado, req.body.apoderado, req.body.idAsunto, 
-                    req.body.numEmpleadoReceptor, req.body.fecha, 1], (err, rows) => {
+                connection.query('INSERT INTO FichaEntradaPatronato(idProcedencia, interesado, apoderadoLegal, idAsuntoPatronato, idEmpleadoReceptor, fechaEntrada, informacionAdicional, idEstadoPatronato) ' +
+                    'VALUES(?, ?, ?, ?, ?, STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), ?, ?)', [req.body.idProcedencia, req.body.interesado, req.body.apoderado, req.body.idAsunto, 
+                    req.body.numEmpleadoReceptor, req.body.fecha, req.body.extrainfo, 1], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -123,9 +123,9 @@ registrarPatronatoController.saveAcumulado = (req, res, next) => {
                     resolve(rows.insertId);
                 });
             }else {
-                connection.query('INSERT INTO FichaEntradaPatronato(idProcedencia, interesado, idAsuntoPatronato, idEmpleadoReceptor, fechaEntrada, idEstadoPatronato) ' +
-                    'VALUES(?, ?, ?, ?, STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), ?)', [req.body.idProcedencia, req.body.interesado, req.body.idAsunto, 
-                    req.body.numEmpleadoReceptor, req.body.fecha, 1], (err, rows) => {
+                connection.query('INSERT INTO FichaEntradaPatronato(idProcedencia, interesado, idAsuntoPatronato, idEmpleadoReceptor, fechaEntrada, informacionAdicional, idEstadoPatronato) ' +
+                    'VALUES(?, ?, ?, ?, STR_TO_DATE(?, \'%d-%m-%Y %H:%i:%s\'), ?, ?)', [req.body.idProcedencia, req.body.interesado, req.body.idAsunto, 
+                    req.body.numEmpleadoReceptor, req.body.fecha, req.body.extrainfo, 1], (err, rows) => {
                     if (err) {
                         console.log(err);
                         return next(err);

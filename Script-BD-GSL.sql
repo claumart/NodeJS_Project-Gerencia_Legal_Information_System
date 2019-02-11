@@ -144,6 +144,7 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaExpediente` (
   `idAsunto` INT NOT NULL,
   `idEmpleadoReceptor` INT NOT NULL,
   `fechaEntrada` DATETIME NOT NULL,
+  `informacionAdicional` VARCHAR(200) NULL,
   `idAbogadoAsignado` INT NULL,
   `fechaAsignacion` DATE NULL,
   `fechaDescargo` DATE NULL,
@@ -215,7 +216,7 @@ DROP TABLE IF EXISTS `Expediente` ;
 
 CREATE TABLE IF NOT EXISTS `Expediente` (
   `idExpediente` INT NOT NULL AUTO_INCREMENT,
-  `numExpediente` VARCHAR(20) NOT NULL,
+  `numExpediente` VARCHAR(30) NOT NULL,
   `folios` INT NOT NULL,
   PRIMARY KEY (`idExpediente`))
 ENGINE = InnoDB;
@@ -311,6 +312,7 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaPatronato` (
   `idAsuntoPatronato` INT NOT NULL,
   `idEmpleadoReceptor` INT NOT NULL,
   `fechaEntrada` DATETIME NOT NULL,
+  `informacionAdicional` VARCHAR(200) NULL,
   `idAbogadoAsignado` INT NULL,
   `fechaAsignacion` DATE NULL,
   `fechaDescargo` DATE NULL,
@@ -388,6 +390,7 @@ CREATE TABLE IF NOT EXISTS `FichaEntradaOpinion` (
   `numOficio` VARCHAR(30) NOT NULL,
   `idEmpleadoReceptor` INT NOT NULL,
   `fechaEntrada` DATETIME NOT NULL,
+  `informacionAdicional` VARCHAR(200) NULL,
   `idAbogadoAsignado` INT NULL,
   `fechaAsignacion` DATE NULL,
   `fechaDescargo` DATE NULL,
@@ -463,6 +466,30 @@ ALTER TABLE `FichaEntradaExpedienteXExpediente` ADD INDEX `FEEXE_idExpediente_id
 
 
 -- -----------------------------------------------------
+-- Table `FichaEntradaOpinionXExpediente`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `FichaEntradaOpinionXExpediente` ;
+
+CREATE TABLE IF NOT EXISTS `FichaEntradaOpinionXExpediente` (
+  `idFichaEntradaOpinion` INT NOT NULL,
+  `idExpediente` INT NOT NULL,
+  PRIMARY KEY (`idFichaEntradaOpinion`, `idExpediente`),
+  CONSTRAINT `FEOXE_idFichaEntradaOpinion_FK`
+    FOREIGN KEY (`idFichaEntradaOpinion`)
+    REFERENCES `FichaEntradaOpinion` (`idFichaEntradaOpinion`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `FEOXE_idExpediente_FK`
+    FOREIGN KEY (`idExpediente`)
+    REFERENCES `Expediente` (`idExpediente`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+ALTER TABLE `FichaEntradaOpinionXExpediente` ADD INDEX `FEOXE_idExpediente_FK_idx` (`idExpediente` ASC);
+
+
+-- -----------------------------------------------------
 -- Table `Municipio`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `Municipio` ;
@@ -512,7 +539,7 @@ DROP TABLE IF EXISTS `ExpedientePatronato` ;
 CREATE TABLE IF NOT EXISTS `ExpedientePatronato` (
   `idExpedientePatronato` INT NOT NULL AUTO_INCREMENT,
   `idComunidadRelacionada` INT NOT NULL,
-  `numExpedientePatronato` VARCHAR(25) NOT NULL,
+  `numExpedientePatronato` VARCHAR(30) NOT NULL,
   `periodoDeValidez` INT NOT NULL,
   `folios` INT NOT NULL,
   PRIMARY KEY (`idExpedientePatronato`),

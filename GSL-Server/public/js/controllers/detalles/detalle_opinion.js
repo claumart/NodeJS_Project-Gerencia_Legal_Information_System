@@ -58,7 +58,9 @@ app.controller("detailCtrl", function($scope, $http, $window, utilities, detailU
         $scope.apoderadoLegal = detalleOpinionList[0].apoderadoLegal;
         $scope.descripcionAsunto = detalleOpinionList[0].asunto;
         $scope.nombreEmpleadoReceptor = detalleOpinionList[0].nombreEmpleadoReceptor;
+        $scope.expedientes = detalleOpinionList[0].expedientes;
         $scope.fechaEntrada = detalleOpinionList[0].fechaEntrada;
+        $scope.extrainfo = detalleOpinionList[0].informacionAdicional;
         $scope.nombreAbogadoAsignado = detalleOpinionList[0].nombreAbogadoAsignado;
         $scope.fechaAsignacion = detalleOpinionList[0].fechaAsignacion;
         $scope.fechaDescargo = detalleOpinionList[0].fechaDescargo;

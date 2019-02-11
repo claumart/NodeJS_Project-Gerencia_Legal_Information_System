@@ -99,7 +99,6 @@
               		<div class="medium-6 small-12 cell medium-offset-3">
               			<label>Asunto:</label>
 			            <textarea id="asunto_textarea" name="asunto_textarea" ng-model="asunto_textarea"></textarea>
-			            </select>
               		</div>
             	</div>
 	            <div class="grid-x grid-padding-x">
@@ -108,6 +107,47 @@
                 		<select id="empleado_receptor_select" name="empleado_receptor_select" ng-model="empleado_receptor_select" ng-options="x.nombreEmpleado for x in empleadoReceptorList"></select>
               		</div>
             	</div>
+
+            	<div class="grid-x grid-padding-x">
+              		<div class="medium-6 small-12 cell medium-offset-3">
+              			<label>Información Adicional (opcional):</label>
+			            <textarea id="extrainfo_textarea" name="extrainfo_textarea" ng-model="extrainfo_textarea"></textarea>
+              		</div>
+            	</div>
+
+            	<div class="grid-x grid-padding-x">
+	            	<div class="medium-6 small-12 cell medium-offset-3">
+	                	<label>Expedientes Relacionados</label>
+	                	<input type="radio" name="expedientes_relacionados" value="No" id="expedientes_no" ng-model="expedientes_relacionados" checked><label for="expedientes_no">No</label>
+	                	<input type="radio" name="expedientes_relacionados" value="Si" id="expedientes_si" ng-model="expedientes_relacionados"><label for="expedientes_si">Si</label>
+	              	</div>
+	            </div>
+
+	            <div id="si_acumulados_box" ng-show="expedientes_relacionados=='Si'">
+		            <div class="grid-x grid-padding-x" id="si_acumulados_controllers">
+		              	<fieldset class="medium-2 small-12 cell">
+		              		<button type="button" id="add_exp_btn" class="button secondary" ng-click="agregarExpediente()">Agregar Expediente</button>
+		              	</fieldset>
+
+		              	<fieldset class="medium-4 small-12 cell">
+		              		<button type="button" id="delete_last_btn" class="button secondary" ng-click="eliminarUltimoExpediente()">Eliminar último</button>
+		              	</fieldset>
+		              	<fieldset class="medium-2 small-12 cell">
+		              		<input type="number" name="numExpedientes" id="numExpedientes" value="1" style="display: none" ng-model="numExpedientes">
+		              	</fieldset>
+		            </div>
+		            <div class="grid-x grid-padding-x" id="expediente1">
+		              	<div class="medium-4 small-12 cell">
+		              		<label>Número de Expediente:</label>
+		              		<input type="text" id="num_expediente1" name="num_expediente1" ng-model="num_expediente1">
+		              	</div>
+
+		              	<div class="medium-4 small-12 cell">
+		              		<label>Folios:</label>
+		              		<input type="number" ng-model="num_folios_expediente1" value="0" min="0" id="num_folios_expediente1" name="num_folios_expediente1">
+		              	</div>
+		            </div>
+	        	</div>
 
             	<div class="grid-x grid-padding-x ultimo_parametro">
 	            	<div class="medium-6 small-12 cell medium-offset-3">
