@@ -1,0 +1,5 @@
+Variables a modificar para hacer funcionar la aplicación
+1- GSL-Server > connection.js > Parametros de bases de datos
+2- GSL-Server > app.js > app.use(express.static('Modificar la dirección de la ubicación en donde se almacenarán los dictamenes escaneados'));
+3- GSL-Server > controllers > controlesDeFormularios > dictamenPath.js > Modificar la dirección de la ubicación en donde se almacenarán los dictamenes escaneados
+4- GSL-Server > bin > www > var port = normalizePort(process.env.PORT || 'Cambiar este valor al puerto deseado');

@@ -424,7 +424,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza)
                             document.getElementById('myModal').style.display = "flex";
             			 }
                     }else{
-                        $scope.modalMessage = "El campo Asunto es muy largo o está vacío, por favor ingrese un valor valido y sin espacios";
+                        $scope.modalMessage = "El campo Asunto es muy largo o está vacío, por favor ingrese un valor valido";
                         document.getElementById('myModal').style.display = "flex";
                     } 
                 }else {

@@ -3,7 +3,7 @@ var seguimientoExpController = {};
 seguimientoExpController.mostrarExpedientesRecibidos = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
-        var query = "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia," +
+        var query = "(SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia," +
         "asunto.nombreAsunto as nombreAsunto, fichaexp.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaexpediente as fichaexp " +
         "LEFT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -16,9 +16,9 @@ seguimientoExpController.mostrarExpedientesRecibidos = (req, res, next) => {
             "ON Asunto.idAsunto = fichaexp.idAsunto " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaexp.idAbogadoAsignado " +
-        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente " +    
+        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente) " +    
         "UNION " +
-        "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia, " +
         "asunto.nombreAsunto as nombreAsunto, fichaexp.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaexpediente as fichaexp " +
         "RIGHT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -31,7 +31,7 @@ seguimientoExpController.mostrarExpedientesRecibidos = (req, res, next) => {
             "ON Asunto.idAsunto = fichaexp.idAsunto " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaexp.idAbogadoAsignado " +
-        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente";
+        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente) LIMIT " + req.body.offSet + ", " + req.body.rango;
     	connection.query(query, [1, 1], (err, results) => {
         	if (err) {
                 console.log(err);
@@ -46,7 +46,7 @@ seguimientoExpController.mostrarExpedientesRecibidos = (req, res, next) => {
 seguimientoExpController.mostrarExpedientesAsignados = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
-        var query = "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia," +
+        var query = "(SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia," +
         "asunto.nombreAsunto as nombreAsunto, fichaexp.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaexpediente as fichaexp " +
         "LEFT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -59,9 +59,9 @@ seguimientoExpController.mostrarExpedientesAsignados = (req, res, next) => {
             "ON Asunto.idAsunto = fichaexp.idAsunto " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaexp.idAbogadoAsignado " +
-        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente " +    
+        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente) " +    
         "UNION " +
-        "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia, " +
         "asunto.nombreAsunto as nombreAsunto, fichaexp.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaexpediente as fichaexp " +
         "RIGHT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -74,7 +74,7 @@ seguimientoExpController.mostrarExpedientesAsignados = (req, res, next) => {
             "ON Asunto.idAsunto = fichaexp.idAsunto " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaexp.idAbogadoAsignado " +
-        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente";
+        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [2, 2], (err, results) => {
             if (err) {
                 console.log(err);
@@ -89,7 +89,7 @@ seguimientoExpController.mostrarExpedientesAsignados = (req, res, next) => {
 seguimientoExpController.mostrarExpedientesDescargados = (req, res, next) => {
 	req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia," +
+        var query = "(SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia," +
         "asunto.nombreAsunto as nombreAsunto, fichaexp.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaexpediente as fichaexp " +
         "LEFT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -102,9 +102,9 @@ seguimientoExpController.mostrarExpedientesDescargados = (req, res, next) => {
             "ON Asunto.idAsunto = fichaexp.idAsunto " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaexp.idAbogadoAsignado " +
-        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente " +    
+        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente) " +    
         "UNION " +
-        "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia, " +
         "asunto.nombreAsunto as nombreAsunto, fichaexp.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaexpediente as fichaexp " +
         "RIGHT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -117,7 +117,7 @@ seguimientoExpController.mostrarExpedientesDescargados = (req, res, next) => {
             "ON Asunto.idAsunto = fichaexp.idAsunto " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaexp.idAbogadoAsignado " +
-        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente";
+        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [3, 3], (err, results) => {
             if (err) {
                 console.log(err);
@@ -132,7 +132,7 @@ seguimientoExpController.mostrarExpedientesDescargados = (req, res, next) => {
 seguimientoExpController.mostrarExpedientesRevisados = (req, res, next) => {
 	req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia," +
+        var query = "(SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia," +
         "asunto.nombreAsunto as nombreAsunto, fichaexp.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaexpediente as fichaexp " +
         "LEFT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -145,9 +145,9 @@ seguimientoExpController.mostrarExpedientesRevisados = (req, res, next) => {
             "ON Asunto.idAsunto = fichaexp.idAsunto " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaexp.idAbogadoAsignado " +
-        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente " +    
+        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente) " +    
         "UNION " +
-        "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia, " +
         "asunto.nombreAsunto as nombreAsunto, fichaexp.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaexpediente as fichaexp " +
         "RIGHT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -160,7 +160,7 @@ seguimientoExpController.mostrarExpedientesRevisados = (req, res, next) => {
             "ON Asunto.idAsunto = fichaexp.idAsunto " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaexp.idAbogadoAsignado " +
-        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente";
+        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [4, 4], (err, results) => {
             if (err) {
                 console.log(err);
@@ -175,7 +175,7 @@ seguimientoExpController.mostrarExpedientesRevisados = (req, res, next) => {
 seguimientoExpController.mostrarExpedientesRemitidos = (req, res, next) => {
 	req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia," +
+        var query = "(SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia," +
         "asunto.nombreAsunto as nombreAsunto, fichaexp.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaexpediente as fichaexp " +
         "LEFT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -188,9 +188,9 @@ seguimientoExpController.mostrarExpedientesRemitidos = (req, res, next) => {
             "ON Asunto.idAsunto = fichaexp.idAsunto " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaexp.idAbogadoAsignado " +
-        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente " +    
+        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente) " +    
         "UNION " +
-        "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia, " +
         "asunto.nombreAsunto as nombreAsunto, fichaexp.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaexpediente as fichaexp " +
         "RIGHT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -203,7 +203,7 @@ seguimientoExpController.mostrarExpedientesRemitidos = (req, res, next) => {
             "ON Asunto.idAsunto = fichaexp.idAsunto " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaexp.idAbogadoAsignado " +
-        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente";
+        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [5, 5], (err, results) => {
             if (err) {
                 console.log(err);
@@ -218,7 +218,7 @@ seguimientoExpController.mostrarExpedientesRemitidos = (req, res, next) => {
 seguimientoExpController.mostrarExpedientesConPrevio = (req, res, next) => {
 	req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia," +
+        var query = "(SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia," +
         "asunto.nombreAsunto as nombreAsunto, fichaexp.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaexpediente as fichaexp " +
         "LEFT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -231,9 +231,9 @@ seguimientoExpController.mostrarExpedientesConPrevio = (req, res, next) => {
             "ON Asunto.idAsunto = fichaexp.idAsunto " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaexp.idAbogadoAsignado " +
-        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente " +    
+        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente) " +    
         "UNION " +
-        "SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaexp.idFichaEntradaExpediente as idficha, GROUP_CONCAT(Expediente.numExpediente SEPARATOR ', ') as numExpediente, Procedencia.nombreDependencia as nombreProcedencia, " +
         "asunto.nombreAsunto as nombreAsunto, fichaexp.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaexpediente as fichaexp " +
         "RIGHT JOIN fichaEntradaExpedienteXExpediente as fichaxexp " +
@@ -246,7 +246,7 @@ seguimientoExpController.mostrarExpedientesConPrevio = (req, res, next) => {
             "ON Asunto.idAsunto = fichaexp.idAsunto " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaexp.idAbogadoAsignado " +
-        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente";
+        "WHERE fichaexp.idEstadoExpediente = ? GROUP BY fichaexp.idFichaEntradaExpediente) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [6, 6], (err, results) => {
             if (err) {
                 console.log(err);

@@ -17,7 +17,7 @@ app.controller("passwordCtrl", function($scope, $http, $window) {
                 data : {actualPassword : $scope.actual_password_input}
             }).then(function mySuccess(response) {
                 if(response.data){
-                    if($scope.password_input.length < 21 && $scope.password_input.trim().length > 6){
+                    if($scope.password_input.length < 21 && $scope.password_input.trim().length > 5){
                         if($scope.password_input == $scope.password_verification_input){
                             $http({
                                 method : "POST",
@@ -45,7 +45,8 @@ app.controller("passwordCtrl", function($scope, $http, $window) {
                         document.getElementById('myModal').style.display = "flex";
                     }
                 }else{
-
+                	$scope.modalMessage = "La contraseña actual ingresada es incorrecta";
+            		document.getElementById('myModal').style.display = "flex";
                 }
             }, function myError(response) {
                 $scope.modalFeedback = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";

@@ -37,6 +37,13 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 	$scope.tipo_busqueda_select = "exp";
 	$scope.nombreParametroId = "Expedientes";
 	$scope.usar_fechas = false;
+	$scope.pagina1 = 1;
+	$scope.pagina2 = 2;
+	$scope.totalRegistros = 0;
+	$scope.tamanioBusqueda = 2;
+	$scope.numeroPagina = 1;
+	$scope.totalPaginas = 0;
+	$scope.busqueda = false;
 	
 	$scope.closeModal = ()=> {
         document.getElementById('myModal').style.display = "none";
@@ -168,8 +175,15 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 		$scope.resultadosExpList = null;
 		$scope.resultadosOpnList = null;
 		$scope.resultadosPttList = null;
+		limpiarPaginas();
 	}
 
+
+	$scope.IniciarBusqueda = async ()=>{
+		$scope.busqueda = true;
+		await  limpiarPaginas();
+		await $scope.ValidarBusqueda();
+	};
 
 	$scope.ValidarBusqueda = ()=> {
 		switch($scope.tipo_busqueda_select) {
@@ -256,20 +270,60 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 			if($scope.tipo_fecha1 == "fecha_especifica") {
 				if($scope.fecha_dia1 != null) {
 					var fechaValidada = utilities.validarFecha($scope.fecha_dia1);
-					$http({
-			        	method : "POST",
-			        	url : "/buscar/expedientes/parametros1/conFecha",
-			        	headers: {'Content-Type': 'application/json'},
-			        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
-			        		fecha : fechaValidada
-                		}
-			    	}).then(function mySuccess(response) {
-			    		var lista = JSON.parse(response.data);
-			        	$scope.resultadosExpList = utilities.formatearFecha(lista);
-			    	}, function myError(response) {
-			        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            			document.getElementById('myModal').style.display = "flex";
-			    	});
+					if($scope.busqueda){
+						$http({
+							method : "POST",
+							url : "/contar/expedientes/parametros1/conFecha",
+							headers: {'Content-Type': 'application/json'},
+							data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+				        		fecha : fechaValidada
+	                		}
+						}).then(async function mySuccess(response) {
+							var lista = await JSON.parse(response.data);
+							$scope.totalRegistros = lista[0].numeroRegistros;
+							console.log("Registros: " + $scope.totalRegistros);
+							$scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+							console.log("Paginas: " + $scope.totalPaginas);
+							if($scope.totalRegistros>0){
+								$http({
+						        	method : "POST",
+						        	url : "/buscar/expedientes/parametros1/conFecha",
+						        	headers: {'Content-Type': 'application/json'},
+						        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+						        		fecha : fechaValidada, offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+						        		rango: $scope.tamanioBusqueda
+			                		}
+						    	}).then(function mySuccess(response) {
+						    		var lista = JSON.parse(response.data);
+						        	$scope.resultadosExpList = utilities.formatearFecha(lista);
+						    	}, function myError(response) {
+						        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            			document.getElementById('myModal').style.display = "flex";
+						    	});
+							}else{
+								$scope.resultadosExpList = null;
+							}
+						},function myError(response) {
+							$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+				            document.getElementById('myModal').style.display = "flex";
+						});
+					}else{
+						$http({
+				        	method : "POST",
+				        	url : "/buscar/expedientes/parametros1/conFecha",
+				        	headers: {'Content-Type': 'application/json'},
+				        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+				        		fecha : fechaValidada, offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+				        		rango: $scope.tamanioBusqueda
+	                		}
+				    	}).then(function mySuccess(response) {
+				    		var lista = JSON.parse(response.data);
+				        	$scope.resultadosExpList = utilities.formatearFecha(lista);
+				    	}, function myError(response) {
+				        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            			document.getElementById('myModal').style.display = "flex";
+				    	});
+					}
 				}else{
 					$scope.modalMessage = "Por favor seleccione la fecha para realizar la busqueda";
                 	document.getElementById('myModal').style.display = "flex";
@@ -280,20 +334,60 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 					var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio1);
 					if($scope.fecha_fin1 != null) {
 						var fechaFinValidada = utilities.validarFecha($scope.fecha_fin1);
-						$http({
-				        	method : "POST",
-				        	url : "/buscar/expedientes/parametros1/conFecha",
-				        	headers: {'Content-Type': 'application/json'},
-				        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
-				        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada
-                			}
-				    	}).then(function mySuccess(response) {
-				    		var lista = JSON.parse(response.data);
-				        	$scope.resultadosExpList = utilities.formatearFecha(lista);
-				    	}, function myError(response) {
-				        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            				document.getElementById('myModal').style.display = "flex";
-				    	});
+						if($scope.busqueda){
+							$http({
+							    method : "POST",
+							   	url : "/contar/expedientes/parametros1/conFecha",
+							   	headers: {'Content-Type': 'application/json'},
+							   	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+					        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada
+	                			}
+							}).then(async function mySuccess(response) {
+								var lista = await JSON.parse(response.data);
+								$scope.totalRegistros = lista[0].numeroRegistros;
+							    $scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+							    if($scope.totalRegistros>0){
+									$http({
+							        	method : "POST",
+							        	url : "/buscar/expedientes/parametros1/conFecha",
+							        	headers: {'Content-Type': 'application/json'},
+							        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+							        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada,
+							        		offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+						        			rango: $scope.tamanioBusqueda
+			                			}
+							    	}).then(function mySuccess(response) {
+							    		var lista = JSON.parse(response.data);
+							        	$scope.resultadosExpList = utilities.formatearFecha(lista);
+							    	}, function myError(response) {
+							        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            				document.getElementById('myModal').style.display = "flex";
+							    	});
+							    }else{
+							    	$scope.resultadosExpList = null;
+							    }
+							},function myError(response) {
+								$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+				            	document.getElementById('myModal').style.display = "flex";
+							});
+						}else{
+							$http({
+					        	method : "POST",
+					        	url : "/buscar/expedientes/parametros1/conFecha",
+					        	headers: {'Content-Type': 'application/json'},
+					        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+					        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada,
+					        		offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+						        	rango: $scope.tamanioBusqueda
+	                			}
+					    	}).then(function mySuccess(response) {
+					    		var lista = JSON.parse(response.data);
+					        	$scope.resultadosExpList = utilities.formatearFecha(lista);
+					    	}, function myError(response) {
+					        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            				document.getElementById('myModal').style.display = "flex";
+					    	});
+						}
 					}else{
 						$scope.modalMessage = "Por favor seleccione la fecha de finalización para realizar la busqueda";
                 		document.getElementById('myModal').style.display = "flex";
@@ -305,19 +399,57 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 				}
 			}
 		}else {
-			$http({
-			    method : "POST",
-			   	url : "/buscar/expedientes/parametros1/sinFecha",
-			   	headers: {'Content-Type': 'application/json'},
-			   	data : {parametroBusqueda : nombreParametro, valorParametro : valor
-                }
-			}).then(function mySuccess(response) {
-			    var lista = JSON.parse(response.data);
-			    $scope.resultadosExpList = utilities.formatearFecha(lista);
-			}, function myError(response) {
-			    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            	document.getElementById('myModal').style.display = "flex";
-			});
+			if($scope.busqueda){
+				$http({
+				    method : "POST",
+				   	url : "/contar/expedientes/parametros1/sinFecha",
+				   	headers: {'Content-Type': 'application/json'},
+				   	data : {parametroBusqueda : nombreParametro, valorParametro : valor
+	                }
+				}).then(async function mySuccess(response) {
+					var lista = await JSON.parse(response.data);
+					$scope.totalRegistros = lista[0].numeroRegistros;
+					console.log("Registros: " + $scope.totalRegistros);
+				    $scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+				    console.log("Paginas: " + $scope.totalPaginas);
+				    console.log("Soy la función de conteo");
+				    if($scope.totalRegistros>0){
+				    	$http({
+						    method : "POST",
+						   	url : "/buscar/expedientes/parametros1/sinFecha",
+						   	headers: {'Content-Type': 'application/json'},
+						   	data : {parametroBusqueda : nombreParametro, valorParametro : valor,
+			                offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, rango: $scope.tamanioBusqueda}
+						}).then(function mySuccess(response) {
+						    var lista = JSON.parse(response.data);
+						    $scope.resultadosExpList = utilities.formatearFecha(lista);
+						}, function myError(response) {
+						    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            	document.getElementById('myModal').style.display = "flex";
+						});
+				    }else{
+				    	$scope.resultadosExpList = null;
+				    }
+				},function myError(response) {
+					$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            	document.getElementById('myModal').style.display = "flex";
+				});
+			}else{
+				$http({
+				    method : "POST",
+				   	url : "/buscar/expedientes/parametros1/sinFecha",
+				   	headers: {'Content-Type': 'application/json'},
+				   	data : {parametroBusqueda : nombreParametro, valorParametro : valor,
+	                offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, rango: $scope.tamanioBusqueda}
+				}).then(function mySuccess(response) {
+					console.log($scope.numeroPagina);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+				    var lista = JSON.parse(response.data);
+				    $scope.resultadosExpList = utilities.formatearFecha(lista);
+				}, function myError(response) {
+				    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            	document.getElementById('myModal').style.display = "flex";
+				});
+			}
 		}
 	};
 
@@ -325,19 +457,57 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 		if($scope.tipo_fecha2 == "fecha_especifica") {
 			if($scope.fecha_dia2 != null) {
 				var fechaValidada = utilities.validarFecha($scope.fecha_dia2);
-				$http({
-			        method : "POST",
-			        url : "/buscar/expedientes/parametros2/conFecha",
-			        headers: {'Content-Type': 'application/json'},
-			        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada
-                	}
-			    }).then(function mySuccess(response) {
-			    	var lista = JSON.parse(response.data);
-			       	$scope.resultadosExpList = utilities.formatearFecha(lista);
-			    }, function myError(response) {
-			       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            		document.getElementById('myModal').style.display = "flex";
-			   	});
+				if($scope.busqueda){
+					$http({
+				        method : "POST",
+				        url : "/contar/expedientes/parametros2/conFecha", 
+				        headers: {'Content-Type': 'application/json'},
+				        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada
+	                	}
+				    }).then(async function mySuccess(response) {
+				    	var lista = await JSON.parse(response.data);
+						$scope.totalRegistros = lista[0].numeroRegistros;
+					    $scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+					    if($scope.totalRegistros>0){
+					    	$http({
+						        method : "POST",
+						        url : "/buscar/expedientes/parametros2/conFecha", 
+						        headers: {'Content-Type': 'application/json'},
+						        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada,
+						        	offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+				        			rango: $scope.tamanioBusqueda
+			                	}
+						    }).then(function mySuccess(response) {
+						    	var lista = JSON.parse(response.data);
+						       	$scope.resultadosExpList = utilities.formatearFecha(lista);
+						    }, function myError(response) {
+						       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            		document.getElementById('myModal').style.display = "flex";
+						   	});
+					    }else{
+					    	$scope.resultadosExpList = null;
+					    }
+				    }, function myError(response) {
+				       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            		document.getElementById('myModal').style.display = "flex";
+				   	});
+				}else{
+					$http({
+				        method : "POST",
+				        url : "/buscar/expedientes/parametros2/conFecha", 
+				        headers: {'Content-Type': 'application/json'},
+				        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada,
+				        	offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+				        	rango: $scope.tamanioBusqueda
+	                	}
+				    }).then(function mySuccess(response) {
+				    	var lista = JSON.parse(response.data);
+				       	$scope.resultadosExpList = utilities.formatearFecha(lista);
+				    }, function myError(response) {
+				       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            		document.getElementById('myModal').style.display = "flex";
+				   	});
+				}
 			}else{
 				$scope.modalMessage = "Por favor seleccione la fecha para realizar la busqueda";
                 document.getElementById('myModal').style.display = "flex";
@@ -347,25 +517,62 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 				var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio2);
 				if($scope.fecha_fin2 != null) {
 					var fechaFinValidada = utilities.validarFecha($scope.fecha_fin2);
-					$http({
-				        method : "POST",
-				       	url : "/buscar/expedientes/parametros2/conFecha",
-				       	headers: {'Content-Type': 'application/json'},
-				       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
-				        	fechaFin : fechaFinValidada
-                		}
-				    }).then(function mySuccess(response) {
-				   		var lista = JSON.parse(response.data);
-				       	$scope.resultadosExpList = utilities.formatearFecha(lista);
-				   	}, function myError(response) {
-				       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            			document.getElementById('myModal').style.display = "flex";
-			    	});
+					if($scope.busqueda){
+						$http({
+					        method : "POST",
+					       	url : "/contar/expedientes/parametros2/conFecha",
+					       	headers: {'Content-Type': 'application/json'},
+					       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
+					        	fechaFin : fechaFinValidada
+	                		}
+					    }).then(async function mySuccess(response) {
+							var lista = await JSON.parse(response.data);
+							$scope.totalRegistros = lista[0].numeroRegistros;
+						    $scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+						    if($scope.totalRegistros>0){
+						    	$http({
+						        method : "POST",
+						       	url : "/buscar/expedientes/parametros2/conFecha",
+						       	headers: {'Content-Type': 'application/json'},
+						       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
+						        	fechaFin : fechaFinValidada, offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+				        			rango: $scope.tamanioBusqueda
+		                		}
+						    }).then(function mySuccess(response) {
+						   		var lista = JSON.parse(response.data);
+						       	$scope.resultadosExpList = utilities.formatearFecha(lista);
+						   	}, function myError(response) {
+						       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+		            			document.getElementById('myModal').style.display = "flex";
+					    	});
+						    }else{
+						    	$scope.resultadosExpList = null;
+						    }   		
+					   	}, function myError(response) {
+					       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            			document.getElementById('myModal').style.display = "flex";
+				    	});
+					}else{
+						$http({
+					        method : "POST",
+					       	url : "/buscar/expedientes/parametros2/conFecha",
+					       	headers: {'Content-Type': 'application/json'},
+					       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
+					        	fechaFin : fechaFinValidada, offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+				        		rango: $scope.tamanioBusqueda
+	                		}
+					    }).then(function mySuccess(response) {
+					   		var lista = JSON.parse(response.data);
+					       	$scope.resultadosExpList = utilities.formatearFecha(lista);
+					   	}, function myError(response) {
+					       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            			document.getElementById('myModal').style.display = "flex";
+				    	});
+					}
 				}else{
 					$scope.modalMessage = "Por favor seleccione la fecha de finalización para realizar la busqueda";
                 	document.getElementById('myModal').style.display = "flex";
 				}
-
 			}else{
 				$scope.modalMessage = "Por favor seleccione la fecha de inicio para realizar la busqueda";
                 document.getElementById('myModal').style.display = "flex";
@@ -452,7 +659,6 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 					$scope.modalMessage = "Por favor seleccione la fecha para realizar la busqueda";
                 	document.getElementById('myModal').style.display = "flex";
 				}
-
 			}else if($scope.tipo_fecha1 == "fecha_rango") {
 				if($scope.fecha_inicio1 != null) {
 					var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio1);
@@ -770,4 +976,116 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 		}
 	};
 
+
+
+	/*********************************************************************************************/
+	/*****************************************Pagination******************************************/
+	/*********************************************************************************************/
+
+	$scope.volverPagina = async ()=>{
+		if($scope.numeroPagina>2){
+			$scope.pagina2 = --$scope.numeroPagina;
+			$scope.busqueda = false;
+			document.getElementById('pagina1').setAttribute('class', '');
+			if($scope.totalPaginas>1){
+				document.getElementById('pagina2').setAttribute('class', 'active');
+			}
+			if($scope.totalPaginas>2){
+				document.getElementById('ultimaPagina').setAttribute('class', '');
+			}
+			await $scope.ValidarBusqueda();
+		}else if($scope.numeroPagina==2){
+			await $scope.irPagina1();
+			$scope.busqueda = false;
+			await $scope.ValidarBusqueda();
+		}
+	};
+
+	$scope.irPagina1 = async ()=>{
+		$scope.numeroPagina=1;
+		$scope.pagina2 = 2;
+		$scope.busqueda = false;
+		document.getElementById('pagina1').setAttribute('class', 'active');
+		if($scope.totalPaginas>1){
+			document.getElementById('pagina2').setAttribute('class', '');
+		}
+		if($scope.totalPaginas>2){
+			document.getElementById('ultimaPagina').setAttribute('class', '');
+		}
+		await $scope.ValidarBusqueda();
+	};
+
+	$scope.irPagina2 = async ()=>{
+		if($scope.numeroPagina==1){
+			$scope.pagina2 = ++$scope.numeroPagina;
+			$scope.busqueda = false;
+			document.getElementById('pagina1').setAttribute('class', '');
+			if($scope.totalPaginas>1){
+				document.getElementById('pagina2').setAttribute('class', 'active');
+			}
+			if($scope.totalPaginas>2){
+				document.getElementById('ultimaPagina').setAttribute('class', '');
+			}
+			await $scope.ValidarBusqueda();
+		}else if($scope.numeroPagina==$scope.totalPaginas && $scope.totalPaginas>2){
+			$scope.pagina2 = --$scope.numeroPagina;
+			$scope.busqueda = false;
+			document.getElementById('pagina1').setAttribute('class', '');
+			if($scope.totalPaginas>1){
+				document.getElementById('pagina2').setAttribute('class', 'active');
+			}
+			if($scope.totalPaginas>2){
+				document.getElementById('ultimaPagina').setAttribute('class', '');
+			}
+			await $scope.ValidarBusqueda();
+		}
+	};
+
+	$scope.irUltimaPagina = async ()=>{
+		$scope.numeroPagina=$scope.totalPaginas;
+		$scope.pagina2 = $scope.totalPaginas - 1;
+		$scope.busqueda = false;
+		document.getElementById('pagina1').setAttribute('class', '');
+		document.getElementById('pagina2').setAttribute('class', '');
+		document.getElementById('ultimaPagina').setAttribute('class', 'active');
+		await $scope.ValidarBusqueda();
+	};
+
+	$scope.adelantarPagina = async ()=>{
+		if($scope.numeroPagina<$scope.totalPaginas - 1){
+			$scope.pagina2 = ++$scope.numeroPagina;
+			$scope.busqueda = false;
+			document.getElementById('pagina1').setAttribute('class', '');
+			if($scope.totalPaginas>1){
+				document.getElementById('pagina2').setAttribute('class', 'active');
+			}
+			if($scope.totalPaginas>2){
+				document.getElementById('ultimaPagina').setAttribute('class', '');
+			}
+			await $scope.ValidarBusqueda();
+		}else if($scope.numeroPagina==$scope.totalPaginas - 1 && $scope.totalPaginas==2){
+			$scope.numeroPagina=$scope.totalPaginas;
+			$scope.pagina2 = $scope.totalPaginas;
+			$scope.busqueda = false;
+			document.getElementById('pagina1').setAttribute('class', '');
+			document.getElementById('pagina2').setAttribute('class', 'active');
+			$scope.ValidarBusqueda();
+		}else if($scope.numeroPagina==$scope.totalPaginas - 1 && $scope.totalPaginas>2){
+			await $scope.irUltimaPagina();
+		}
+	};
+
+	limpiarPaginas = async ()=>{
+		await document.getElementById('pagina2').setAttribute('class', 'ng-hide');
+		await document.getElementById('ultimaPagina').setAttribute('class', 'ng-hide');
+		$scope.pagina2 = 2;
+		$scope.totalRegistros = 0;
+		$scope.tamanioBusqueda = 2;
+		$scope.numeroPagina = 1;
+		$scope.totalPaginas = 0;
+		await document.getElementById('pagina1').setAttribute('class', 'active');
+		console.log("Soy la función de limpieza");                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+	};
+
 });
+

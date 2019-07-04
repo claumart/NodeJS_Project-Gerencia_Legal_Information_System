@@ -134,7 +134,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities) {
                 document.getElementById('myModal').style.display = "flex";
             }
         }else{
-            $scope.modalMessage = "Por favor seleccione la dependecnia de reingreso";
+            $scope.modalMessage = "Por favor seleccione la dependencia de reingreso";
             document.getElementById('myModal').style.display = "flex";
         }  
     };

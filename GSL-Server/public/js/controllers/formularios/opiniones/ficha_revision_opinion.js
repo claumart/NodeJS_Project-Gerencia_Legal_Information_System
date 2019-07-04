@@ -237,7 +237,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities) {
                 document.getElementById('myModal').style.display = "flex";
             }
         }else {
-            $scope.modalMessage = "Por favor seleccione la fecha de revisión del expediente";
+            $scope.modalMessage = "Por favor seleccione la fecha de revisión de la opinión";
             document.getElementById('myModal').style.display = "flex";
         }       
     };

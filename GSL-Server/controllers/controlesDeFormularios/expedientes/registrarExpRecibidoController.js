@@ -49,9 +49,7 @@ registrarExpController.saveNoAcumulado = (req, res, next) => {
                             console.log(err);
                             return next(err);
                         }
-                        if(i==req.body.cantidadExpedientes -1) {
-                            res.status(status.OK).json({ message: 'Registro guardado correctamente' });
-                        }
+                        res.status(status.OK).json({ message: 'Registro guardado correctamente' }); 
                     });
                 });
             }else{

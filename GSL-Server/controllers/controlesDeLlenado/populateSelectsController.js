@@ -45,8 +45,8 @@ populateSelectsController.populateAbogadoAsignado = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
         var query = 'SELECT numEmpleado, nombreEmpleado FROM ' +
-            'Empleado WHERE activo=? and idCargo=?';
-    	connection.query(query, [true, 1], (err, results) => {
+            'Empleado WHERE activo=? and idCargo=? or idCargo=? or idCargo=?';
+    	connection.query(query, [true, 1, 4, 5], (err, results) => {
 	        if (err) return next(err);
 	        var string=JSON.stringify(results);
 	        res.setHeader('Content-Type', 'application/json');

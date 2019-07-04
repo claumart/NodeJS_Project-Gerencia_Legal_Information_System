@@ -65,8 +65,9 @@ app.use(cookieSession({
 }));
 
 app.use(function (req, res, next) {
-  req.sessionOptions.maxAge = req.session.maxAge || req.sessionOptions.maxAge
-  next()
+  req.sessionOptions.maxAge = req.session.maxAge || req.sessionOptions.maxAge;
+  req.sessionOptions.expires = new Date(Number(new Date()) + 2.88e+7);
+  next();
 })
 
 //Connection handle

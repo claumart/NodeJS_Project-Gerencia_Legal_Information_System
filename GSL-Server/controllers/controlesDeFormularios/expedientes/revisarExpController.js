@@ -16,7 +16,7 @@ revisarExpController.crearDictamen = (req, res, next) => {
                     return next(err);
                 }
                 var date = new Date();
-                var now = d.toLocaleString() + '.' + d.getMilliseconds();
+                var now = date.toLocaleString() + '.' + date.getMilliseconds();
                 crypto.scrypt(now, Math.random().toString(36).substring(2), 32, (err, derivedKey) => {
                     if (err) throw err;
                     carpeta = derivedKey.toString('hex');

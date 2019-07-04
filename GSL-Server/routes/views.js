@@ -1,20 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
-const crypto = require('crypto');
-
-router.get('/pruebahash',function(req,res){
-	//También se puede usar res.sendFile(path.join(__dirname +'/../views/index.html'));
-	// Using a custom N parameter. Must be a power of two.
-	var d = new Date();
-  	var n = d.toLocaleString() + '.' + d.getMilliseconds();
-	crypto.scrypt(n, Math.random().toString(36).substring(2), 32, (err, derivedKey) => {
-  		if (err) throw err;
-  		console.log(derivedKey.toString('hex').length);  // '3745e48...aa39b34'
-  		console.log(derivedKey.toString('hex'));
-  		res.send(derivedKey.toString('hex'));
-	});
-});
 
 router.get('/',function(req,res){
 	//También se puede usar res.sendFile(path.join(__dirname +'/../views/index.html'));

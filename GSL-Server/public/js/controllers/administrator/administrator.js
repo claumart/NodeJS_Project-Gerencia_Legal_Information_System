@@ -376,7 +376,7 @@ app.controller("administratorCtrl", function($scope, $http, utilities, $window) 
     };
 
     BuscarExp = ()=> {
-    	if($scope.buscar_ficha_input.length < 21 && $scope.buscar_ficha_input.trim().length > 0){
+    	if($scope.buscar_ficha_input.length < 31 && $scope.buscar_ficha_input.trim().length > 0){
             var numExpValidado = utilities.eliminateSpace($scope.buscar_ficha_input.toUpperCase().trim());
         	$http({
 		        method : "POST",
@@ -391,13 +391,13 @@ app.controller("administratorCtrl", function($scope, $http, utilities, $window) 
     			document.getElementById('myFeedbackModal').style.display = "flex";
 			});
         }else{
-        	$scope.modalFeedback = "Por favor, escriba un número de expediente para realizar la busqueda";
+        	$scope.modalFeedback = "Por favor, escriba un número de expediente valido para realizar la busqueda";
     		document.getElementById('myFeedbackModal').style.display = "flex";
         }
     };
 
     BuscarOpn = ()=>{
-    	if($scope.buscar_ficha_input.length < 21 && $scope.buscar_ficha_input.trim().length > 0){
+    	if($scope.buscar_ficha_input.length < 31 && $scope.buscar_ficha_input.trim().length > 0){
             var numOficioValidado = utilities.eliminateSpace($scope.buscar_ficha_input.toUpperCase().trim());
         	$http({
 		        method : "POST",
@@ -412,13 +412,13 @@ app.controller("administratorCtrl", function($scope, $http, utilities, $window) 
     			document.getElementById('myFeedbackModal').style.display = "flex";
 			});
         }else{
-        	$scope.modalFeedback = "Por favor, escriba un número de oficio para realizar la busqueda";
+        	$scope.modalFeedback = "Por favor, escriba un número de oficio valido para realizar la busqueda";
     		document.getElementById('myFeedbackModal').style.display = "flex";
         }
     };
 
     BuscarPtt = ()=> {
-    	if($scope.buscar_ficha_input.length < 21 && $scope.buscar_ficha_input.trim().length > 0){
+    	if($scope.buscar_ficha_input.length < 31 && $scope.buscar_ficha_input.trim().length > 0){
             var numExpValidado = utilities.eliminateSpace($scope.buscar_ficha_input.toUpperCase().trim());
         	$http({
 		        method : "POST",
@@ -434,7 +434,7 @@ app.controller("administratorCtrl", function($scope, $http, utilities, $window) 
     			document.getElementById('myFeedbackModal').style.display = "flex";
 			});
         }else{
-        	$scope.modalFeedback = "Por favor, escriba un número de expediente para realizar la busqueda";
+        	$scope.modalFeedback = "Por favor, escriba un número de expediente valido para realizar la busqueda";
     		document.getElementById('myFeedbackModal').style.display = "flex";
         }
     };

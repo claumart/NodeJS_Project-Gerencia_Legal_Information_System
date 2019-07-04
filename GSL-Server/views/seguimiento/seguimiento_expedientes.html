@@ -12,6 +12,7 @@
 	    <link rel="stylesheet" href="/css/header.css">
 	    <link rel="stylesheet" href="/css/footer.css">
 	    <link rel="stylesheet" href="/css/modal.css">
+	    <link rel="stylesheet" href="/css/pagination.css">
 	    <link rel="stylesheet" href="/css/seguimiento.css">
 	    <script src="/js/angular.min.js"></script>
   	</head>
@@ -84,22 +85,22 @@
 		      		</div>
 		      		<div class="grid-x grid-padding-x">
 		      			<fieldset class="large-2 medium-4 small-12 cell" ng-show="privilegios.indexOf('asng')!=-1">
-			            	<button type="button" id="asignar_btn" class="button secondary" ng-click="mostrarExpedientesRecibidos()">Asignar</button>
+			            	<button type="button" id="asignar_btn" class="button secondary" ng-click="contarExpedientesRecibidos()">Asignar</button>
 			            </fieldset>
 			            <fieldset class="large-2 medium-4 small-12 cell" ng-show="privilegios.indexOf('dscg')!=-1">
-			            	<button type="button" id="descargar_btn" class="button secondary" ng-click="mostrarExpedientesAsignados1()">Descargar</button>
+			            	<button type="button" id="descargar_btn" class="button secondary" ng-click="contarExpedientesAsignados1()">Descargar</button>
 			            </fieldset>
 			            <fieldset class="large-2 medium-4 small-12 cell" ng-show="privilegios.indexOf('rvsexp')!=-1">
-			            	<button type="button" id="revisar_btn" class="button secondary" ng-click="mostrarExpedientesDescargados()">Revisar</button>
+			            	<button type="button" id="revisar_btn" class="button secondary" ng-click="contarExpedientesDescargados()">Revisar</button>
 			            </fieldset>
 			            <fieldset class="large-2 medium-4 small-12 cell" ng-show="privilegios.indexOf('rmt')!=-1">
-			            	<button type="button" id="remitir_btn" class="button secondary" ng-click="mostrarExpedientesRevisados()">Remitir</button>
+			            	<button type="button" id="remitir_btn" class="button secondary" ng-click="contarExpedientesRevisados()">Remitir</button>
 			            </fieldset>
 			            <fieldset class="large-2 medium-4 small-12 cell" ng-show="privilegios.indexOf('rmt')!=-1">
-			            	<button type="button" id="remitirCP_btn" class="button secondary" ng-click="mostrarExpedientesAsignados2()">Remitir con Previo</button>
+			            	<button type="button" id="remitirCP_btn" class="button secondary" ng-click="contarExpedientesAsignados2()">Remitir con Previo</button>
 			            </fieldset>
 			            <fieldset class="large-2 medium-4 small-12 cell" ng-show="privilegios.indexOf('rngpre')!=-1">
-			            	<button type="button" id="reingresoCP_btn" class="button secondary" ng-click="mostrarExpedientesConPrevio()">Reingresar con Previo</button>
+			            	<button type="button" id="reingresoCP_btn" class="button secondary" ng-click="contarExpedientesConPrevio()">Reingresar con Previo</button>
 			            </fieldset>
 		      		</div>		
 		      	</form>
@@ -131,6 +132,19 @@
 							</table>
 		      			</div>
 		      		</div>
+		      		<div class="grid-x" ng-show="totalPaginas>0">
+						<div class="small-12 cell center">
+							<div class="pagination">
+								<button ng-click="volverPagina()">Previo</button>
+								<button id="pagina1" ng-click="irPagina1()" ng-bind="pagina1" class="active"></button>
+								<button ng-show="numeroPagina>2&&totalPaginas>3">...</button>           
+								<button id="pagina2" ng-click="irPagina2()" ng-bind="pagina2" ng-show="totalPaginas>1"></button>
+								<button ng-show="numeroPagina<totalPaginas-1&&totalPaginas>3">...</button>
+								<button id="ultimaPagina" ng-click="irUltimaPagina()" ng-bind="totalPaginas" ng-show="totalPaginas>2"></button>
+								<button ng-click="adelantarPagina()">Siguiente</button>
+							</div>
+						</div>
+					</div>
 		      	</div>
 		      	<div id="myModal" class="modal">
 					<div id="myContent" class="modal-content">

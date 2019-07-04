@@ -137,7 +137,7 @@
 
 				    <div class="medium-4 small-12 cell">
 				        <label>Nombre de la comunidad:</label>
-				        <input type="text" list="comunidades1" id="comunidad1" ng-model="comunidad1" name="comunidad1" ng-change="actualizarComunidadesList1()">
+				        <input type="text" list="comunidades1" id="comunidad1" ng-model="comunidad1" name="comunidad1" ng-change="actualizarComunidadesList1()" autocomplete="off">
 				        <datalist id="comunidades1">
 							<option ng-repeat="x in comunidadesList track by $index" value="{{x.nombreComunidad}}">
 						</datalist>
@@ -195,7 +195,7 @@
 
 			        <div class="medium-4 small-12 cell">
 			            <label>Nombre de la comunidad:</label>
-			           	<input type="text" list="comunidades2" id="comunidad2" ng-model="comunidad2" name="comunidad2" ng-change="actualizarComunidadesList2()">
+			           	<input type="text" list="comunidades2" id="comunidad2" ng-model="comunidad2" name="comunidad2" ng-change="actualizarComunidadesList2()" autocomplete="off">
 			           	<datalist id="comunidades2">
 							<option ng-repeat="x in comunidadesList track by $index" value="{{x.nombreComunidad}}">
 						</datalist>

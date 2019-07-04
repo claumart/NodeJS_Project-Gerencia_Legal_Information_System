@@ -466,7 +466,7 @@ app.controller("formCtrl", function($scope, $http, $window, utilities, limpieza)
 	                            document.getElementById('myModal').style.display = "flex";
 	                        }
                     	}else{
-                    		$scope.modalMessage = "El campo Informacion Adicional es muy largo";
+                    		$scope.modalMessage = "El campo Información Adicional es muy largo";
                 			document.getElementById('myModal').style.display = "flex";
                     	}
                     }else{
