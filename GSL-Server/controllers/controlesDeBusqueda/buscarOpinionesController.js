@@ -39,23 +39,23 @@ buscarRegistroOpinionController.parametros1SinFecha = (req, res, next)=>{
 				return next();
 		}
 
-		var query = "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+		var query = "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "LEFT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        fraseBusqueda + " " +
+        fraseBusqueda + ") " +
         "UNION " +
-        "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "RIGHT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        fraseBusqueda;
+        fraseBusqueda + ") LIMIT " + req.body.offSet + ", " + req.body.rango;
 
 	    await connection.query(query, [campoBusqueda, campoBusqueda], (err, results) => {
 	        if (err) {
@@ -121,23 +121,23 @@ buscarRegistroOpinionController.parametros1ConFecha = (req, res, next)=>{
 				return next();
 		}
 
-		var query = "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+		var query = "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "LEFT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        fraseBusqueda + " " + fraseBusquedaFecha + " " +
+        fraseBusqueda + " " + fraseBusquedaFecha + ") " +
         "UNION " +
-        "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "RIGHT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        fraseBusqueda + " " + fraseBusquedaFecha;
+        fraseBusqueda + " " + fraseBusquedaFecha + ") LIMIT " + req.body.offSet + ", " + req.body.rango;
 
 
 	    if(req.body.fechaInicio != null && req.body.fechaFin != null) {
@@ -173,7 +173,7 @@ buscarRegistroOpinionController.parametros2ConFecha = (req, res, next)=>{
 	req.getConnection(async function(err, connection){
         if (err) return next(err);
 
-        var query = "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        var query = "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "LEFT JOIN Dependencia as Procedencia " +
@@ -181,9 +181,9 @@ buscarRegistroOpinionController.parametros2ConFecha = (req, res, next)=>{
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
         "WHERE " + req.body.parametroBusqueda + " BETWEEN STR_TO_DATE(?, '%d-%m-%Y %H:%i:%s') " +
-			"AND STR_TO_DATE(?, '%d-%m-%Y %H:%i:%s') " +
+			"AND STR_TO_DATE(?, '%d-%m-%Y %H:%i:%s')) " +
         "UNION " +
-        "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "RIGHT JOIN Dependencia as Procedencia " +
@@ -191,7 +191,7 @@ buscarRegistroOpinionController.parametros2ConFecha = (req, res, next)=>{
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
         "WHERE " + req.body.parametroBusqueda + " BETWEEN STR_TO_DATE(?, '%d-%m-%Y %H:%i:%s') " +
-			"AND STR_TO_DATE(?, '%d-%m-%Y %H:%i:%s')";
+			"AND STR_TO_DATE(?, '%d-%m-%Y %H:%i:%s')) LIMIT " + req.body.offSet + ", " + req.body.rango;
 
         if(req.body.fechaInicio != null && req.body.fechaFin != null) {
         	var fechaInicio = req.body.fechaInicio.trim() + " 00:00:00";

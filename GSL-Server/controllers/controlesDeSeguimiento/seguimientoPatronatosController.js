@@ -3,7 +3,7 @@ var seguimientoPatronatoController = {};
 seguimientoPatronatoController.mostrarPatronatosRecibidos = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
-        var query = "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        var query = "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \' , Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -19,9 +19,9 @@ seguimientoPatronatoController.mostrarPatronatosRecibidos = (req, res, next) => 
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato " +
+        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato) " +
         "UNION " +
-        "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \', Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -37,7 +37,7 @@ seguimientoPatronatoController.mostrarPatronatosRecibidos = (req, res, next) => 
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato";
+        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato) LIMIT " + req.body.offSet + ", " + req.body.rango;
     	connection.query(query, [1, 1], (err, results) => {
         	if (err) {
                 console.log(err);
@@ -52,7 +52,7 @@ seguimientoPatronatoController.mostrarPatronatosRecibidos = (req, res, next) => 
 seguimientoPatronatoController.mostrarPatronatosAsignados = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
-        var query = "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        var query = "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \' , Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -68,9 +68,9 @@ seguimientoPatronatoController.mostrarPatronatosAsignados = (req, res, next) => 
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato " +
+        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato) " +
         "UNION " +
-        "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \', Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -86,7 +86,7 @@ seguimientoPatronatoController.mostrarPatronatosAsignados = (req, res, next) => 
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato";
+        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [2, 2], (err, results) => {
             if (err) {
                 console.log(err);
@@ -101,7 +101,7 @@ seguimientoPatronatoController.mostrarPatronatosAsignados = (req, res, next) => 
 seguimientoPatronatoController.mostrarPatronatosDescargados = (req, res, next) => {
 	req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        var query = "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \' , Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -117,9 +117,9 @@ seguimientoPatronatoController.mostrarPatronatosDescargados = (req, res, next) =
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato " +
+        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato) " +
         "UNION " +
-        "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \', Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -135,7 +135,7 @@ seguimientoPatronatoController.mostrarPatronatosDescargados = (req, res, next) =
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato";
+        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [3, 3], (err, results) => {
             if (err) {
                 console.log(err);
@@ -150,7 +150,7 @@ seguimientoPatronatoController.mostrarPatronatosDescargados = (req, res, next) =
 seguimientoPatronatoController.mostrarPatronatosRevisados = (req, res, next) => {
 	req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        var query = "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \' , Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -166,9 +166,9 @@ seguimientoPatronatoController.mostrarPatronatosRevisados = (req, res, next) => 
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato " +
+        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato) " +
         "UNION " +
-        "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \', Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -184,7 +184,7 @@ seguimientoPatronatoController.mostrarPatronatosRevisados = (req, res, next) => 
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato";
+        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [4, 4], (err, results) => {
             if (err) {
                 console.log(err);
@@ -199,7 +199,7 @@ seguimientoPatronatoController.mostrarPatronatosRevisados = (req, res, next) => 
 seguimientoPatronatoController.mostrarPatronatosRemitidos = (req, res, next) => {
 	req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        var query = "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \' , Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -215,9 +215,9 @@ seguimientoPatronatoController.mostrarPatronatosRemitidos = (req, res, next) => 
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato " +
+        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato) " +
         "UNION " +
-        "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \', Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -233,7 +233,7 @@ seguimientoPatronatoController.mostrarPatronatosRemitidos = (req, res, next) => 
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato";
+        "WHERE fichapatronato.idEstadoPatronato = ? GROUP BY fichapatronato.idFichaEntradaPatronato) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [5, 5], (err, results) => {
             if (err) {
                 console.log(err);

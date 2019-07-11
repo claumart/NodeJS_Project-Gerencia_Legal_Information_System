@@ -3,23 +3,23 @@ var seguimientoOpinionController = {};
 seguimientoOpinionController.mostrarOpinionesRecibidas = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
-        var query = "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        var query = "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "LEFT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        "WHERE fichaOpinion.idEstadoOpinion = ? " +
+        "WHERE fichaOpinion.idEstadoOpinion = ?) " +
         "UNION " +
-        "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "RIGHT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        "WHERE fichaOpinion.idEstadoOpinion = ?";
+        "WHERE fichaOpinion.idEstadoOpinion = ?) LIMIT " + req.body.offSet + ", " + req.body.rango;
     	connection.query(query, [1, 1], (err, results) => {
         	if (err) {
                 console.log(err);
@@ -34,23 +34,23 @@ seguimientoOpinionController.mostrarOpinionesRecibidas = (req, res, next) => {
 seguimientoOpinionController.mostrarOpinionesAsignadas = (req, res, next) => {
 	req.getConnection((err, connection)=> {
     	if (err) return next(err);
-        var query = "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        var query = "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "LEFT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        "WHERE fichaOpinion.idEstadoOpinion = ? " +
+        "WHERE fichaOpinion.idEstadoOpinion = ?) " +
         "UNION " +
-        "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "RIGHT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        "WHERE fichaOpinion.idEstadoOpinion = ?";
+        "WHERE fichaOpinion.idEstadoOpinion = ?) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [2, 2], (err, results) => {
             if (err) {
                 console.log(err);
@@ -65,23 +65,23 @@ seguimientoOpinionController.mostrarOpinionesAsignadas = (req, res, next) => {
 seguimientoOpinionController.mostrarOpinionesDescargadas = (req, res, next) => {
 	req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        var query = "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "LEFT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        "WHERE fichaOpinion.idEstadoOpinion = ? " +
+        "WHERE fichaOpinion.idEstadoOpinion = ?) " +
         "UNION " +
-        "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "RIGHT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        "WHERE fichaOpinion.idEstadoOpinion = ?";
+        "WHERE fichaOpinion.idEstadoOpinion = ?) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [3, 3], (err, results) => {
             if (err) {
                 console.log(err);
@@ -96,23 +96,23 @@ seguimientoOpinionController.mostrarOpinionesDescargadas = (req, res, next) => {
 seguimientoOpinionController.mostrarOpinionesRevisadas = (req, res, next) => {
 	req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        var query = "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "LEFT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        "WHERE fichaOpinion.idEstadoOpinion = ? " +
+        "WHERE fichaOpinion.idEstadoOpinion = ?) " +
         "UNION " +
-        "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "RIGHT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        "WHERE fichaOpinion.idEstadoOpinion = ?";
+        "WHERE fichaOpinion.idEstadoOpinion = ?) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [4, 4], (err, results) => {
             if (err) {
                 console.log(err);
@@ -127,23 +127,23 @@ seguimientoOpinionController.mostrarOpinionesRevisadas = (req, res, next) => {
 seguimientoOpinionController.mostrarOpinionesRemitidas = (req, res, next) => {
 	req.getConnection((err, connection)=> {
         if (err) return next(err);
-        var query = "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        var query = "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "LEFT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        "WHERE fichaOpinion.idEstadoOpinion = ? " +
+        "WHERE fichaOpinion.idEstadoOpinion = ?) " +
         "UNION " +
-        "SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
+        "(SELECT fichaOpinion.idFichaEntradaOpinion as idficha, fichaOpinion.numOficio, Procedencia.nombreDependencia as nombreProcedencia, " +
         "fichaOpinion.asunto, fichaOpinion.fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM fichaentradaopinion as fichaOpinion " +
         "RIGHT JOIN Dependencia as Procedencia " +
             "ON Procedencia.idDependencia = fichaOpinion.idProcedencia " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichaOpinion.idAbogadoAsignado " +
-        "WHERE fichaOpinion.idEstadoOpinion = ?";
+        "WHERE fichaOpinion.idEstadoOpinion = ?) LIMIT " + req.body.offSet + ", " + req.body.rango;
         connection.query(query, [5, 5], (err, results) => {
             if (err) {
                 console.log(err);

@@ -170,12 +170,13 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 		}
 	};
 
-	$scope.limpiarParametrosDeBusqueda = ()=>{
+	$scope.limpiarParametrosDeBusqueda = async ()=>{
+		await limpiarPaginas();
 		$scope.parametro_busqueda = "";
 		$scope.resultadosExpList = null;
 		$scope.resultadosOpnList = null;
 		$scope.resultadosPttList = null;
-		limpiarPaginas();
+		$scope.totalPaginas = 0;
 	}
 
 
@@ -641,20 +642,58 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 			if($scope.tipo_fecha1 == "fecha_especifica") {
 				if($scope.fecha_dia1 != null) {
 					var fechaValidada = utilities.validarFecha($scope.fecha_dia1);
-					$http({
-			        	method : "POST",
-			        	url : "/buscar/opiniones/parametros1/conFecha",
-			        	headers: {'Content-Type': 'application/json'},
-			        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
-			        		fecha : fechaValidada
-                		}
-			    	}).then(function mySuccess(response) {
-			    		var lista = JSON.parse(response.data);
-			        	$scope.resultadosOpnList = utilities.formatearFecha(lista);
-			    	}, function myError(response) {
-			        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            			document.getElementById('myModal').style.display = "flex";
-			    	});
+					if($scope.busqueda){
+						$http({
+							method : "POST",
+							url : "/contar/opiniones/parametros1/conFecha",
+							headers: {'Content-Type': 'application/json'},
+							data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+				        		fecha : fechaValidada
+	                		}
+						}).then(async function mySuccess(response) {
+							var lista = await JSON.parse(response.data);
+							$scope.totalRegistros = lista[0].numeroRegistros;
+							$scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+							if($scope.totalRegistros>0){
+								$http({
+						        	method : "POST",
+						        	url : "/buscar/opiniones/parametros1/conFecha",
+						        	headers: {'Content-Type': 'application/json'},
+						        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+						        		fecha : fechaValidada, offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+								        rango: $scope.tamanioBusqueda
+			                		}
+						    	}).then(function mySuccess(response) {
+						    		var lista = JSON.parse(response.data);
+						        	$scope.resultadosOpnList = utilities.formatearFecha(lista);
+						    	}, function myError(response) {
+						        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            			document.getElementById('myModal').style.display = "flex";
+						    	});
+							}else{
+								$scope.resultadosOpnList = null;
+							}
+						},function myError(response) {
+							$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+				            document.getElementById('myModal').style.display = "flex";
+						});
+					}else{
+						$http({
+				        	method : "POST",
+				        	url : "/buscar/opiniones/parametros1/conFecha",
+				        	headers: {'Content-Type': 'application/json'},
+				        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+				        		fecha : fechaValidada, offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+						        rango: $scope.tamanioBusqueda
+	                		}
+				    	}).then(function mySuccess(response) {
+				    		var lista = JSON.parse(response.data);
+				        	$scope.resultadosOpnList = utilities.formatearFecha(lista);
+				    	}, function myError(response) {
+				        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            			document.getElementById('myModal').style.display = "flex";
+				    	});
+					}
 				}else{
 					$scope.modalMessage = "Por favor seleccione la fecha para realizar la busqueda";
                 	document.getElementById('myModal').style.display = "flex";
@@ -664,20 +703,58 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 					var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio1);
 					if($scope.fecha_fin1 != null) {
 						var fechaFinValidada = utilities.validarFecha($scope.fecha_fin1);
-						$http({
-				        	method : "POST",
-				        	url : "/buscar/opiniones/parametros1/conFecha",
-				        	headers: {'Content-Type': 'application/json'},
-				        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
-				        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada
-                			}
-				    	}).then(function mySuccess(response) {
-				    		var lista = JSON.parse(response.data);
-				        	$scope.resultadosOpnList = utilities.formatearFecha(lista);
-				    	}, function myError(response) {
-				        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            				document.getElementById('myModal').style.display = "flex";
-				    	});
+						if($scope.busqueda){
+							$http({
+								method : "POST",
+								url : "/contar/opiniones/parametros1/conFecha",
+								headers: {'Content-Type': 'application/json'},
+								data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+					        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada
+		                		}
+							}).then(async function mySuccess(response) {
+								var lista = await JSON.parse(response.data);
+								$scope.totalRegistros = lista[0].numeroRegistros;
+								$scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+								if($scope.totalRegistros>0){
+									$http({
+							        	method : "POST",
+							        	url : "/buscar/opiniones/parametros1/conFecha",
+							        	headers: {'Content-Type': 'application/json'},
+							        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+							        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada, 
+							        		offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, rango: $scope.tamanioBusqueda
+			                			}
+							    	}).then(function mySuccess(response) {
+							    		var lista = JSON.parse(response.data);
+							        	$scope.resultadosOpnList = utilities.formatearFecha(lista);
+							    	}, function myError(response) {
+							        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            				document.getElementById('myModal').style.display = "flex";
+							    	});	
+								}else{
+									$scope.resultadosOpnList = null;
+								}
+							},function myError(response) {
+								$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+					            document.getElementById('myModal').style.display = "flex";
+							});
+						}else{
+							$http({
+					        	method : "POST",
+					        	url : "/buscar/opiniones/parametros1/conFecha",
+					        	headers: {'Content-Type': 'application/json'},
+					        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+					        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada, 
+					        		offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, rango: $scope.tamanioBusqueda
+	                			}
+					    	}).then(function mySuccess(response) {
+					    		var lista = JSON.parse(response.data);
+					        	$scope.resultadosOpnList = utilities.formatearFecha(lista);
+					    	}, function myError(response) {
+					        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            				document.getElementById('myModal').style.display = "flex";
+					    	});
+						}
 					}else{
 						$scope.modalMessage = "Por favor seleccione la fecha de finalización para realizar la busqueda";
                 		document.getElementById('myModal').style.display = "flex";
@@ -689,19 +766,57 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 				}
 			}
 		}else {
-			$http({
+			if($scope.busqueda){
+				$http({
+					method : "POST",
+					url : "/contar/opiniones/parametros1/sinFecha",
+					headers: {'Content-Type': 'application/json'},
+					data : {parametroBusqueda : nombreParametro, valorParametro : valor
+	                }
+				}).then(async function mySuccess(response) {
+					var lista = await JSON.parse(response.data);
+					$scope.totalRegistros = lista[0].numeroRegistros;
+					$scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+					if($scope.totalRegistros>0){
+						$http({
+					    method : "POST",
+						   	url : "/buscar/opiniones/parametros1/sinFecha",
+						   	headers: {'Content-Type': 'application/json'},
+						   	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+						   		offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+								rango: $scope.tamanioBusqueda
+			                }
+						}).then(function mySuccess(response) {
+						    var lista = JSON.parse(response.data);
+						    $scope.resultadosOpnList = utilities.formatearFecha(lista);
+						}, function myError(response) {
+						    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            	document.getElementById('myModal').style.display = "flex";
+						});		
+					}else{
+						$scope.resultadosOpnList = null;
+					}
+				},function myError(response) {
+					$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+				    document.getElementById('myModal').style.display = "flex";
+				});
+			}else{
+				$http({
 			    method : "POST",
-			   	url : "/buscar/opiniones/parametros1/sinFecha",
-			   	headers: {'Content-Type': 'application/json'},
-			   	data : {parametroBusqueda : nombreParametro, valorParametro : valor
-                }
-			}).then(function mySuccess(response) {
-			    var lista = JSON.parse(response.data);
-			    $scope.resultadosOpnList = utilities.formatearFecha(lista);
-			}, function myError(response) {
-			    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            	document.getElementById('myModal').style.display = "flex";
-			});
+				   	url : "/buscar/opiniones/parametros1/sinFecha",
+				   	headers: {'Content-Type': 'application/json'},
+				   	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+				   		offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+						rango: $scope.tamanioBusqueda
+	                }
+				}).then(function mySuccess(response) {
+				    var lista = JSON.parse(response.data);
+				    $scope.resultadosOpnList = utilities.formatearFecha(lista);
+				}, function myError(response) {
+				    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            	document.getElementById('myModal').style.display = "flex";
+				});
+			}
 		}
 	};
 
@@ -709,19 +824,57 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 		if($scope.tipo_fecha2 == "fecha_especifica") {
 			if($scope.fecha_dia2 != null) {
 				var fechaValidada = utilities.validarFecha($scope.fecha_dia2);
-				$http({
-			        method : "POST",
-			        url : "/buscar/opiniones/parametros2/conFecha",
-			        headers: {'Content-Type': 'application/json'},
-			        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada
-                	}
-			    }).then(function mySuccess(response) {
-			    	var lista = JSON.parse(response.data);
-			       	$scope.resultadosOpnList = utilities.formatearFecha(lista);
-			    }, function myError(response) {
-			       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            		document.getElementById('myModal').style.display = "flex";
-			   	});
+				if($scope.busqueda){
+					$http({
+						method : "POST",
+						url : "/contar/opiniones/parametros2/conFecha",
+						headers: {'Content-Type': 'application/json'},
+						data : {parametroBusqueda : nombreParametro, fecha : fechaValidada
+	                	}
+					}).then(async function mySuccess(response) {
+						var lista = await JSON.parse(response.data);
+						$scope.totalRegistros = lista[0].numeroRegistros;
+						$scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+						if($scope.totalRegistros>0){
+							$http({
+						        method : "POST",
+						        url : "/buscar/opiniones/parametros2/conFecha",
+						        headers: {'Content-Type': 'application/json'},
+						        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada, 
+						        	offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+								    rango: $scope.tamanioBusqueda
+			                	}
+						    }).then(function mySuccess(response) {
+						    	var lista = JSON.parse(response.data);
+						       	$scope.resultadosOpnList = utilities.formatearFecha(lista);
+						    }, function myError(response) {
+						       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            		document.getElementById('myModal').style.display = "flex";
+						   	});	
+						}else{
+							$scope.resultadosOpnList = null;
+						}
+					},function myError(response) {
+						$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+				        document.getElementById('myModal').style.display = "flex";
+					});
+				}else{
+					$http({
+				        method : "POST",
+				        url : "/buscar/opiniones/parametros2/conFecha",
+				        headers: {'Content-Type': 'application/json'},
+				        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada, 
+				        	offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+						    rango: $scope.tamanioBusqueda
+	                	}
+				    }).then(function mySuccess(response) {
+				    	var lista = JSON.parse(response.data);
+				       	$scope.resultadosOpnList = utilities.formatearFecha(lista);
+				    }, function myError(response) {
+				       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            		document.getElementById('myModal').style.display = "flex";
+				   	});
+				}
 			}else{
 				$scope.modalMessage = "Por favor seleccione la fecha para realizar la busqueda";
                 document.getElementById('myModal').style.display = "flex";
@@ -731,20 +884,58 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 				var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio2);
 				if($scope.fecha_fin2 != null) {
 					var fechaFinValidada = utilities.validarFecha($scope.fecha_fin2);
-					$http({
-				        method : "POST",
-				       	url : "/buscar/expedientes/parametros2/conFecha",
-				       	headers: {'Content-Type': 'application/json'},
-				       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
-				        	fechaFin : fechaFinValidada
-                		}
-				    }).then(function mySuccess(response) {
-				   		var lista = JSON.parse(response.data);
-				       	$scope.resultadosOpnList = utilities.formatearFecha(lista);
-				   	}, function myError(response) {
-				       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            			document.getElementById('myModal').style.display = "flex";
-			    	});
+					if($scope.busqueda){
+						$http({
+							method : "POST",
+							url : "/contar/opiniones/parametros2/conFecha",
+							headers: {'Content-Type': 'application/json'},
+							data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
+					        	fechaFin : fechaFinValidada
+	                		}
+						}).then(async function mySuccess(response) {
+							var lista = await JSON.parse(response.data);
+							$scope.totalRegistros = lista[0].numeroRegistros;
+							$scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+							if($scope.totalRegistros>0){
+								$http({
+							        method : "POST",
+							       	url : "/buscar/opiniones/parametros2/conFecha",
+							       	headers: {'Content-Type': 'application/json'},
+							       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
+							        	fechaFin : fechaFinValidada, offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+								        rango: $scope.tamanioBusqueda
+			                		}
+							    }).then(function mySuccess(response) {
+							   		var lista = JSON.parse(response.data);
+							       	$scope.resultadosOpnList = utilities.formatearFecha(lista);
+							   	}, function myError(response) {
+							       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            			document.getElementById('myModal').style.display = "flex";
+						    	});
+							}else{
+								$scope.resultadosOpnList = null;
+							}
+						},function myError(response) {
+							$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+				            document.getElementById('myModal').style.display = "flex";
+						});
+					}else{
+						$http({
+					        method : "POST",
+					       	url : "/buscar/opiniones/parametros2/conFecha",
+					       	headers: {'Content-Type': 'application/json'},
+					       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
+					        	fechaFin : fechaFinValidada, offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+						        rango: $scope.tamanioBusqueda
+	                		}
+					    }).then(function mySuccess(response) {
+					   		var lista = JSON.parse(response.data);
+					       	$scope.resultadosOpnList = utilities.formatearFecha(lista);
+					   	}, function myError(response) {
+					       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            			document.getElementById('myModal').style.display = "flex";
+				    	});
+					}
 				}else{
 					$scope.modalMessage = "Por favor seleccione la fecha de finalización para realizar la busqueda";
                 	document.getElementById('myModal').style.display = "flex";
@@ -839,20 +1030,58 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 			if($scope.tipo_fecha1 == "fecha_especifica") {
 				if($scope.fecha_dia1 != null) {
 					var fechaValidada = utilities.validarFecha($scope.fecha_dia1);
-					$http({
-			        	method : "POST",
-			        	url : "/buscar/patronatos/parametros1/conFecha",
-			        	headers: {'Content-Type': 'application/json'},
-			        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
-			        		fecha : fechaValidada
-                		}
-			    	}).then(function mySuccess(response) {
-			    		var lista = JSON.parse(response.data);
-			        	$scope.resultadosPttList = utilities.formatearFecha(lista);
-			    	}, function myError(response) {
-			        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            			document.getElementById('myModal').style.display = "flex";
-			    	});
+					if($scope.busqueda){
+						$http({
+							method : "POST",
+							url : "/contar/patronatos/parametros1/conFecha",
+							headers: {'Content-Type': 'application/json'},
+							data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+				        		fecha : fechaValidada
+	                		}
+						}).then(async function mySuccess(response) {
+							var lista = await JSON.parse(response.data);
+							$scope.totalRegistros = lista[0].numeroRegistros;
+							$scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+							if($scope.totalRegistros>0){
+								$http({
+						        	method : "POST",
+						        	url : "/buscar/patronatos/parametros1/conFecha",
+						        	headers: {'Content-Type': 'application/json'},
+						        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+						        		fecha : fechaValidada, offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+								        rango: $scope.tamanioBusqueda
+			                		}
+						    	}).then(function mySuccess(response) {
+						    		var lista = JSON.parse(response.data);
+						        	$scope.resultadosPttList = utilities.formatearFecha(lista);
+						    	}, function myError(response) {
+						        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            			document.getElementById('myModal').style.display = "flex";
+						    	});
+							}else{
+								$scope.resultadosPttList = null;
+							}
+						},function myError(response) {
+							$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+				            document.getElementById('myModal').style.display = "flex";
+						});
+					}else{
+						$http({
+				        	method : "POST",
+				        	url : "/buscar/patronatos/parametros1/conFecha",
+				        	headers: {'Content-Type': 'application/json'},
+				        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+				        		fecha : fechaValidada, offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+						        rango: $scope.tamanioBusqueda
+	                		}
+				    	}).then(function mySuccess(response) {
+				    		var lista = JSON.parse(response.data);
+				        	$scope.resultadosPttList = utilities.formatearFecha(lista);
+				    	}, function myError(response) {
+				        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            			document.getElementById('myModal').style.display = "flex";
+				    	});
+					}
 				}else{
 					$scope.modalMessage = "Por favor seleccione la fecha para realizar la busqueda";
                 	document.getElementById('myModal').style.display = "flex";
@@ -863,20 +1092,60 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 					var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio1);
 					if($scope.fecha_fin1 != null) {
 						var fechaFinValidada = utilities.validarFecha($scope.fecha_fin1);
-						$http({
-				        	method : "POST",
-				        	url : "/buscar/patronatos/parametros1/conFecha",
-				        	headers: {'Content-Type': 'application/json'},
-				        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
-				        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada
-                			}
-				    	}).then(function mySuccess(response) {
-				    		var lista = JSON.parse(response.data);
-				        	$scope.resultadosPttList = utilities.formatearFecha(lista);
-				    	}, function myError(response) {
-				        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            				document.getElementById('myModal').style.display = "flex";
-				    	});
+						if($scope.busqueda){
+							$http({
+								method : "POST",
+								url : "/contar/patronatos/parametros1/conFecha",
+								headers: {'Content-Type': 'application/json'},
+								data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+					        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada
+		                		}
+							}).then(async function mySuccess(response) {
+								var lista = await JSON.parse(response.data);
+								$scope.totalRegistros = lista[0].numeroRegistros;
+								$scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+								if($scope.totalRegistros>0){
+									$http({
+							        	method : "POST",
+							        	url : "/buscar/patronatos/parametros1/conFecha",
+							        	headers: {'Content-Type': 'application/json'},
+							        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+							        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada, 
+							        		offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+								        	rango: $scope.tamanioBusqueda
+			                			}
+							    	}).then(function mySuccess(response) {
+							    		var lista = JSON.parse(response.data);
+							        	$scope.resultadosPttList = utilities.formatearFecha(lista);
+							    	}, function myError(response) {
+							        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            				document.getElementById('myModal').style.display = "flex";
+							    	});
+								}else{
+									$scope.resultadosPttList = null;
+								}
+							},function myError(response) {
+								$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+					            document.getElementById('myModal').style.display = "flex";
+							});
+						}else{
+							$http({
+					        	method : "POST",
+					        	url : "/buscar/patronatos/parametros1/conFecha",
+					        	headers: {'Content-Type': 'application/json'},
+					        	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+					        		fechaInicio : fechaInicioValidada, fechaFin : fechaFinValidada, 
+					        		offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+						        	rango: $scope.tamanioBusqueda
+	                			}
+					    	}).then(function mySuccess(response) {
+					    		var lista = JSON.parse(response.data);
+					        	$scope.resultadosPttList = utilities.formatearFecha(lista);
+					    	}, function myError(response) {
+					        	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            				document.getElementById('myModal').style.display = "flex";
+					    	});
+						}
 					}else{
 						$scope.modalMessage = "Por favor seleccione la fecha de finalización para realizar la busqueda";
                 		document.getElementById('myModal').style.display = "flex";
@@ -888,19 +1157,58 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 				}
 			}
 		}else {
-			$http({
-			    method : "POST",
-			   	url : "/buscar/patronatos/parametros1/sinFecha",
-			   	headers: {'Content-Type': 'application/json'},
-			   	data : {parametroBusqueda : nombreParametro, valorParametro : valor
-                }
-			}).then(function mySuccess(response) {
-			    var lista = JSON.parse(response.data);
-			    $scope.resultadosPttList = utilities.formatearFecha(lista);
-			}, function myError(response) {
-			    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            	document.getElementById('myModal').style.display = "flex";
-			});
+			if($scope.busqueda){
+				$http({
+					method : "POST",
+					url : "/contar/patronatos/parametros1/sinFecha",
+					headers: {'Content-Type': 'application/json'},
+					data : {parametroBusqueda : nombreParametro, valorParametro : valor
+	                }
+				}).then(async function mySuccess(response) {
+					var lista = await JSON.parse(response.data);
+					$scope.totalRegistros = lista[0].numeroRegistros;
+					$scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+					if($scope.totalRegistros>0){
+						$http({
+						    method : "POST",
+						   	url : "/buscar/patronatos/parametros1/sinFecha",
+						   	headers: {'Content-Type': 'application/json'},
+						   	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+						   		offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+								rango: $scope.tamanioBusqueda
+			                }
+						}).then(function mySuccess(response) {
+						    var lista = JSON.parse(response.data);
+						    $scope.resultadosPttList = utilities.formatearFecha(lista);
+						}, function myError(response) {
+						    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            	document.getElementById('myModal').style.display = "flex";
+						});		
+					}else{
+						$scope.resultadosPttList = null;
+					}
+				},function myError(response) {
+					$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+				    document.getElementById('myModal').style.display = "flex";
+				});
+			}else{
+				$http({
+				    method : "POST",
+				   	url : "/buscar/patronatos/parametros1/sinFecha",
+				   	headers: {'Content-Type': 'application/json'},
+				   	data : {parametroBusqueda : nombreParametro, valorParametro : valor, 
+				   		offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+						rango: $scope.tamanioBusqueda
+	                }
+				}).then(function mySuccess(response) {
+				    var lista = JSON.parse(response.data);
+				    $scope.resultadosPttList = utilities.formatearFecha(lista);
+				}, function myError(response) {
+				    $scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            	document.getElementById('myModal').style.display = "flex";
+				});
+			}
+			
 		}
 	};
 
@@ -908,20 +1216,57 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 		if($scope.tipo_fecha2 == "fecha_especifica") {
 			if($scope.fecha_dia2 != null) {
 				var fechaValidada = utilities.validarFecha($scope.fecha_dia2);
-				$http({
-			        method : "POST",
-			        url : "/buscar/patronatos/parametros2/conFecha",
-			        headers: {'Content-Type': 'application/json'},
-			        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada
-
-                	}
-			    }).then(function mySuccess(response) {
-			    	var lista = JSON.parse(response.data);
-			       	$scope.resultadosPttList = utilities.formatearFecha(lista);
-			    }, function myError(response) {
-			       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            		document.getElementById('myModal').style.display = "flex";
-			   	});
+				if($scope.busqueda){
+					$http({
+						method : "POST",
+						url : "/contar/patronatos/parametros2/conFecha",
+						headers: {'Content-Type': 'application/json'},
+						data : {parametroBusqueda : nombreParametro, fecha : fechaValidada
+	                	}
+					}).then(async function mySuccess(response) {
+						var lista = await JSON.parse(response.data);
+						$scope.totalRegistros = lista[0].numeroRegistros;
+						$scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+						if($scope.totalRegistros>0){
+							$http({
+						        method : "POST",
+						        url : "/buscar/patronatos/parametros2/conFecha",
+						        headers: {'Content-Type': 'application/json'},
+						        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada, 
+						        	offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+								    rango: $scope.tamanioBusqueda
+			                	}
+						    }).then(function mySuccess(response) {
+						    	var lista = JSON.parse(response.data);
+						       	$scope.resultadosPttList = utilities.formatearFecha(lista);
+						    }, function myError(response) {
+						       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            		document.getElementById('myModal').style.display = "flex";
+						   	});	
+						}else{
+							$scope.resultadosPttList = null;
+						}
+					},function myError(response) {
+						$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+				        document.getElementById('myModal').style.display = "flex";
+					});
+				}else{
+					$http({
+				        method : "POST",
+				        url : "/buscar/patronatos/parametros2/conFecha",
+				        headers: {'Content-Type': 'application/json'},
+				        data : {parametroBusqueda : nombreParametro, fecha : fechaValidada, 
+				        	offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+						    rango: $scope.tamanioBusqueda
+	                	}
+				    }).then(function mySuccess(response) {
+				    	var lista = JSON.parse(response.data);
+				       	$scope.resultadosPttList = utilities.formatearFecha(lista);
+				    }, function myError(response) {
+				       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            		document.getElementById('myModal').style.display = "flex";
+				   	});
+				}
 			}else{
 				$scope.modalMessage = "";
                 document.getElementById('myModal').style.display = "flex";
@@ -932,20 +1277,58 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 				var fechaInicioValidada = utilities.validarFecha($scope.fecha_inicio2);
 				if($scope.fecha_fin2 != null) {
 					var fechaFinValidada = utilities.validarFecha($scope.fecha_fin2);
-					$http({
-				        method : "POST",
-				       	url : "/buscar/patronatos/parametros2/conFecha",
-				       	headers: {'Content-Type': 'application/json'},
-				       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
-				        	fechaFin : fechaFinValidada
-                		}
-				    }).then(function mySuccess(response) {
-				   		var lista = JSON.parse(response.data);
-				       	$scope.resultadosPttList = utilities.formatearFecha(lista);
-				   	}, function myError(response) {
-				       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
-            			document.getElementById('myModal').style.display = "flex";
-			    	});
+					if($scope.busqueda){
+						$http({
+							method : "POST",
+							url : "/contar/patronatos/parametros2/conFecha",
+							headers: {'Content-Type': 'application/json'},
+							data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
+					        	fechaFin : fechaFinValidada
+	                		}
+						}).then(async function mySuccess(response) {
+							var lista = await JSON.parse(response.data);
+							$scope.totalRegistros = lista[0].numeroRegistros;
+							$scope.totalPaginas = Math.ceil($scope.totalRegistros/$scope.tamanioBusqueda);
+							if($scope.totalRegistros>0){
+								$http({
+							        method : "POST",
+							       	url : "/buscar/patronatos/parametros2/conFecha",
+							       	headers: {'Content-Type': 'application/json'},
+							       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
+							        	fechaFin : fechaFinValidada, offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+								       	rango: $scope.tamanioBusqueda
+			                		}
+							    }).then(function mySuccess(response) {
+							   		var lista = JSON.parse(response.data);
+							       	$scope.resultadosPttList = utilities.formatearFecha(lista);
+							   	}, function myError(response) {
+							       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+			            			document.getElementById('myModal').style.display = "flex";
+						    	});
+							}else{
+								$scope.resultadosPttList = null;
+							}
+						},function myError(response) {
+							$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+				            document.getElementById('myModal').style.display = "flex";
+						});
+					}else{
+						$http({
+					        method : "POST",
+					       	url : "/buscar/patronatos/parametros2/conFecha",
+					       	headers: {'Content-Type': 'application/json'},
+					       	data : {parametroBusqueda : nombreParametro, fechaInicio : fechaInicioValidada, 
+					        	fechaFin : fechaFinValidada, offSet : ($scope.numeroPagina - 1) * $scope.tamanioBusqueda, 
+						       	rango: $scope.tamanioBusqueda
+	                		}
+					    }).then(function mySuccess(response) {
+					   		var lista = JSON.parse(response.data);
+					       	$scope.resultadosPttList = utilities.formatearFecha(lista);
+					   	}, function myError(response) {
+					       	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
+	            			document.getElementById('myModal').style.display = "flex";
+				    	});
+					}
 				}else{
 					$scope.modalMessage = "Por favor seleccione la fecha de finalización para realizar la busqueda";
                 	document.getElementById('myModal').style.display = "flex";
@@ -975,7 +1358,6 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 				break;
 		}
 	};
-
 
 
 	/*********************************************************************************************/
@@ -1084,7 +1466,9 @@ app.controller("searchCtrl", function($scope, $http, $window, utilities) {
 		$scope.numeroPagina = 1;
 		$scope.totalPaginas = 0;
 		await document.getElementById('pagina1').setAttribute('class', 'active');
-		console.log("Soy la función de limpieza");                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+		$scope.resultadosExpList = null;
+		$scope.resultadosOpnList = null;
+		$scope.resultadosPttList = null;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 	};
 
 });

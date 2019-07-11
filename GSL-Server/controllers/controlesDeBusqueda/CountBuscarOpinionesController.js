@@ -1,7 +1,7 @@
 var status = require('http-status');
-var buscarRegistroOpinionController = {};
+var countRegistroOpinionController = {};
 
-buscarRegistroOpinionController.parametros1SinFecha = (req, res, next)=>{
+countRegistroOpinionController.parametros1SinFecha = (req, res, next)=>{
 	req.getConnection(async function(err, connection){
         if (err) return next(err);
         var campoBusqueda;
@@ -54,7 +54,7 @@ buscarRegistroOpinionController.parametros1SinFecha = (req, res, next)=>{
 	});
 }
 
-buscarRegistroOpinionController.parametros1ConFecha = (req, res, next)=>{
+countRegistroOpinionController.parametros1ConFecha = (req, res, next)=>{
 	req.getConnection(async function(err, connection){
         if (err) return next(err);
         var campoBusqueda;
@@ -141,7 +141,7 @@ buscarRegistroOpinionController.parametros1ConFecha = (req, res, next)=>{
 	});
 }
 
-buscarRegistroOpinionController.parametros2ConFecha = (req, res, next)=>{
+countRegistroOpinionController.parametros2ConFecha = (req, res, next)=>{
 	req.getConnection(async function(err, connection){
         if (err) return next(err);
 
@@ -179,4 +179,4 @@ buscarRegistroOpinionController.parametros2ConFecha = (req, res, next)=>{
 	});
 }
 
-module.exports = buscarRegistroOpinionController;
+module.exports = countRegistroOpinionController;

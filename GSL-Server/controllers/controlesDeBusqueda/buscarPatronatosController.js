@@ -55,7 +55,7 @@ buscarRegistroPatronatosController.parametros1SinFecha = (req, res, next)=>{
 				return next();
 		}
 
-		var query = "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+		var query = "(SELECT DISTINCT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \' , Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -71,9 +71,9 @@ buscarRegistroPatronatosController.parametros1SinFecha = (req, res, next)=>{
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        fraseBusqueda + " GROUP BY fichapatronato.idFichaEntradaPatronato " +
+        fraseBusqueda + " GROUP BY fichapatronato.idFichaEntradaPatronato) " +
         "UNION " +
-        "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \', Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -89,7 +89,7 @@ buscarRegistroPatronatosController.parametros1SinFecha = (req, res, next)=>{
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        fraseBusqueda + " GROUP BY fichapatronato.idFichaEntradaPatronato";
+        fraseBusqueda + " GROUP BY fichapatronato.idFichaEntradaPatronato) LIMIT " + req.body.offSet + ", " + req.body.rango;
 
 	    await connection.query(query, [campoBusqueda, campoBusqueda], (err, results) => {
 	        if (err) {
@@ -179,7 +179,7 @@ buscarRegistroPatronatosController.parametros1ConFecha = (req, res, next)=>{
 				return next();
 		}
 
-		var query = "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+		var query = "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \' , Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -195,9 +195,9 @@ buscarRegistroPatronatosController.parametros1ConFecha = (req, res, next)=>{
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        fraseBusqueda + " " + fraseBusquedaFecha + " GROUP BY fichapatronato.idFichaEntradaPatronato " +
+        fraseBusqueda + " " + fraseBusquedaFecha + " GROUP BY fichapatronato.idFichaEntradaPatronato) " +
         "UNION " +
-        "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \', Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -213,7 +213,7 @@ buscarRegistroPatronatosController.parametros1ConFecha = (req, res, next)=>{
             "ON AsuntoPatronato.idAsuntoPatronato = fichapatronato.idAsuntoPatronato " +
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
-        fraseBusqueda + " " + fraseBusquedaFecha + " GROUP BY fichapatronato.idFichaEntradaPatronato";
+        fraseBusqueda + " " + fraseBusquedaFecha + " GROUP BY fichapatronato.idFichaEntradaPatronato) LIMIT " + req.body.offSet + ", " + req.body.rango;
 
 	    if(req.body.fechaInicio != null && req.body.fechaFin != null) {
         	var fechaInicio = req.body.fechaInicio.trim() + " 00:00:00";
@@ -248,7 +248,7 @@ buscarRegistroPatronatosController.parametros2ConFecha = (req, res, next)=>{
 	req.getConnection(async function(err, connection){
         if (err) return next(err);
 
-        var query = "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        var query = "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \' , Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -265,9 +265,9 @@ buscarRegistroPatronatosController.parametros2ConFecha = (req, res, next)=>{
         "LEFT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
         "WHERE " + req.body.parametroBusqueda + " BETWEEN STR_TO_DATE(?, '%d-%m-%Y %H:%i:%s') " +
-			"AND STR_TO_DATE(?, '%d-%m-%Y %H:%i:%s') GROUP BY fichapatronato.idFichaEntradaPatronato " +
+			"AND STR_TO_DATE(?, '%d-%m-%Y %H:%i:%s') GROUP BY fichapatronato.idFichaEntradaPatronato) " +
         "UNION " +
-        "SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
+        "(SELECT fichapatronato.idFichaEntradaPatronato as idficha, GROUP_CONCAT(ExpedientePatronato.numExpedientePatronato SEPARATOR ', ') " + 
         "as numExpediente, CONCAT(TipoComunidad.nombreTipoComunidad, \' \', Comunidad.nombreComunidad) AS comunidad, " +
         "AsuntoPatronato.nombreAsuntoPatronato as nombreAsunto, fichapatronato.fechaEntrada as fechaEntrada, abogado.nombreEmpleado as nombreAbogadoAsignado " +
         "FROM FichaEntradaPatronato as fichapatronato " +
@@ -284,7 +284,7 @@ buscarRegistroPatronatosController.parametros2ConFecha = (req, res, next)=>{
         "RIGHT JOIN empleado as abogado " +
             "ON abogado.numEmpleado = fichapatronato.idAbogadoAsignado " +
         "WHERE " + req.body.parametroBusqueda + " BETWEEN STR_TO_DATE(?, '%d-%m-%Y %H:%i:%s') " +
-			"AND STR_TO_DATE(?, '%d-%m-%Y %H:%i:%s') GROUP BY fichapatronato.idFichaEntradaPatronato";
+			"AND STR_TO_DATE(?, '%d-%m-%Y %H:%i:%s') GROUP BY fichapatronato.idFichaEntradaPatronato) LIMIT " + req.body.offSet + ", " + req.body.rango;
 
         if(req.body.fechaInicio != null && req.body.fechaFin != null) {
         	var fechaInicio = req.body.fechaInicio.trim() + " 00:00:00";

@@ -1,7 +1,7 @@
 var status = require('http-status');
-var buscarRegistroPatronatosController = {};
+var countRegistroPatronatosController = {};
 
-buscarRegistroPatronatosController.parametros1SinFecha = (req, res, next)=>{
+countRegistroPatronatosController.parametros1SinFecha = (req, res, next)=>{
 	req.getConnection(async function(err, connection){
         if (err) return next(err);
         var campoBusqueda;
@@ -76,7 +76,7 @@ buscarRegistroPatronatosController.parametros1SinFecha = (req, res, next)=>{
 	});
 }
 
-buscarRegistroPatronatosController.parametros1ConFecha = (req, res, next)=>{
+countRegistroPatronatosController.parametros1ConFecha = (req, res, next)=>{
 	req.getConnection(async function(err, connection){
         if (err) return next(err);
         var campoBusqueda;
@@ -192,7 +192,7 @@ buscarRegistroPatronatosController.parametros1ConFecha = (req, res, next)=>{
 	});
 }
 
-buscarRegistroPatronatosController.parametros2ConFecha = (req, res, next)=>{
+countRegistroPatronatosController.parametros2ConFecha = (req, res, next)=>{
 	req.getConnection(async function(err, connection){
         if (err) return next(err);
 
@@ -230,4 +230,4 @@ buscarRegistroPatronatosController.parametros2ConFecha = (req, res, next)=>{
 	});
 }
 
-module.exports = buscarRegistroPatronatosController;
+module.exports = countRegistroPatronatosController;
