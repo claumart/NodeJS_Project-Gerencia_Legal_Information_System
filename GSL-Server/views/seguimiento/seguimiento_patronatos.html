@@ -99,7 +99,7 @@
 		      		
 		      	</form>
 		      	<div class="grid-container fluid">
-		      		<div class="grid-x grid-padding-x">
+		      		<div class="grid-x grid-padding-x" ng-show="patronatosList.length>0">
 		      			<div class="small-12 cell">
 		      				<table  id="tabla_principal">
 								<thead>
@@ -125,6 +125,34 @@
 							</table>
 		      			</div>
 		      		</div>
+		      		<!----------------------Prueba--------------------->
+		      		<div class="grid-x grid-padding-x" ng-show="patronatoEspecificoList.length>0">
+		      			<div class="small-12 cell">
+		      				<table  id="tabla_principal">
+								<thead>
+							    	<tr>
+							    		<th>Expediente</th>
+							      		<th>Comunidad</th>
+							      		<th>Asunto</th>
+							      		<th>Fecha de entrada</th>
+							      		<th>Abogado Asignado</th>
+							      		<th>Listo Para</th>
+							    	</tr>
+							  	</thead>
+							  	<tbody>
+							    	<tr ng-repeat="x in patronatoEspecificoList track by $index">
+							    		<td>{{x.numExpediente}}</td>
+							    		<td>{{x.comunidad}}</td>
+							    		<td>{{x.nombreAsunto}}</td>
+							    		<td>{{x.fechaEntrada}}</td>
+							    		<td>{{x.nombreAbogadoAsignado}}</td>
+							    		<td><button type="button" class="button secondary" ng-click="darSeguimientoPatronatoEspecifico(x.idficha, x.idEstado)">{{x.textoBoton}}</button></td>
+							    	</tr>
+							  	</tbody>
+							</table>
+		      			</div>
+		      		</div>
+		      		<!------------------------------------------------->
 		      		<div class="grid-x" ng-show="totalPaginas>0">
 						<div class="small-12 cell center">
 							<div class="pagination">

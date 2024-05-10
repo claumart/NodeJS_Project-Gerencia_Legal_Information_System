@@ -178,7 +178,7 @@ registrarPatronatoController.saveAcumulado = (req, res, next) => {
                         return next(err);
                     }
                     connection.query('INSERT INTO FichaEntradaPatronatoXExpedientePatronato(idFichaEntradaPatronato, idExpedientePatronato) VALUES(?, ?)', 
-                    [fichaEntradaId, expedienteId], (err, rows) => {
+                    [fichaEntradaId, expedienteInsId], (err, rows) => {
                         if (err) {
                             console.log(err);
                             return next(err);

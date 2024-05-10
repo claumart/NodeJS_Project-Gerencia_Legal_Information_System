@@ -11,6 +11,36 @@ app.service("utilities", function() {
     this.eliminateSpace = (str)=> {
         return str.replace(/\s+/g, "");
     };
+
+    this.agregarTextoBoton = (lista)=> {
+        for(x in lista){
+            switch (lista[x].idEstado) {
+                case 1:
+                    lista[x].textoBoton = "Asignar";
+                    break;
+                case 2:
+                    lista[x].textoBoton = "Descargar";
+                    break;
+                case 3:
+                    lista[x].textoBoton = "Revisar";
+                    break;
+                case 4:
+                    lista[x].textoBoton = "Remitir";
+                    break;
+                case 5:
+                    lista[x].textoBoton = "Completado";
+                    break;
+                case 6:
+                    lista[x].textoBoton = "Reingresar";
+                    break;
+                default:
+                    $scope.modalMessage = "Error del sistema en el registro del expediente";
+                    document.getElementById('myModal').style.display = "flex";
+            }
+        }
+        return lista;
+    };
+
 });
 
 app.controller("seguimientoCtrl", function($scope, $http, $window, utilities) {
@@ -407,43 +437,39 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities) {
             data : {numExpediente : numExpValidado}
     	}).then(function mySuccess(response) {
     		var lista = JSON.parse(response.data);
-            if(lista.length > 0){
-                switch (lista[0].idEstado) {
-                    case 1:
-                        $scope.accion = "asignar";
-                        $scope.textoBoton = "Asignar";
-                        break;
-                    case 2:
-                        $scope.accion = "descargar";
-                        $scope.textoBoton = "Descargar";
-                        break;
-                    case 3:
-                        $scope.accion = "revisar";
-                        $scope.textoBoton = "Revisar";
-                        break;
-                    case 4:
-                        $scope.accion = "remitir";
-                        $scope.textoBoton = "Remitir";
-                        break;
-                    case 5:
-                        $scope.accion = "compleatdo";
-                        $scope.textoBoton = "Completado";
-                        break;
-                    case 6:
-                        $scope.accion = "reingresar";
-                        $scope.textoBoton = "Reingresar";
-                        break;
-                    default:
-                        $scope.modalMessage = "Error del sistema en el registro del expediente";
-                        document.getElementById('myModal').style.display = "flex";
-                }
-            }
-        	$scope.expedientesList = utilities.formatearFecha(lista);
+            lista = utilities.agregarTextoBoton(lista);
+        	$scope.expedienteEspecificoList = utilities.formatearFecha(lista);
     	}, function myError(response) {
         	$scope.modalMessage = response.statusText + " La acción no se pudo completar debido a un fallo en el sistema";
             document.getElementById('myModal').style.display = "flex";
     	});
 	};
+
+    $scope.darSeguimientoExpedienteEspecifico = (idFicha, idEstado)=>{
+        switch (idEstado) {
+            case 1:
+                var newUrl = "/expedientes/asignar_expediente#titulo_formulario?idFicha=" + idFicha;
+                $window.location.href = newUrl;
+                break;
+            case 2:
+               var newUrl = "/expedientes/descargar_expediente#titulo_formulario?idFicha=" + idFicha;
+                $window.location.href = newUrl;
+                break;
+            case 3:
+                var newUrl = "/expedientes/revisar_expediente#titulo_formulario?idFicha=" + idFicha;
+                $window.location.href = newUrl;
+                break;
+            case 4:
+                var newUrl = "/expedientes/remitir_expediente#titulo_formulario?idFicha=" + idFicha;
+                $window.location.href = newUrl;
+                break;
+            case 6:
+                var newUrl = "/expedientes/reingresar_con_previo#titulo_formulario?idFicha=" + idFicha;
+                $window.location.href = newUrl;
+                break;    
+        }
+
+    }
 
     $scope.darSeguimientoExpediente = (idFicha)=>{
         switch ($scope.accion) {
@@ -572,7 +598,8 @@ app.controller("seguimientoCtrl", function($scope, $http, $window, utilities) {
         $scope.numeroPagina = 1;
         $scope.totalPaginas = 0;
         await document.getElementById('pagina1').setAttribute('class', 'active');
-        $scope.expedientesList = null;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+        $scope.expedientesList = null;
+        $scope.expedienteEspecificoList = null;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
     };
 
     seleccionarAccion = ()=> {

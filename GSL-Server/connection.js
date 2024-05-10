@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var myConnection = require('express-myconnection');
 //Cambiar las siguientes dos variables
 var dbUser = "root";
-var pass = "12345";
+var pass = "";
 
 module.exports.dbConnection = myConnection(mysql,{
     host: 'localhost',
